@@ -11,20 +11,58 @@
 		B9167C222EF2913800E2DBFC /* FirebaseFirestore in Frameworks */ = {isa = PBXBuildFile; productRef = B9167C212EF2913800E2DBFC /* FirebaseFirestore */; };
 		B9167C322EF89DCA00E2DBFC /* venues.json in Sources */ = {isa = PBXBuildFile; fileRef = B9167C312EF89DBB00E2DBFC /* venues.json */; };
 		B9167C332EF8A92500E2DBFC /* venues.json in Resources */ = {isa = PBXBuildFile; fileRef = B9167C312EF89DBB00E2DBFC /* venues.json */; };
+		B9E5C6572EF95E39005FA51F /* FavoritesManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9E5C6492EF95E39005FA51F /* FavoritesManager.swift */; };
+		B9E5C6582EF95E39005FA51F /* VenueDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9E5C6542EF95E39005FA51F /* VenueDetailView.swift */; };
+		B9E5C6592EF95E39005FA51F /* NightPulseView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9E5C64E2EF95E39005FA51F /* NightPulseView.swift */; };
+		B9E5C65A2EF95E39005FA51F /* VenueCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9E5C6532EF95E39005FA51F /* VenueCard.swift */; };
+		B9E5C65B2EF95E39005FA51F /* NoctoTheme.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9E5C6512EF95E39005FA51F /* NoctoTheme.swift */; };
+		B9E5C65C2EF95E39005FA51F /* AllVenuesMapView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9E5C6462EF95E39005FA51F /* AllVenuesMapView.swift */; };
+		B9E5C65D2EF95E39005FA51F /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9E5C6482EF95E39005FA51F /* ContentView.swift */; };
+		B9E5C65E2EF95E39005FA51F /* HomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9E5C64C2EF95E39005FA51F /* HomeView.swift */; };
+		B9E5C65F2EF95E39005FA51F /* FavoritesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9E5C64A2EF95E39005FA51F /* FavoritesView.swift */; };
+		B9E5C6602EF95E39005FA51F /* AdminDashboardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9E5C6452EF95E39005FA51F /* AdminDashboardView.swift */; };
+		B9E5C6612EF95E39005FA51F /* NOCTOApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9E5C64F2EF95E39005FA51F /* NOCTOApp.swift */; };
+		B9E5C6622EF95E39005FA51F /* VenueRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9E5C6552EF95E39005FA51F /* VenueRepository.swift */; };
+		B9E5C6632EF95E39005FA51F /* Venue.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9E5C6522EF95E39005FA51F /* Venue.swift */; };
+		B9E5C6642EF95E39005FA51F /* LocationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9E5C64D2EF95E39005FA51F /* LocationManager.swift */; };
+		B9E5C6652EF95E39005FA51F /* NOCTOApp.swift.zip in Resources */ = {isa = PBXBuildFile; fileRef = B9E5C6502EF95E39005FA51F /* NOCTOApp.swift.zip */; };
+		B9E5C6662EF95E39005FA51F /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = B9E5C64B2EF95E39005FA51F /* GoogleService-Info.plist */; };
+		B9E5C6672EF95E39005FA51F /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = B9E5C6472EF95E39005FA51F /* Assets.xcassets */; };
+		B9E5C6692EF9703A005FA51F /* BlurView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9E5C6682EF9700E005FA51F /* BlurView.swift */; };
+		B9E5C66B2EF970D7005FA51F /* MicroFeedback.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9E5C66A2EF970BD005FA51F /* MicroFeedback.swift */; };
+		B9E5C66D2EF97782005FA51F /* ParallaxCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9E5C66C2EF97778005FA51F /* ParallaxCard.swift */; };
+		B9E5C66F2EF97A8E005FA51F /* HeroParallaxCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9E5C66E2EF97A7A005FA51F /* HeroParallaxCard.swift */; };
+		B9E5C6712EFC7022005FA51F /* Color+Hex.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9E5C6702EFC7017005FA51F /* Color+Hex.swift */; };
+		B9E5C6732EFC8C43005FA51F /* Haptics.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9E5C6722EFC8C3E005FA51F /* Haptics.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
 		B9167C312EF89DBB00E2DBFC /* venues.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = venues.json; sourceTree = "<group>"; };
 		B9481C462EEB858500B13953 /* NOCTO.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = NOCTO.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		B9E5C6452EF95E39005FA51F /* AdminDashboardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdminDashboardView.swift; sourceTree = "<group>"; };
+		B9E5C6462EF95E39005FA51F /* AllVenuesMapView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AllVenuesMapView.swift; sourceTree = "<group>"; };
+		B9E5C6472EF95E39005FA51F /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		B9E5C6482EF95E39005FA51F /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
+		B9E5C6492EF95E39005FA51F /* FavoritesManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavoritesManager.swift; sourceTree = "<group>"; };
+		B9E5C64A2EF95E39005FA51F /* FavoritesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavoritesView.swift; sourceTree = "<group>"; };
+		B9E5C64B2EF95E39005FA51F /* GoogleService-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
+		B9E5C64C2EF95E39005FA51F /* HomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeView.swift; sourceTree = "<group>"; };
+		B9E5C64D2EF95E39005FA51F /* LocationManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationManager.swift; sourceTree = "<group>"; };
+		B9E5C64E2EF95E39005FA51F /* NightPulseView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NightPulseView.swift; sourceTree = "<group>"; };
+		B9E5C64F2EF95E39005FA51F /* NOCTOApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NOCTOApp.swift; sourceTree = "<group>"; };
+		B9E5C6502EF95E39005FA51F /* NOCTOApp.swift.zip */ = {isa = PBXFileReference; lastKnownFileType = archive.zip; path = NOCTOApp.swift.zip; sourceTree = "<group>"; };
+		B9E5C6512EF95E39005FA51F /* NoctoTheme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoctoTheme.swift; sourceTree = "<group>"; };
+		B9E5C6522EF95E39005FA51F /* Venue.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Venue.swift; sourceTree = "<group>"; };
+		B9E5C6532EF95E39005FA51F /* VenueCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VenueCard.swift; sourceTree = "<group>"; };
+		B9E5C6542EF95E39005FA51F /* VenueDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VenueDetailView.swift; sourceTree = "<group>"; };
+		B9E5C6552EF95E39005FA51F /* VenueRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VenueRepository.swift; sourceTree = "<group>"; };
+		B9E5C6682EF9700E005FA51F /* BlurView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BlurView.swift; sourceTree = "<group>"; };
+		B9E5C66A2EF970BD005FA51F /* MicroFeedback.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MicroFeedback.swift; sourceTree = "<group>"; };
+		B9E5C66C2EF97778005FA51F /* ParallaxCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParallaxCard.swift; sourceTree = "<group>"; };
+		B9E5C66E2EF97A7A005FA51F /* HeroParallaxCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HeroParallaxCard.swift; sourceTree = "<group>"; };
+		B9E5C6702EFC7017005FA51F /* Color+Hex.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Color+Hex.swift"; sourceTree = "<group>"; };
+		B9E5C6722EFC8C3E005FA51F /* Haptics.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Haptics.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
-
-/* Begin PBXFileSystemSynchronizedRootGroup section */
-		B9481C482EEB858500B13953 /* NOCTO */ = {
-			isa = PBXFileSystemSynchronizedRootGroup;
-			path = NOCTO;
-			sourceTree = "<group>";
-		};
-/* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
 		B9481C432EEB858500B13953 /* Frameworks */ = {
@@ -42,8 +80,8 @@
 		B9481C3D2EEB858500B13953 = {
 			isa = PBXGroup;
 			children = (
+				B9E5C6562EF95E39005FA51F /* NOCTO */,
 				B9167C312EF89DBB00E2DBFC /* venues.json */,
-				B9481C482EEB858500B13953 /* NOCTO */,
 				B9481C472EEB858500B13953 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -54,6 +92,36 @@
 				B9481C462EEB858500B13953 /* NOCTO.app */,
 			);
 			name = Products;
+			sourceTree = "<group>";
+		};
+		B9E5C6562EF95E39005FA51F /* NOCTO */ = {
+			isa = PBXGroup;
+			children = (
+				B9E5C6722EFC8C3E005FA51F /* Haptics.swift */,
+				B9E5C6702EFC7017005FA51F /* Color+Hex.swift */,
+				B9E5C66E2EF97A7A005FA51F /* HeroParallaxCard.swift */,
+				B9E5C66C2EF97778005FA51F /* ParallaxCard.swift */,
+				B9E5C66A2EF970BD005FA51F /* MicroFeedback.swift */,
+				B9E5C6682EF9700E005FA51F /* BlurView.swift */,
+				B9E5C6452EF95E39005FA51F /* AdminDashboardView.swift */,
+				B9E5C6462EF95E39005FA51F /* AllVenuesMapView.swift */,
+				B9E5C6472EF95E39005FA51F /* Assets.xcassets */,
+				B9E5C6482EF95E39005FA51F /* ContentView.swift */,
+				B9E5C6492EF95E39005FA51F /* FavoritesManager.swift */,
+				B9E5C64A2EF95E39005FA51F /* FavoritesView.swift */,
+				B9E5C64B2EF95E39005FA51F /* GoogleService-Info.plist */,
+				B9E5C64C2EF95E39005FA51F /* HomeView.swift */,
+				B9E5C64D2EF95E39005FA51F /* LocationManager.swift */,
+				B9E5C64E2EF95E39005FA51F /* NightPulseView.swift */,
+				B9E5C64F2EF95E39005FA51F /* NOCTOApp.swift */,
+				B9E5C6502EF95E39005FA51F /* NOCTOApp.swift.zip */,
+				B9E5C6512EF95E39005FA51F /* NoctoTheme.swift */,
+				B9E5C6522EF95E39005FA51F /* Venue.swift */,
+				B9E5C6532EF95E39005FA51F /* VenueCard.swift */,
+				B9E5C6542EF95E39005FA51F /* VenueDetailView.swift */,
+				B9E5C6552EF95E39005FA51F /* VenueRepository.swift */,
+			);
+			path = NOCTO;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -70,9 +138,6 @@
 			buildRules = (
 			);
 			dependencies = (
-			);
-			fileSystemSynchronizedGroups = (
-				B9481C482EEB858500B13953 /* NOCTO */,
 			);
 			name = NOCTO;
 			packageProductDependencies = (
@@ -126,6 +191,9 @@
 			buildActionMask = 2147483647;
 			files = (
 				B9167C332EF8A92500E2DBFC /* venues.json in Resources */,
+				B9E5C6652EF95E39005FA51F /* NOCTOApp.swift.zip in Resources */,
+				B9E5C6662EF95E39005FA51F /* GoogleService-Info.plist in Resources */,
+				B9E5C6672EF95E39005FA51F /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -136,7 +204,27 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				B9E5C6732EFC8C43005FA51F /* Haptics.swift in Sources */,
 				B9167C322EF89DCA00E2DBFC /* venues.json in Sources */,
+				B9E5C6572EF95E39005FA51F /* FavoritesManager.swift in Sources */,
+				B9E5C6582EF95E39005FA51F /* VenueDetailView.swift in Sources */,
+				B9E5C6592EF95E39005FA51F /* NightPulseView.swift in Sources */,
+				B9E5C66B2EF970D7005FA51F /* MicroFeedback.swift in Sources */,
+				B9E5C6712EFC7022005FA51F /* Color+Hex.swift in Sources */,
+				B9E5C66F2EF97A8E005FA51F /* HeroParallaxCard.swift in Sources */,
+				B9E5C65A2EF95E39005FA51F /* VenueCard.swift in Sources */,
+				B9E5C65B2EF95E39005FA51F /* NoctoTheme.swift in Sources */,
+				B9E5C65C2EF95E39005FA51F /* AllVenuesMapView.swift in Sources */,
+				B9E5C65D2EF95E39005FA51F /* ContentView.swift in Sources */,
+				B9E5C65E2EF95E39005FA51F /* HomeView.swift in Sources */,
+				B9E5C66D2EF97782005FA51F /* ParallaxCard.swift in Sources */,
+				B9E5C6692EF9703A005FA51F /* BlurView.swift in Sources */,
+				B9E5C65F2EF95E39005FA51F /* FavoritesView.swift in Sources */,
+				B9E5C6602EF95E39005FA51F /* AdminDashboardView.swift in Sources */,
+				B9E5C6612EF95E39005FA51F /* NOCTOApp.swift in Sources */,
+				B9E5C6622EF95E39005FA51F /* VenueRepository.swift in Sources */,
+				B9E5C6632EF95E39005FA51F /* Venue.swift in Sources */,
+				B9E5C6642EF95E39005FA51F /* LocationManager.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

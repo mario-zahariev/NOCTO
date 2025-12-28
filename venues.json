@@ -1,0 +1,13 @@
+[
+  {
+    "id": "A8E1F9E4-3C2A-4F3E-9B7D-123456789ABC",
+    "name": "Bedroom Premium",
+    "imageName": "bedroom",
+    "type": "club",
+    "description": "Premium club experience",
+    "latitude": 42.6977,
+    "longitude": 23.3219,
+    "address": "Sofia Center",
+    "workingHours": "22-06"
+  }
+]
