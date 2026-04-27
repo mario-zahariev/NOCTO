@@ -1,0 +1,17 @@
+# Xcode
+DerivedData/
+.build/
+*.xcworkspace/xcuserdata/
+*.xcodeproj/xcuserdata/
+*.xcuserstate
+
+# SwiftPM
+Package.resolved
+
+# Secrets and local config
+.env
+.env.*
+NOCTO/GoogleService-Info.local.plist
+
+# macOS
+.DS_Store

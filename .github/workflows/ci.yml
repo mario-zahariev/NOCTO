@@ -1,0 +1,40 @@
+name: CI
+
+on:
+  push:
+    branches: ["main"]
+  pull_request:
+
+jobs:
+  swift-package-tests:
+    runs-on: macos-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Swift Version
+        run: swift --version
+
+      - name: Run Unit Tests
+        run: swift test
+
+  iOS-build-smoke:
+    runs-on: macos-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Show Xcode
+        run: xcodebuild -version
+
+      - name: Resolve Packages
+        run: xcodebuild -resolvePackageDependencies -project NOCTO.xcodeproj
+
+      - name: Build App (Simulator)
+        run: |
+          xcodebuild \
+            -project NOCTO.xcodeproj \
+            -scheme NOCTO \
+            -sdk iphonesimulator \
+            -destination 'generic/platform=iOS Simulator' \
+            build

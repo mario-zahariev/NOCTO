@@ -9,7 +9,6 @@
 /* Begin PBXBuildFile section */
 		B9167C202EF2913800E2DBFC /* FirebaseAnalytics in Frameworks */ = {isa = PBXBuildFile; productRef = B9167C1F2EF2913800E2DBFC /* FirebaseAnalytics */; };
 		B9167C222EF2913800E2DBFC /* FirebaseFirestore in Frameworks */ = {isa = PBXBuildFile; productRef = B9167C212EF2913800E2DBFC /* FirebaseFirestore */; };
-		B9167C322EF89DCA00E2DBFC /* venues.json in Sources */ = {isa = PBXBuildFile; fileRef = B9167C312EF89DBB00E2DBFC /* venues.json */; };
 		B9167C332EF8A92500E2DBFC /* venues.json in Resources */ = {isa = PBXBuildFile; fileRef = B9167C312EF89DBB00E2DBFC /* venues.json */; };
 		B9E5C6572EF95E39005FA51F /* FavoritesManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9E5C6492EF95E39005FA51F /* FavoritesManager.swift */; };
 		B9E5C6582EF95E39005FA51F /* VenueDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9E5C6542EF95E39005FA51F /* VenueDetailView.swift */; };
@@ -205,7 +204,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				B9E5C6732EFC8C43005FA51F /* Haptics.swift in Sources */,
-				B9167C322EF89DCA00E2DBFC /* venues.json in Sources */,
 				B9E5C6572EF95E39005FA51F /* FavoritesManager.swift in Sources */,
 				B9E5C6582EF95E39005FA51F /* VenueDetailView.swift in Sources */,
 				B9E5C6592EF95E39005FA51F /* NightPulseView.swift in Sources */,

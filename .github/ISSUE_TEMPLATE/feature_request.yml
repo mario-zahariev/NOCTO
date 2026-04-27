@@ -1,0 +1,18 @@
+name: Feature request
+description: Propose a product or engineering improvement
+labels: [enhancement]
+body:
+  - type: textarea
+    id: problem
+    attributes:
+      label: Problem
+      description: What user or product problem are we solving?
+    validations:
+      required: true
+  - type: textarea
+    id: proposal
+    attributes:
+      label: Proposal
+      description: What solution do you suggest?
+    validations:
+      required: true
