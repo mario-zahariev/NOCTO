@@ -11,7 +11,9 @@
 - [ ] `swift test`
 - [ ] Local app smoke build
 
-## Risk
+## Risk (select one)
+
+Select one:
 
 - [ ] Low
 - [ ] Medium

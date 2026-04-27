@@ -5,14 +5,16 @@
 1. Presentation (`NOCTO/*.swift` view files)
 2. Domain model (`Venue`)
 3. Data access (`VenueRepository`)
-4. Cross-cutting utilities (`Haptics`, `LocationManager`, theme/extensions)
+4. State and persistence (`FavoritesManager` with `UserDefaults` for favorite UUID storage)
+5. Cross-cutting utilities (`Haptics`, `LocationManager`, theme/extensions)
 
 ## Data Flow
 
 1. `ContentView` requests venues via `VenueRepository`.
-2. Repository decodes `venues.json` and validates entries.
-3. Views render validated venues and user actions are delegated to `FavoritesManager`.
-4. Favorites persist through `UserDefaults` by venue UUID.
+2. `VenueRepository` decodes `venues.json`, validates entries, and returns clean venue payloads.
+3. `ContentView`, `HomeView`, and `FavoritesView` call `FavoritesManager` for favorite state mutations/reads.
+4. `FavoritesManager` persists favorite venue UUIDs in `UserDefaults`.
+5. `VenueRepository` and `FavoritesManager` stay decoupled and are composed by `ContentView`.
 
 ## Guardrails
 

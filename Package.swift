@@ -3,7 +3,10 @@ import PackageDescription
 
 let package = Package(
     name: "NOCTOCore",
-    platforms: [.macOS(.v14)],
+    platforms: [
+        .iOS(.v17),
+        .macOS(.v14)
+    ],
     products: [
         .library(name: "NOCTOCore", targets: ["NOCTOCore"])
     ],

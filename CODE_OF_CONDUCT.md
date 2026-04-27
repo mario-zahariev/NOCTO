@@ -1,6 +1,6 @@
 # Code of Conduct
 
-## Our Standard
+## Our Standards
 
 We expect respectful, professional, and inclusive collaboration.
 
