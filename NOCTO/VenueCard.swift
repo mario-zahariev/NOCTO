@@ -1,4 +1,5 @@
 import SwiftUI
+import NOCTOCore
 
 struct VenueCard: View {
     let venue: Venue

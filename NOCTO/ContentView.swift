@@ -1,4 +1,5 @@
 import SwiftUI
+import NOCTOCore
 
 struct ContentView: View {
     @StateObject private var favorites = FavoritesManager()

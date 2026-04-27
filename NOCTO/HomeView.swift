@@ -1,4 +1,5 @@
 import SwiftUI
+import NOCTOCore
 
 struct HomeView: View {
     let venues: [Venue]
