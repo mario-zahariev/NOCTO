@@ -1,3 +1,3 @@
 import NOCTOCore
 
-typealias Venue = NOCTOCore.Venue
+public typealias Venue = NOCTOCore.Venue

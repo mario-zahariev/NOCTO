@@ -4,7 +4,10 @@ extension Color {
     init(hex: String) {
         let clean = hex.replacingOccurrences(of: "#", with: "")
         var value: UInt64 = 0
-        Scanner(string: clean).scanHexInt64(&value)
+        let scanner = Scanner(string: clean)
+        if !(scanner.scanHexInt64(&value) && scanner.isAtEnd) {
+            value = 0xFFFFFF
+        }
 
         let r, g, b: UInt64
         switch clean.count {

@@ -45,7 +45,12 @@ public struct LocalVenueRepository: VenueRepositoryProtocol {
             throw LocalVenueRepositoryError.missingResource
         }
 
-        let data = try Data(contentsOf: url)
+        let data: Data
+        do {
+            data = try Data(contentsOf: url)
+        } catch {
+            throw LocalVenueRepositoryError.invalidData
+        }
         guard !data.isEmpty else { throw LocalVenueRepositoryError.invalidData }
 
         do {

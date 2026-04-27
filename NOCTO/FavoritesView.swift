@@ -16,7 +16,7 @@ struct FavoritesView: View {
                     ContentUnavailableView(
                         "Няма запазени места",
                         systemImage: "heart.slash",
-                        description: Text("Маркирай любими клубове и барове от Home.")
+                        description: Text("Маркирай любими клубове и барове от Начало.")
                     )
                 } else {
                     List(favoriteVenues) { venue in
@@ -28,7 +28,7 @@ struct FavoritesView: View {
                 }
             }
             .background(NoctoTheme.background.ignoresSafeArea())
-            .navigationTitle("Favorites")
+            .navigationTitle("Любими")
         }
     }
 }

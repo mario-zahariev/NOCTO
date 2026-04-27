@@ -8,19 +8,20 @@ struct AdminDashboardView: View {
     var body: some View {
         NavigationStack {
             List {
-                Section("Overview") {
-                    statRow("Общо venues", value: "\(venues.count)")
-                    statRow("Favorites", value: "\(favorites.favoriteIDs.count)")
-                    statRow("Документация", value: "Enabled")
+                Section("Преглед") {
+                    statRow("Общо локации", value: "\(venues.count)")
+                    statRow("Любими", value: "\(favorites.favoriteIDs.count)")
+                    statRow("Документация", value: "Активна")
                 }
 
-                Section("Health") {
-                    statRow("Repository validation", value: "Active")
-                    statRow("Fallback handling", value: "Active")
-                    statRow("Error boundaries", value: "Basic")
+                // TODO: Wire these health statuses to a real health provider before production.
+                Section("Състояние") {
+                    statRow("Валидация на хранилище", value: "Плейсхолдър")
+                    statRow("Fallback обработка", value: "Плейсхолдър")
+                    statRow("Граници на грешки", value: "Плейсхолдър")
                 }
             }
-            .navigationTitle("Admin")
+            .navigationTitle("Админ")
         }
     }
 

@@ -17,8 +17,11 @@ final class LocationManager: NSObject, ObservableObject {
     }
 
     func requestAccess() {
+        if authorizationStatus == .authorizedWhenInUse || authorizationStatus == .authorizedAlways {
+            manager.requestLocation()
+            return
+        }
         manager.requestWhenInUseAuthorization()
-        manager.requestLocation()
     }
 }
 
@@ -26,6 +29,9 @@ extension LocationManager: CLLocationManagerDelegate {
     nonisolated func locationManagerDidChangeAuthorization(_ manager: CLLocationManager) {
         Task { @MainActor in
             authorizationStatus = manager.authorizationStatus
+            if authorizationStatus == .authorizedWhenInUse || authorizationStatus == .authorizedAlways {
+                self.manager.requestLocation()
+            }
         }
     }
 
