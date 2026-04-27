@@ -27,9 +27,6 @@ jobs:
       - name: Show Xcode
         run: xcodebuild -version
 
-      - name: Resolve Packages
-        run: xcodebuild -resolvePackageDependencies -project NOCTO.xcodeproj
-
       - name: Build App (Simulator)
         run: |
           xcodebuild \
