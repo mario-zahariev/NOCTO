@@ -1,18 +1,34 @@
 name: Feature request
 description: Propose a product or engineering improvement
 labels: [enhancement]
+title: "[enhancement] "
 body:
   - type: textarea
     id: problem
     attributes:
       label: Problem
       description: What user or product problem are we solving?
+      placeholder: Pain point, impact, and current limitation.
     validations:
       required: true
+
   - type: textarea
     id: proposal
     attributes:
       label: Proposal
       description: What solution do you suggest?
+      placeholder: Scope, behavior, and acceptance criteria.
     validations:
       required: true
+
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: Alternatives considered
+      description: Other options and why they were rejected.
+
+  - type: textarea
+    id: risks
+    attributes:
+      label: Risks / dependencies
+      description: Technical risk, rollout risk, or blockers.

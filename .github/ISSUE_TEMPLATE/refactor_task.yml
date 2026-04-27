@@ -1,0 +1,46 @@
+name: Refactor task
+description: Track internal cleanup without changing product behavior
+labels: [refactor]
+title: "[refactor] "
+body:
+  - type: textarea
+    id: objective
+    attributes:
+      label: Objective
+      description: What internal code/structure needs cleanup?
+      placeholder: Module, component, or service to refactor.
+    validations:
+      required: true
+
+  - type: textarea
+    id: current_state
+    attributes:
+      label: Current state
+      description: What is wrong today?
+      placeholder: Duplication, complexity, coupling, naming drift, tech debt.
+    validations:
+      required: true
+
+  - type: textarea
+    id: target_state
+    attributes:
+      label: Target state
+      description: What should the structure look like after refactor?
+      placeholder: Clear module boundaries, reduced complexity, better reuse.
+    validations:
+      required: true
+
+  - type: textarea
+    id: non_goals
+    attributes:
+      label: Non-goals
+      description: What is explicitly out of scope?
+
+  - type: textarea
+    id: validation
+    attributes:
+      label: Validation plan
+      description: How do we verify no behavior regression?
+      placeholder: Unit tests, UI smoke checks, CI jobs, manual scenarios.
+    validations:
+      required: true
