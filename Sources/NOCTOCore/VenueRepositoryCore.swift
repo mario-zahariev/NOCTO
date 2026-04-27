@@ -1,6 +1,6 @@
 import Foundation
 
-public enum VenueRepositoryCoreError: Error {
+public enum VenueRepositoryCoreError: Error, Equatable {
     case invalidJSON
     case noValidVenues
 }
@@ -8,10 +8,10 @@ public enum VenueRepositoryCoreError: Error {
 public struct VenueRepositoryCore {
     public init() {}
 
-    public func decode(from data: Data) throws -> [VenueCore] {
-        let venues: [VenueCore]
+    public func decode(from data: Data) throws -> [Venue] {
+        let venues: [Venue]
         do {
-            venues = try JSONDecoder().decode([VenueCore].self, from: data)
+            venues = try JSONDecoder().decode([Venue].self, from: data)
         } catch {
             throw VenueRepositoryCoreError.invalidJSON
         }
