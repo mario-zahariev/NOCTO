@@ -24,7 +24,6 @@
 		B9E5C6622EF95E39005FA51F /* VenueRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9E5C6552EF95E39005FA51F /* VenueRepository.swift */; };
 		B9E5C6632EF95E39005FA51F /* Venue.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9E5C6522EF95E39005FA51F /* Venue.swift */; };
 		B9E5C6642EF95E39005FA51F /* LocationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9E5C64D2EF95E39005FA51F /* LocationManager.swift */; };
-		B9E5C6652EF95E39005FA51F /* NOCTOApp.swift.zip in Resources */ = {isa = PBXBuildFile; fileRef = B9E5C6502EF95E39005FA51F /* NOCTOApp.swift.zip */; };
 		B9E5C6662EF95E39005FA51F /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = B9E5C64B2EF95E39005FA51F /* GoogleService-Info.plist */; };
 		B9E5C6672EF95E39005FA51F /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = B9E5C6472EF95E39005FA51F /* Assets.xcassets */; };
 		B9E5C6692EF9703A005FA51F /* BlurView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9E5C6682EF9700E005FA51F /* BlurView.swift */; };
@@ -49,7 +48,6 @@
 		B9E5C64D2EF95E39005FA51F /* LocationManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationManager.swift; sourceTree = "<group>"; };
 		B9E5C64E2EF95E39005FA51F /* NightPulseView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NightPulseView.swift; sourceTree = "<group>"; };
 		B9E5C64F2EF95E39005FA51F /* NOCTOApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NOCTOApp.swift; sourceTree = "<group>"; };
-		B9E5C6502EF95E39005FA51F /* NOCTOApp.swift.zip */ = {isa = PBXFileReference; lastKnownFileType = archive.zip; path = NOCTOApp.swift.zip; sourceTree = "<group>"; };
 		B9E5C6512EF95E39005FA51F /* NoctoTheme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoctoTheme.swift; sourceTree = "<group>"; };
 		B9E5C6522EF95E39005FA51F /* Venue.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Venue.swift; sourceTree = "<group>"; };
 		B9E5C6532EF95E39005FA51F /* VenueCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VenueCard.swift; sourceTree = "<group>"; };
@@ -113,7 +111,6 @@
 				B9E5C64D2EF95E39005FA51F /* LocationManager.swift */,
 				B9E5C64E2EF95E39005FA51F /* NightPulseView.swift */,
 				B9E5C64F2EF95E39005FA51F /* NOCTOApp.swift */,
-				B9E5C6502EF95E39005FA51F /* NOCTOApp.swift.zip */,
 				B9E5C6512EF95E39005FA51F /* NoctoTheme.swift */,
 				B9E5C6522EF95E39005FA51F /* Venue.swift */,
 				B9E5C6532EF95E39005FA51F /* VenueCard.swift */,
@@ -190,7 +187,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				B9167C332EF8A92500E2DBFC /* venues.json in Resources */,
-				B9E5C6652EF95E39005FA51F /* NOCTOApp.swift.zip in Resources */,
 				B9E5C6662EF95E39005FA51F /* GoogleService-Info.plist in Resources */,
 				B9E5C6672EF95E39005FA51F /* Assets.xcassets in Resources */,
 			);
