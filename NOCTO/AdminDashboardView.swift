@@ -4,6 +4,7 @@ import NOCTOCore
 struct AdminDashboardView: View {
     let venues: [Venue]
     @ObservedObject var favorites: FavoritesManager
+    let snapshot: OperationalSnapshot
 
     var body: some View {
         NavigationStack {
@@ -11,14 +12,22 @@ struct AdminDashboardView: View {
                 Section("Преглед") {
                     statRow("Общо локации", value: "\(venues.count)")
                     statRow("Любими", value: "\(favorites.favoriteIDs.count)")
+                    statRow("Load latency", value: "\(snapshot.loadLatencyMs) ms")
                     statRow("Документация", value: "Активна")
                 }
 
-                // TODO: Wire these health statuses to a real health provider before production.
                 Section("Състояние") {
-                    statRow("Валидация на хранилище", value: "Плейсхолдър")
-                    statRow("Fallback обработка", value: "Плейсхолдър")
-                    statRow("Граници на грешки", value: "Плейсхолдър")
+                    statRow("Валидация на хранилище", value: snapshot.decodeHealthLabel)
+                    statRow("Fallback обработка", value: snapshot.fallbackLabel)
+                    statRow("Латентност на зареждане", value: snapshot.latencyBandLabel)
+                }
+
+                if let lastError = snapshot.lastErrorMessage {
+                    Section("Последна грешка") {
+                        Text(lastError)
+                            .font(.footnote)
+                            .foregroundStyle(NoctoTheme.textSecondary)
+                    }
                 }
             }
             .navigationTitle("Админ")

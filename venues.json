@@ -4,10 +4,131 @@
     "name": "Bedroom Premium",
     "imageName": "bedroom",
     "type": "club",
-    "description": "Premium club experience",
+    "description": "Премиум клубно преживяване с фокус върху house и melodic nights.",
     "latitude": 42.6977,
     "longitude": 23.3219,
-    "address": "Sofia Center",
-    "workingHours": "22-06"
+    "address": "бул. Витоша 12, София",
+    "workingHours": "22:00-06:00"
+  },
+  {
+    "id": "F5E4C3B2-A1D0-4F2E-8C7B-1A2B3C4D5E6F",
+    "name": "EXE Club",
+    "imageName": "exe",
+    "type": "club",
+    "description": "Underground сцена, късни сетове и силен weekend поток.",
+    "latitude": 42.6939,
+    "longitude": 23.3242,
+    "address": "ул. Раковски 113, София",
+    "workingHours": "23:00-06:00"
+  },
+  {
+    "id": "7C6B5A49-3817-46F5-A4B3-2C1D0E9F8A7B",
+    "name": "Carrusel Club",
+    "imageName": "carrusel",
+    "type": "club",
+    "description": "Луксозен club формат с VIP зони и комерсиални hit вечери.",
+    "latitude": 42.6961,
+    "longitude": 23.3264,
+    "address": "ул. Позитано 8, София",
+    "workingHours": "22:30-05:30"
+  },
+  {
+    "id": "19F2A3B4-C5D6-47E8-91A2-B3C4D5E6F708",
+    "name": "Bar Friday",
+    "imageName": "barfriday",
+    "type": "bar",
+    "description": "Cocktail бар с по-тих early-evening пик и social crowd.",
+    "latitude": 42.6992,
+    "longitude": 23.3198,
+    "address": "ул. Шишман 24, София",
+    "workingHours": "18:00-02:00"
+  },
+  {
+    "id": "A1B2C3D4-E5F6-4789-A0B1-C2D3E4F5A607",
+    "name": "One More Bar",
+    "imageName": "onemore",
+    "type": "bar",
+    "description": "Централна бар локация с стабилен weekday трафик.",
+    "latitude": 42.6948,
+    "longitude": 23.3226,
+    "address": "ул. Цар Иван Шишман 12, София",
+    "workingHours": "17:00-02:00"
+  },
+  {
+    "id": "B0A9C8D7-E6F5-4321-9A8B-7C6D5E4F3A21",
+    "name": "Social Club Sofia",
+    "imageName": "socialclub",
+    "type": "lounge",
+    "description": "Lounge атмосфера с deep/organic селекция и premium service.",
+    "latitude": 42.7006,
+    "longitude": 23.3301,
+    "address": "бул. Евлоги и Христо Георгиеви 45, София",
+    "workingHours": "20:00-03:00"
+  },
+  {
+    "id": "C1D2E3F4-A5B6-4789-90AB-CDEF12345678",
+    "name": "Tell Me Bar",
+    "imageName": "tellme",
+    "type": "bar",
+    "description": "Craft коктейли и градска публика в центъра.",
+    "latitude": 42.6971,
+    "longitude": 23.3295,
+    "address": "ул. Ангел Кънчев 28, София",
+    "workingHours": "18:00-01:30"
+  },
+  {
+    "id": "D9E8F7A6-B5C4-4321-ABCD-EF0123456789",
+    "name": "Terminal 1",
+    "imageName": "terminal1",
+    "type": "event",
+    "description": "Live и event локация с ротация по жанрове.",
+    "latitude": 42.6856,
+    "longitude": 23.3184,
+    "address": "ул. Ангел Кънчев 1, София",
+    "workingHours": "21:00-04:00"
+  },
+  {
+    "id": "E7F6A5B4-C3D2-4E1F-9A8B-0C1D2E3F4A5B",
+    "name": "PM Club",
+    "imageName": "pmclub",
+    "type": "club",
+    "description": "Mainstream dance формат с висок weekend пик.",
+    "latitude": 42.7003,
+    "longitude": 23.3221,
+    "address": "бул. България 1, София",
+    "workingHours": "23:00-06:00"
+  },
+  {
+    "id": "F1E2D3C4-B5A6-4789-90AB-C1D2E3F4A5B6",
+    "name": "V Bar",
+    "imageName": "vbar",
+    "type": "lounge",
+    "description": "Lounge + terrace с по-висок early-night retention.",
+    "latitude": 42.6927,
+    "longitude": 23.3169,
+    "address": "бул. Патриарх Евтимий 16, София",
+    "workingHours": "19:00-03:00"
+  },
+  {
+    "id": "0A1B2C3D-4E5F-4678-9ABC-DEF012345678",
+    "name": "Yalta Club",
+    "imageName": "yalta",
+    "type": "club",
+    "description": "Класическа electronic сцена с дълбок нощен цикъл.",
+    "latitude": 42.6941,
+    "longitude": 23.3237,
+    "address": "бул. Цар Освободител 20, София",
+    "workingHours": "23:00-06:00"
+  },
+  {
+    "id": "1234ABCD-5678-4EF0-9ABC-DEF123456789",
+    "name": "Sense Rooftop Bar",
+    "imageName": "sense",
+    "type": "other",
+    "description": "Rooftop формат с premium city view и коктейлно меню.",
+    "latitude": 42.6933,
+    "longitude": 23.3324,
+    "address": "бул. Цар Освободител 16, София",
+    "workingHours": "18:30-01:00"
   }
 ]

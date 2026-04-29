@@ -1,14 +1,15 @@
 import SwiftUI
 
 struct NightPulseView: View {
-    let venuesCount: Int
+    let snapshot: OperationalSnapshot
 
     var body: some View {
         NavigationStack {
             VStack(spacing: 16) {
-                metricCard(title: "Активни места", value: "\(venuesCount)")
-                metricCard(title: "Пиков интервал", value: "23:30 - 01:30")
-                metricCard(title: "Трафик индекс", value: "74 / 100")
+                metricCard(title: "Активни места", value: "\(snapshot.venuesCount)")
+                metricCard(title: "Здраве на decode", value: snapshot.decodeHealthLabel)
+                metricCard(title: "Load latency", value: "\(snapshot.loadLatencyMs) ms")
+                metricCard(title: "Трафик индекс", value: "\(snapshot.trafficIndex) / 100")
                 Spacer()
             }
             .padding(20)

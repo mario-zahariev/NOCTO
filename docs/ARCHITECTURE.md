@@ -11,13 +11,25 @@
 ## Data Flow
 
 1. `ContentView` requests venues via `VenueRepository`.
-2. `VenueRepository` decodes `venues.json`, validates entries, and returns clean venue payloads.
-3. `ContentView`, `HomeView`, and `FavoritesView` call `FavoritesManager` for favorite state mutations/reads.
-4. `FavoritesManager` persists favorite venue UUIDs in `UserDefaults`.
-5. `VenueRepository` and `FavoritesManager` stay decoupled and are composed by `ContentView`.
+2. `VenueRepository` delegates loading through `VenueDataSource` (current implementation: `LocalVenueDataSource`).
+3. `LocalVenueDataSource` loads `venues.json`, validates entries via `NOCTOCore`, and returns clean venue payloads.
+4. `ContentView`, `HomeView`, and `FavoritesView` call `FavoritesManager` for favorite state mutations/reads.
+5. `FavoritesManager` persists favorite venue UUIDs in `UserDefaults`.
+6. `VenueRepository` and `FavoritesManager` stay decoupled and are composed by `ContentView`.
 
 ## Guardrails
 
 - Fail fast with explicit, typed repository errors.
 - Validate all external JSON input before rendering.
 - Keep UI and data loading concerns separated.
+
+## Firebase Posture Decision Gate (2026-04-29)
+
+- Option A: **Enable Firebase runtime now** (`FirebaseApp.configure`, analytics/firestore wiring, operational telemetry).
+- Option B: **Detach Firebase dependencies temporarily** until remote data path is implemented.
+
+### Current decision
+
+- **Runtime posture:** Firebase remains detached at runtime (no Firebase initialization path in app flow).
+- **Rationale:** local-first architecture is still the source of truth; enabling Firebase before remote adapter contracts would add operational complexity without product value.
+- **Exit criteria to move to Option A:** `VenueDataSource` remote adapter implemented, telemetry contract defined, and health metrics wired in Admin/Pulse surfaces.
