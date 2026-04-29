@@ -31,5 +31,7 @@
 ### Current decision
 
 - **Runtime posture:** Firebase remains detached at runtime (no Firebase initialization path in app flow).
+- **Build posture:** Firebase is detached from NOCTO target linkage (`FirebaseAnalytics`/`FirebaseFirestore` removed from frameworks and package dependencies).
+- **Resource posture:** `GoogleService-Info.plist` is removed from target build resources (file kept on disk for optional future re-attach).
 - **Rationale:** local-first architecture is still the source of truth; enabling Firebase before remote adapter contracts would add operational complexity without product value.
 - **Exit criteria to move to Option A:** `VenueDataSource` remote adapter implemented, telemetry contract defined, and health metrics wired in Admin/Pulse surfaces.
