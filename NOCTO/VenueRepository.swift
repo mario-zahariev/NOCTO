@@ -1,20 +1,16 @@
 import NOCTOCore
 import Foundation
 
-typealias VenueRepositoryError = LocalVenueRepositoryError
+typealias VenueRepositoryError = VenueDataSourceError
 
 struct VenueRepository {
-    private let core = LocalVenueRepository()
+    private let dataSource: any VenueDataSource
 
-    func loadVenues() async throws -> [Venue] {
-        try await withCheckedThrowingContinuation { continuation in
-            DispatchQueue.global(qos: .userInitiated).async {
-                do {
-                    continuation.resume(returning: try core.loadVenues())
-                } catch {
-                    continuation.resume(throwing: error)
-                }
-            }
-        }
+    init(dataSource: any VenueDataSource = LocalVenueDataSource()) {
+        self.dataSource = dataSource
+    }
+
+    func loadVenues() throws -> [Venue] {
+        try dataSource.loadVenues()
     }
 }

@@ -6,6 +6,8 @@ struct ContentView: View {
     @State private var venues: [Venue] = []
     @State private var loadError: String?
     @State private var isLoading = false
+    @State private var loadLatencyMs = 0
+    @State private var lastLoadSucceeded = false
 
     private let repository = VenueRepository()
 
@@ -34,24 +36,37 @@ struct ContentView: View {
                     FavoritesView(venues: venues, favorites: favorites)
                         .tabItem { Label("Любими", systemImage: "heart") }
 
-                    NightPulseView(venuesCount: venues.count)
+                    NightPulseView(snapshot: snapshot)
                         .tabItem { Label("Пулс", systemImage: "waveform.path.ecg") }
 
-                    AdminDashboardView(venues: venues, favorites: favorites)
+                    AdminDashboardView(venues: venues, favorites: favorites, snapshot: snapshot)
                         .tabItem { Label("Админ", systemImage: "gauge.with.dots.needle.67percent") }
                 }
                 .tint(NoctoTheme.accent)
             }
         }
         .task {
+            let startedAt = Date()
             isLoading = true
             loadError = nil
             do {
-                venues = try await repository.loadVenues()
+                venues = try repository.loadVenues()
+                lastLoadSucceeded = true
             } catch {
                 loadError = error.localizedDescription
+                lastLoadSucceeded = false
             }
+            loadLatencyMs = Int(Date().timeIntervalSince(startedAt) * 1000)
             isLoading = false
         }
+    }
+
+    private var snapshot: OperationalSnapshot {
+        OperationalSnapshot(
+            loadLatencyMs: loadLatencyMs,
+            didLoadSucceed: lastLoadSucceeded,
+            lastErrorMessage: loadError,
+            venuesCount: venues.count
+        )
     }
 }
