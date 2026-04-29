@@ -19,7 +19,7 @@ struct AdminDashboardView: View {
                 Section("Състояние") {
                     statRow("Валидация на хранилище", value: snapshot.decodeHealthLabel)
                     statRow("Fallback обработка", value: snapshot.fallbackLabel)
-                    statRow("Граници на грешки", value: snapshot.latencyBandLabel)
+                    statRow("Латентност на зареждане", value: snapshot.latencyBandLabel)
                 }
 
                 if let lastError = snapshot.lastErrorMessage {

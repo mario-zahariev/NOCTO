@@ -40,6 +40,8 @@ def validate_entry(entry: dict, index: int) -> None:
 
     if not entry["name"].strip():
         fail(f"entry #{index} has empty 'name'")
+    if not entry["imageName"].strip():
+        fail(f"entry #{index} has empty 'imageName'")
     if not entry["address"].strip():
         fail(f"entry #{index} has empty 'address'")
     if not entry["workingHours"].strip():

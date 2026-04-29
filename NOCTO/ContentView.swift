@@ -5,7 +5,7 @@ struct ContentView: View {
     @StateObject private var favorites = FavoritesManager()
     @State private var venues: [Venue] = []
     @State private var loadError: String?
-    @State private var isLoading = false
+    @State private var isLoading = true
     @State private var loadLatencyMs = 0
     @State private var lastLoadSucceeded = false
 
@@ -50,7 +50,9 @@ struct ContentView: View {
             isLoading = true
             loadError = nil
             do {
-                venues = try repository.loadVenues()
+                venues = try await Task.detached(priority: .userInitiated) { [repository] in
+                    try repository.loadVenues()
+                }.value
                 lastLoadSucceeded = true
             } catch {
                 loadError = error.localizedDescription
