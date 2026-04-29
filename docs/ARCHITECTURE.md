@@ -35,3 +35,10 @@
 - **Resource posture:** `GoogleService-Info.plist` is removed from target build resources (file kept on disk for optional future re-attach).
 - **Rationale:** local-first architecture is still the source of truth; enabling Firebase before remote adapter contracts would add operational complexity without product value.
 - **Exit criteria to move to Option A:** `VenueDataSource` remote adapter implemented, telemetry contract defined, and health metrics wired in Admin/Pulse surfaces.
+
+### CI Guardrail (Post-Detachment)
+
+- CI runs `scripts/ci/check_firebase_detached.sh` before tests.
+- The guard fails if `NOCTO.xcodeproj/project.pbxproj` contains Firebase linkage markers (`firebase-ios-sdk`, `FirebaseAnalytics`, `FirebaseFirestore`).
+- The guard fails if `GoogleService-Info.plist` is re-added to target Build Resources.
+- Purpose: keep Firebase detachment explicit and prevent accidental re-attach in routine project edits.
