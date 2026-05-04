@@ -133,18 +133,23 @@ struct OperationalSnapshot {
 
         let closesNextDay = closing.hour < opening.hour ||
             (closing.hour == opening.hour && closing.minute <= opening.minute)
-        return closesNextDay && closing.hour >= 3
+        let closingMinuteOfDay = closing.hour * 60 + closing.minute
+        return closesNextDay && (180..<720).contains(closingMinuteOfDay)
     }
 
     private static func hourAndMinute(from workingHours: String, at index: Int) -> (hour: Int, minute: Int)? {
         let parts = workingHours.split(separator: "-")
         guard parts.indices.contains(index) else { return nil }
 
-        let timeParts = parts[index].split(separator: ":")
+        let timeParts = parts[index]
+            .trimmingCharacters(in: .whitespacesAndNewlines)
+            .split(separator: ":")
         guard
             timeParts.count == 2,
-            let hour = Int(timeParts[0]),
-            let minute = Int(timeParts[1])
+            let hour = Int(timeParts[0].trimmingCharacters(in: .whitespacesAndNewlines)),
+            let minute = Int(timeParts[1].trimmingCharacters(in: .whitespacesAndNewlines)),
+            (0...23).contains(hour),
+            (0...59).contains(minute)
         else {
             return nil
         }

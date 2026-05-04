@@ -63,8 +63,14 @@ struct NightPulseView: View {
     private var typeMixCard: some View {
         VStack(alignment: .leading, spacing: 12) {
             sectionLabel("Микс от места")
-            ForEach(snapshot.typeSignals) { signal in
-                typeMixRow(signal)
+            if snapshot.typeSignals.isEmpty {
+                Text("Няма валиден типаж за показване")
+                    .font(.subheadline)
+                    .foregroundStyle(NoctoTheme.textSecondary)
+            } else {
+                ForEach(snapshot.typeSignals) { signal in
+                    typeMixRow(signal)
+                }
             }
         }
         .nightPulseCard()
