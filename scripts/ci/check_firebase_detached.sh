@@ -26,10 +26,14 @@ check_absent "FirebaseAnalytics" "Found FirebaseAnalytics linkage marker in Xcod
 check_absent "FirebaseFirestore" "Found FirebaseFirestore linkage marker in Xcode project."
 check_absent "GoogleService-Info.plist in Resources" "Found GoogleService-Info.plist inside Build Resources."
 
-if git ls-files --error-unmatch "$FIREBASE_PLIST" >/dev/null 2>&1; then
-  echo "❌ Found tracked Firebase config plist: $FIREBASE_PLIST"
-  echo "Keep only GoogleService-Info.plist.example in git; real plist files must remain local-only."
-  fail=1
+if ! git rev-parse --is-inside-work-tree >/dev/null 2>&1; then
+  echo "⚠️  Not inside a git working tree; skipping tracked Firebase plist check."
+else
+  if git ls-files --error-unmatch "$FIREBASE_PLIST" >/dev/null 2>&1; then
+    echo "❌ Found tracked Firebase config plist: $FIREBASE_PLIST"
+    echo "Keep only GoogleService-Info.plist.example in git; real plist files must remain local-only."
+    fail=1
+  fi
 fi
 
 if [[ "$fail" -ne 0 ]]; then
