@@ -29,7 +29,9 @@ struct FavoritesView: View {
                                         venue: venue,
                                         isFavorite: true,
                                         onToggleFavorite: {
-                                            favorites.toggle(venue.id)
+                                            withAnimation {
+                                                favorites.toggle(venue.id)
+                                            }
                                             Haptics.tap()
                                         }
                                     )
