@@ -31,7 +31,7 @@ struct AllVenuesMapView: View {
                     }
                 }
             }
-            .navigationTitle("Map")
+            .navigationTitle("Карта")
         }
     }
 }

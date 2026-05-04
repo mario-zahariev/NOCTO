@@ -16,7 +16,7 @@ struct NightPulseView: View {
                 .padding(.vertical, 14)
             }
             .background(NoctoTheme.background.ignoresSafeArea())
-            .navigationTitle("Night Pulse")
+            .navigationTitle("Пулс")
         }
     }
 
@@ -55,7 +55,7 @@ struct NightPulseView: View {
             signalRow("Основен формат", value: snapshot.primaryVenueTypeLabel, systemImage: "music.note.house")
             signalRow("Късно покритие", value: "\(snapshot.lateNightVenueCount) места", systemImage: "moon.stars")
             signalRow("Зареждане", value: "\(snapshot.loadLatencyMs) ms · \(snapshot.latencyBandLabel)", systemImage: "speedometer")
-            signalRow("Decode статус", value: snapshot.decodeHealthLabel, systemImage: "checkmark.seal")
+            signalRow("Статус на данните", value: snapshot.decodeHealthLabel, systemImage: "checkmark.seal")
         }
         .nightPulseCard()
     }
@@ -79,8 +79,8 @@ struct NightPulseView: View {
     private var qualityCard: some View {
         VStack(alignment: .leading, spacing: 12) {
             sectionLabel("Оперативно качество")
-            signalRow("Пълнота на dataset-а", value: "\(snapshot.dataCompletenessPercent)%", systemImage: "chart.bar.doc.horizontal")
-            signalRow("Fallback", value: snapshot.fallbackLabel, systemImage: "arrow.triangle.2.circlepath")
+            signalRow("Пълнота на данните", value: "\(snapshot.dataCompletenessPercent)%", systemImage: "chart.bar.doc.horizontal")
+            signalRow("Резервен режим", value: snapshot.fallbackLabel, systemImage: "arrow.triangle.2.circlepath")
             signalRow("Източник", value: "Локален venues.json", systemImage: "internaldrive")
         }
         .nightPulseCard()
