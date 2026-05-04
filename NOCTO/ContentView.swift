@@ -50,7 +50,9 @@ struct ContentView: View {
             isLoading = true
             loadError = nil
             do {
-                venues = try repository.loadVenues()
+                venues = try await Task.detached(priority: .userInitiated) { [repository] in
+                    try repository.loadVenues()
+                }.value
                 lastLoadSucceeded = true
             } catch {
                 loadError = error.localizedDescription

@@ -13,9 +13,9 @@ fail=0
 check_absent() {
   local pattern="$1"
   local message="$2"
-  if rg -n --fixed-strings "$pattern" "$PROJECT_FILE" >/dev/null; then
+  if grep -qF "$pattern" "$PROJECT_FILE"; then
     echo "❌ $message"
-    rg -n --fixed-strings "$pattern" "$PROJECT_FILE" || true
+    grep -nF "$pattern" "$PROJECT_FILE" || true
     fail=1
   fi
 }
