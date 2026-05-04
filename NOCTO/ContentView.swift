@@ -68,7 +68,7 @@ struct ContentView: View {
             loadLatencyMs: loadLatencyMs,
             didLoadSucceed: lastLoadSucceeded,
             lastErrorMessage: loadError,
-            venuesCount: venues.count
+            venues: venues
         )
     }
 }
