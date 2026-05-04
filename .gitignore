@@ -16,6 +16,7 @@ Package.resolved
 .env.test
 .env.production
 .env.*.local
+NOCTO/GoogleService-Info.plist
 NOCTO/GoogleService-Info.local.plist
 
 # macOS
