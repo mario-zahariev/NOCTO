@@ -15,6 +15,9 @@ jobs:
       - name: Swift Version
         run: swift --version
 
+      - name: Guard Firebase detachment
+        run: bash scripts/ci/check_firebase_detached.sh
+
       - name: Validate venues schema
         run: python3 scripts/validate_venues_json.py
 
