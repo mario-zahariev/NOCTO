@@ -61,6 +61,7 @@ struct ContentView: View {
             loadLatencyMs = Int(Date().timeIntervalSince(startedAt) * 1000)
             isLoading = false
         }
+        .preferredColorScheme(.dark)
     }
 
     private var snapshot: OperationalSnapshot {
