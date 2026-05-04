@@ -46,7 +46,7 @@ struct VenueDetailView: View {
             .padding(20)
         }
         .background(NoctoTheme.background.ignoresSafeArea())
-        .navigationTitle("Venue")
+        .navigationTitle(venue.name)
         .navigationBarTitleDisplayMode(.inline)
     }
 }

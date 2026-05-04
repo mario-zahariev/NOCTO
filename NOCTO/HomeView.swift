@@ -32,7 +32,7 @@ struct HomeView: View {
                 .padding(.vertical, 10)
             }
             .background(NoctoTheme.background.ignoresSafeArea())
-            .navigationTitle("Home")
+            .navigationTitle("Начало")
         }
     }
 }

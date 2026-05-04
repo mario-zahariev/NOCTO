@@ -49,7 +49,7 @@ struct OperationalSnapshot {
     }
 
     var decodeHealthLabel: String {
-        didLoadSucceed ? "OK" : "ERROR"
+        didLoadSucceed ? "Изряден" : "Проблем"
     }
 
     var fallbackLabel: String {
@@ -97,7 +97,7 @@ struct OperationalSnapshot {
         switch type {
         case .club: return "Клубове"
         case .bar: return "Барове"
-        case .lounge: return "Lounge"
+        case .lounge: return "Лаундж"
         case .event: return "Събития"
         case .other: return "Други"
         }
