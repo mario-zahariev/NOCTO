@@ -14,7 +14,8 @@ NOCTO is a premium iOS nightlife intelligence app focused on Sofia venues.
 
 - SwiftUI
 - MapKit
-- Firebase packages configured in Xcode project (optional runtime setup)
+- Local-first venue data through `NOCTOCore`
+- Firebase detached until a real remote data path is implemented
 
 ## Project Structure
 
@@ -25,8 +26,8 @@ NOCTO is a premium iOS nightlife intelligence app focused on Sofia venues.
 ## Quick Start
 
 1. Open `NOCTO.xcodeproj` in Xcode.
-2. Keep `NOCTO/GoogleService-Info.plist` as placeholder in the repository. Do not commit real Firebase credentials; use a local-only copy or CI secret-managed injection when Firebase is enabled.
-3. Build and run target `NOCTO` on iOS simulator/device.
+2. Build and run target `NOCTO` on iOS simulator/device.
+3. If Firebase is intentionally re-enabled later, copy `NOCTO/GoogleService-Info.plist.example` to a local-only `NOCTO/GoogleService-Info.plist`. Do not commit real Firebase credentials.
 
 ## Data Contract
 
@@ -44,6 +45,7 @@ Required fields:
 
 - Unit tests for JSON decoding and validation in the package core module (`NOCTOCore`)
 - CI workflow for lint/build/test checks
+- Firebase detachment guard to prevent accidental package/resource relinkage
 - Dependabot for dependency updates
 - Security policy and contribution rules
 
