@@ -9,7 +9,7 @@ struct VenueCard: View {
     var body: some View {
         VStack(alignment: .leading, spacing: 10) {
             HStack {
-                Text(venue.type.rawValue.uppercased())
+                Text(venue.type.cardLabel)
                     .font(.caption.weight(.semibold))
                     .foregroundStyle(NoctoTheme.textSecondary)
                 Spacer()
@@ -41,5 +41,17 @@ struct VenueCard: View {
                 .stroke(NoctoTheme.cardBorder, lineWidth: 1)
         )
         .microFeedback()
+    }
+}
+
+private extension VenueCore.VenueType {
+    var cardLabel: String {
+        switch self {
+        case .club: return "КЛУБ"
+        case .bar: return "БАР"
+        case .lounge: return "ЛАУНДЖ"
+        case .event: return "СЪБИТИЕ"
+        case .other: return "ДРУГО"
+        }
     }
 }
