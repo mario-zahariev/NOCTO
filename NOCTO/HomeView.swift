@@ -9,7 +9,7 @@ struct HomeView: View {
         NavigationStack {
             ScrollView {
                 VStack(spacing: 14) {
-                    HeroParallaxCard(title: "NOCTO", subtitle: "Sofia nightlife intelligence")
+                    HeroParallaxCard(title: "NOCTO", subtitle: "Интелигентен гид за нощна София")
                         .padding(.horizontal, 16)
 
                     ForEach(venues) { venue in
