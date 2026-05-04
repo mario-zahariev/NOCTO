@@ -16,15 +16,32 @@ struct FavoritesView: View {
                     ContentUnavailableView(
                         "Няма запазени места",
                         systemImage: "heart.slash",
-                        description: Text("Маркирай любими клубове и барове от Начало.")
+                        description: Text("Запазвай места от Начало или Карта и ги дръж тук за вечерта.")
                     )
                 } else {
-                    List(favoriteVenues) { venue in
-                        NavigationLink(venue.name) {
-                            VenueDetailView(venue: venue)
+                    ScrollView {
+                        LazyVStack(spacing: 14) {
+                            ForEach(favoriteVenues) { venue in
+                                NavigationLink {
+                                    VenueDetailView(venue: venue)
+                                } label: {
+                                    VenueCard(
+                                        venue: venue,
+                                        isFavorite: true,
+                                        onToggleFavorite: {
+                                            withAnimation {
+                                                favorites.toggle(venue.id)
+                                            }
+                                            Haptics.tap()
+                                        }
+                                    )
+                                }
+                                .buttonStyle(.plain)
+                                .padding(.horizontal, 16)
+                            }
                         }
+                        .padding(.vertical, 10)
                     }
-                    .scrollContentBackground(.hidden)
                 }
             }
             .background(NoctoTheme.background.ignoresSafeArea())
