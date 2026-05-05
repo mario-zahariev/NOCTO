@@ -2,7 +2,7 @@
 
 Дата: 2026-05-05
 Статус: активен продуктово-брандов source of truth
-Repo: `/Users/mariozah-/Documents/New project/NOCTO_SAFE`
+Repo: `github.com/mariozahariev69-design/NOCTO`
 
 ## 1. Цел
 
@@ -127,7 +127,7 @@ NOCTO не трябва да започва като безкраен списъ
 
 Активен source of truth:
 
-`/Users/mariozah-/Documents/New project/NOCTO_SAFE`
+`NOCTO_SAFE`
 
 Текущо състояние:
 
