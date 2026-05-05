@@ -3,10 +3,8 @@ import SwiftUI
 struct ProfileView: View {
     let favoritesCount: Int
     let snapshot: OperationalSnapshot
-
-    #if DEBUG
-    let adminView: AdminDashboardView
-    #endif
+    let venues: [Venue]
+    let favorites: FavoritesManager
 
     var body: some View {
         NavigationStack {
@@ -88,7 +86,7 @@ struct ProfileView: View {
     #if DEBUG
     private var debugAdminLink: some View {
         NavigationLink {
-            adminView
+            AdminDashboardView(venues: venues, favorites: favorites, snapshot: snapshot)
         } label: {
             HStack(spacing: 12) {
                 Image(systemName: "gauge.with.dots.needle.67percent")
