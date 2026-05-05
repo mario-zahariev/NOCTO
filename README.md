@@ -1,71 +1,152 @@
+<div align="center">
+
+<br>
+
+<img src="NOCTO/Assets.xcassets/AppIcon.appiconset/AppIcon-1024.png" width="88" alt="NOCTO" />
+
+<br><br>
+
 # NOCTO
 
-_Premium local-first nightlife intelligence for Sofia._
+**OLED nightlife intelligence for Sofia.**
 
-[![CI](https://github.com/mariozahariev69-design/NOCTO/actions/workflows/ci.yml/badge.svg)](https://github.com/mariozahariev69-design/NOCTO/actions/workflows/ci.yml)
-[![Swift tools](https://img.shields.io/badge/Swift%20tools-5.10-orange.svg)](https://swift.org)
-[![Platform](https://img.shields.io/badge/platform-iOS%2017%2B%20%7C%20macOS%2014%2B-blue.svg)](https://developer.apple.com)
-[![License](https://img.shields.io/badge/license-MIT-lightgrey.svg)](LICENSE)
+<br>
 
-<p align="center">
-  <img src="NOCTO/Assets.xcassets/AppIcon.appiconset/AppIcon-1024.png" alt="NOCTO app icon: dark premium nightlife mark" width="180">
-</p>
+[![CI](https://github.com/mariozahariev69-design/NOCTO/actions/workflows/ci.yml/badge.svg)](https://github.com/mariozahariev69-design/NOCTO/actions/workflows/ci.yml)&nbsp;&nbsp;[![Swift](https://img.shields.io/badge/Swift-5.10-F05138?logo=swift&logoColor=white&labelColor=111111)](https://swift.org)&nbsp;&nbsp;[![iOS](https://img.shields.io/badge/iOS-17%2B-000000?logo=apple&logoColor=white&labelColor=111111)](https://developer.apple.com)&nbsp;&nbsp;[![macOS](https://img.shields.io/badge/macOS-14%2B-000000?logo=apple&logoColor=white&labelColor=111111)](https://developer.apple.com)&nbsp;&nbsp;[![License](https://img.shields.io/badge/License-MIT-3a3a3c?labelColor=111111)](LICENSE)
 
-NOCTO is an iOS-first app for curated Sofia venue discovery, local nightlife signals, favorites, and map-based exploration. The current architecture is intentionally local-first: venue data is loaded from validated JSON through `NOCTOCore`, with Firebase detached until there is a real remote data path worth adding.
+<br>
 
-## Current Scope
+</div>
 
-- **Venue discovery** - curated venue cards with address, working hours, type, and detail views.
-- **Favorites** - local `UserDefaults` persistence through `FavoritesManager`.
-- **Map** - MapKit venue annotations and location-focused exploration.
-- **Night Pulse** - computed local signals from the active venue dataset.
-- **Profile / Night Pass surface** - public profile entry point, with admin tooling kept dev-only.
-- **Local data validation** - `venues.json` schema checks and package-level decoding tests.
+---
+
+NOCTO answers one question: *where in Sofia is actually worth going tonight?* Venue records flow from `venues.json` through `NOCTOCore`'s typed decode-and-validate pipeline before any view receives data — invalid entries are rejected at the repository boundary, not silently ignored. Firebase is deliberately absent; it re-enters only through a defined remote adapter contract, not as passive dependency weight.
+
+---
+
+## Data Flow
+
+```
+ContentView
+  └── VenueRepository
+        └── VenueDataSource                ← protocol boundary
+              └── LocalVenueDataSource
+                    └── LocalVenueRepository  (NOCTOCore)
+                          └── VenueRepositoryCore → [Venue]  ← filter(\.isValid) applied
+                                          ↑
+                                    venues.json  (bundle resource)
+
+FavoritesManager      @MainActor · @Published UUID set · UserDefaults persistence
+OperationalSnapshot   pulse index · type mix · latency band · signal confidence
+LocationManager       CLLocationManager · authorizedWhenInUse · 100m accuracy
+```
+
+Every layer fails loudly with typed errors. No degraded state reaches a view.
+
+---
+
+## Capabilities
+
+| Surface | Implementation |
+|---|---|
+| **Home** | `HomeView` — `HeroParallaxCard` + curated `VenueCard` list |
+| **Map** | `AllVenuesMapView` — MapKit annotations, `NoctoTheme.accent` pins |
+| **Favorites** | `FavoritesView` — filtered by `FavoritesManager.isFavorite(_:)` |
+| **Night Pulse** | `NightPulseView` — `OperationalSnapshot` signals: pulse index, type mix, latency, completeness |
+| **Profile** | `ProfileView` — Night Pass surface; Admin behind `#if DEBUG` only |
+
+---
 
 ## Requirements
 
-- iOS 17.0+ for the app target
-- macOS 14+ for the Swift package test target
-- Xcode 26.1+ or newer for the checked-in Xcode project format
-- Swift tools 5.10+ for the `NOCTOCore` package manifest
+| | Version |
+|---|---|
+| iOS deployment target | 17.0 |
+| macOS (test target) | 14.0 |
+| Xcode | 26.1+ |
+| Swift tools | 5.10 |
+| Bundle identifier | `com.mario.NOCTO` |
 
-## Tech Stack
-
-- SwiftUI
-- MapKit
-- Swift Package Manager
-- `NOCTOCore` for reusable venue decoding and validation
-- Local JSON data source
-- GitHub Actions CI for package tests, app smoke build, schema validation, and Firebase detachment guard
+---
 
 ## Project Structure
 
-```text
+```
 NOCTO/
-  iOS app target: views, app entry, repositories, managers, theme/helpers
+├── NOCTOApp.swift              @main · WindowGroup entry point
+├── ContentView.swift           Root composition — async venue load, owns FavoritesManager
+├── HomeView.swift              HeroParallaxCard + venue list, NavigationStack
+├── VenueDetailView.swift       MapKit single-venue map, address, working hours
+├── AllVenuesMapView.swift      Full-map MKCoordinateRegion, all venue annotations
+├── FavoritesView.swift         Filtered venue list, ContentUnavailableView on empty
+├── NightPulseView.swift        OperationalSnapshot cards — hero, signals, type mix, quality
+├── ProfileView.swift           Night Pass identity + metrics; Admin link (#if DEBUG)
+├── AdminDashboardView.swift    Dev-only operational stat list — counts, health, latency
+│
+├── VenueCard.swift             Type label · name · address · hours · favorite toggle
+├── HeroParallaxCard.swift      ParallaxCard + accent gradient overlay, 180pt height
+├── ParallaxCard.swift          3D rotation via PreferenceKey scroll position tracking
+├── BlurView.swift              UIVisualEffectView bridge — .systemUltraThinMaterialDark
+├── MicroFeedback.swift         ViewModifier — scaleEffect(0.98), .easeOut(0.12s) on press
+│
+├── FavoritesManager.swift      @MainActor ObservableObject — UUID set + UserDefaults
+├── LocationManager.swift       CLLocationManagerDelegate — authorizedWhenInUse
+├── OperationalSnapshot.swift   Computed: trafficIndex · typeSignals · latencyBandLabel
+├── VenueRepository.swift       Composes any VenueDataSource
+├── VenueDataSource.swift       Protocol + LocalVenueDataSource concrete adapter
+├── Venue.swift                 typealias Venue = NOCTOCore.Venue
+│
+├── NoctoTheme.swift            Design tokens: background #050609 · accent #FD5B8A
+├── Color+Hex.swift             Color(hex:) — Scanner, sRGB, 6-digit only
+└── Haptics.swift               UIImpactFeedbackGenerator(.light) · .notificationOccurred(.success)
 
 Sources/NOCTOCore/
-  Swift package core module for reusable venue decoding and validation
+├── VenueCore.swift             Venue model — Codable · Identifiable · CLLocationCoordinate2D
+│                               isValid: non-empty name + coordinate bounds
+├── VenueRepositoryCore.swift   JSONDecoder → filter(\.isValid) — throws .invalidJSON / .noValidVenues
+└── LocalVenueRepository.swift  Bundle resource lookup → Data → VenueRepositoryCore
 
 Tests/NOCTOCoreTests/
-  Unit tests for valid JSON, invalid JSON, and all-invalid venue payloads
+└── VenueRepositoryCoreTests    valid payload · invalid JSON · all-invalid venue entries
 
 scripts/
-  Local/CI validation helpers
+├── validate_venues_json.py     9 required fields · UUID · coordinate range · ≥10 entries
+└── ci/check_firebase_detached.sh  Scans .pbxproj for Firebase markers; fails on tracked plist
 ```
 
-## Run The App
+---
 
-1. Clone the repository.
-2. Open `NOCTO.xcodeproj` in Xcode.
-3. Select the `NOCTO` scheme.
-4. Run on an iOS 17+ simulator or device.
+## Quick Start
 
-Firebase remains detached by default. If Firebase is intentionally re-enabled later, copy `NOCTO/GoogleService-Info.plist.example` to a local-only `NOCTO/GoogleService-Info.plist`. Do not commit real Firebase credentials.
+```zsh
+git clone https://github.com/mariozahariev69-design/NOCTO.git
+open NOCTO.xcodeproj
+# Select NOCTO scheme → run on iOS 17+ simulator or device
+```
 
-## Swift Package Usage
+**Load venues from the app bundle:**
 
-`NOCTOCore` can be consumed through Swift Package Manager. Once release tags are published, prefer semantic version requirements:
+```swift
+import NOCTOCore
+
+let venues = try LocalVenueRepository().loadVenues()
+// [Venue] — decoded, validated, invalid entries removed
+```
+
+**Decode from raw Data:**
+
+```swift
+import NOCTOCore
+
+let venues = try VenueRepositoryCore().decode(from: data)
+// throws .invalidJSON or .noValidVenues — never silently degrades
+```
+
+---
+
+## NOCTOCore Package
+
+Referenced as a local Swift package via the `.` relative path in `NOCTO.xcodeproj`. Once semantic version tags are published:
 
 ```swift
 .package(
@@ -74,94 +155,114 @@ Firebase remains detached by default. If Firebase is intentionally re-enabled la
 )
 ```
 
-Until the first semantic version tag exists, `main` can be used as a temporary development fallback. Do not use commit revisions in public setup docs unless there is an exceptional internal reason.
+Add `NOCTOCore` to target dependencies. Use `main` as a temporary fallback only. Do not pin to commit SHAs in shared documentation.
 
-Then add `NOCTOCore` to your target dependencies.
-
-## Quick Start
-
-Load validated venues from a bundled `venues.json`:
-
-```swift
-import NOCTOCore
-
-let repository = LocalVenueRepository()
-let venues = try repository.loadVenues()
-
-print("Loaded \(venues.count) venues")
-```
-
-Decode venue data directly when you already have `Data`:
-
-```swift
-import NOCTOCore
-
-let decoder = VenueRepositoryCore()
-let venues = try decoder.decode(from: data)
-```
+---
 
 ## Data Contract
 
-Venue data is loaded from `venues.json` and validated before rendering.
-
-Required fields:
+Every record in `venues.json` must satisfy `scripts/validate_venues_json.py` and `VenueCore.isValid` at decode time.
 
 ```json
 {
-  "id": "D4A55276-0F5D-4C5B-A74B-8B0D2E2159AA",
-  "name": "EXE Club",
-  "imageName": "exe-club",
-  "type": "club",
-  "description": "High-energy club in central Sofia.",
-  "latitude": 42.6977,
-  "longitude": 23.3219,
-  "address": "Sofia, Bulgaria",
-  "workingHours": "23:00 - 06:00"
+  "id":           "A8E1F9E4-3C2A-4F3E-9B7D-123456789ABC",
+  "name":         "Bedroom Premium",
+  "imageName":    "bedroom",
+  "type":         "club",
+  "description":  "Премиум клубно преживяване с фокус върху house и melodic nights.",
+  "latitude":     42.6977,
+  "longitude":    23.3219,
+  "address":      "бул. Витоша 12, София",
+  "workingHours": "22:00-06:00"
 }
 ```
 
-Supported venue types:
+All nine fields are required. `imageName` and `description` are validated as non-empty strings. `VenueCore.isValid` re-enforces non-empty `name` and coordinate bounds at runtime. The Python validator additionally requires a minimum of 10 entries in the dataset.
 
-- `club`
-- `bar`
-- `lounge`
-- `event`
-- `other`
+**Venue types:** `club` · `bar` · `lounge` · `event` · `other`
 
-The tracked repository dataset requires `imageName` and `description` because the local schema validator enforces them before CI passes.
+---
 
-## Quality Controls
+## CI Pipeline
 
-- `python3 scripts/validate_venues_json.py`
-- `bash scripts/ci/check_firebase_detached.sh`
-- `swift test`
-- iOS simulator smoke build through GitHub Actions
-- Dependabot metadata for GitHub Actions maintenance
+Four gates run on every push to `main` and every pull request. All four must pass.
 
-## Firebase Posture
+```zsh
+# 1. Firebase detachment guard
+bash scripts/ci/check_firebase_detached.sh
 
-Firebase is currently detached:
+# 2. Venue schema validation
+python3 scripts/validate_venues_json.py
 
-- no Firebase runtime initialization
-- no Firebase target linkage
-- no tracked production `GoogleService-Info.plist`
-- CI guard prevents accidental Firebase relinkage
+# 3. NOCTOCore unit tests
+swift test
 
-Firebase should only return through a deliberate remote data adapter, not as passive dependency weight.
+# 4. App smoke build
+xcodebuild -project NOCTO.xcodeproj \
+           -scheme NOCTO \
+           -sdk iphonesimulator \
+           -destination 'generic/platform=iOS Simulator' \
+           build
+```
+
+Dependabot keeps GitHub Actions runners and the Swift package graph current on a weekly cadence.
+
+---
+
+## Linting
+
+SwiftLint runs against `NOCTO/` and `Sources/`. Key configuration in `.swiftlint.yml`:
+
+- `force_cast` → **error**
+- `force_try` → **error**
+- `force_unwrapping` → opt-in, flagged
+- Line length: warning at 140, error at 180
+- `todo` disabled — tracked in roadmap instead
+
+---
+
+## Firebase
+
+Fully detached at every level.
+
+```
+no FirebaseApp.configure()
+no firebase-ios-sdk package reference in project.pbxproj
+no FirebaseAnalytics or FirebaseFirestore target linkage
+no tracked GoogleService-Info.plist
+```
+
+`scripts/ci/check_firebase_detached.sh` scans `NOCTO.xcodeproj/project.pbxproj` for Firebase linkage markers and fails the build if any are found, or if `GoogleService-Info.plist` is re-tracked in git.
+
+Firebase re-enters only when a remote `VenueDataSource` adapter exists — with a defined contract, security rules, health metrics, and a fallback strategy. Not before.
+
+```zsh
+# Local Firebase testing only — never commit this file
+cp NOCTO/GoogleService-Info.plist.example NOCTO/GoogleService-Info.plist
+```
+
+---
 
 ## Roadmap
 
-| Area | Status | Next Move |
-| --- | --- | --- |
-| Local venue intelligence | Active | Expand computed Night Pulse signals |
-| Profile / Night Pass | Active | Add real user-facing state and preferences |
-| Admin operations | Dev-only | Keep operational checks out of public navigation |
-| Remote backend | Planned | Define adapter contract before choosing provider |
-| UI validation | Planned | Add focused screenshot/smoke coverage |
+| Area | Status | Next |
+|---|---|---|
+| Local venue intelligence | ✦ Active | Expand `OperationalSnapshot` Night Pulse signals |
+| Profile · Night Pass | ✦ Active | Real user state and preference persistence |
+| Admin | ⬡ Dev-only | Enforce `#if DEBUG` gate; remove from consumer navigation |
+| Remote backend | ◯ Planned | Define `VenueDataSource` remote adapter contract first |
+| UI coverage | ◯ Planned | Snapshot and smoke tests for key surfaces |
 
-## Repository Links
+---
 
-- [Contributing](CONTRIBUTING.md)
-- [Security Policy](SECURITY.md)
-- [License](LICENSE)
-- [Product Bible](docs/NOCTO_BRAND_PRODUCT_BIBLE_v1.md)
+<div align="center">
+
+[Contributing](CONTRIBUTING.md) &nbsp;·&nbsp; [Security](SECURITY.md) &nbsp;·&nbsp; [License](LICENSE) &nbsp;·&nbsp; [Architecture](docs/ARCHITECTURE.md) &nbsp;·&nbsp; [Product Bible](docs/NOCTO_BRAND_PRODUCT_BIBLE_v1.md)
+
+<br>
+
+<sub>NOCTO — signal over noise.</sub>
+
+<br><br>
+
+</div>
