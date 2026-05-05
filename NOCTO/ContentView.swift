@@ -39,8 +39,20 @@ struct ContentView: View {
                     NightPulseView(snapshot: snapshot)
                         .tabItem { Label("Пулс", systemImage: "waveform.path.ecg") }
 
-                    AdminDashboardView(venues: venues, favorites: favorites, snapshot: snapshot)
-                        .tabItem { Label("Админ", systemImage: "gauge.with.dots.needle.67percent") }
+                    #if DEBUG
+                    ProfileView(
+                        favoritesCount: favorites.favoriteIDs.count,
+                        snapshot: snapshot,
+                        adminView: AdminDashboardView(venues: venues, favorites: favorites, snapshot: snapshot)
+                    )
+                    .tabItem { Label("Профил", systemImage: "person.crop.circle") }
+                    #else
+                    ProfileView(
+                        favoritesCount: favorites.favoriteIDs.count,
+                        snapshot: snapshot
+                    )
+                    .tabItem { Label("Профил", systemImage: "person.crop.circle") }
+                    #endif
                 }
                 .tint(NoctoTheme.accent)
             }
