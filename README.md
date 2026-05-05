@@ -26,7 +26,7 @@ NOCTO answers one question: *where in Sofia is actually worth going tonight?* Ve
 
 ## Data Flow
 
-```
+```text
 ContentView
   └── VenueRepository
         └── VenueDataSource                ← protocol boundary
@@ -71,7 +71,7 @@ Every layer fails loudly with typed errors. No degraded state reaches a view.
 
 ## Project Structure
 
-```
+```text
 NOCTO/
 ├── NOCTOApp.swift              @main · WindowGroup entry point
 ├── ContentView.swift           Root composition — async venue load, owns FavoritesManager
