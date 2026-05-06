@@ -292,7 +292,7 @@ struct OperationalSnapshot {
     // Keep nil by default; use NOCTO_FORCE_CONFIDENCE / --nocto-force-confidence for QA scenarios.
     private static let debugPinnedConfidenceScore: Int? = nil
 
-    private static func isLateNightVenue(_ venue: Venue) -> Bool {
+    nonisolated private static func isLateNightVenue(_ venue: Venue) -> Bool {
         guard
             let opening = hourAndMinute(from: venue.workingHours, at: 0),
             let closing = hourAndMinute(from: venue.workingHours, at: 1)
@@ -306,7 +306,7 @@ struct OperationalSnapshot {
         return closesNextDay && (180..<720).contains(closingMinuteOfDay)
     }
 
-    private static func lateNightCoverageHours(for venue: Venue) -> Int? {
+    nonisolated private static func lateNightCoverageHours(for venue: Venue) -> Int? {
         guard
             isLateNightVenue(venue),
             let opening = hourAndMinute(from: venue.workingHours, at: 0),
@@ -327,7 +327,7 @@ struct OperationalSnapshot {
         return Int(ceil(Double(durationMinutes) / 60.0))
     }
 
-    private static func hourAndMinute(from workingHours: String, at index: Int) -> (hour: Int, minute: Int)? {
+    nonisolated private static func hourAndMinute(from workingHours: String, at index: Int) -> (hour: Int, minute: Int)? {
         let parts = workingHours.split(separator: "-")
         guard parts.indices.contains(index) else { return nil }
 
