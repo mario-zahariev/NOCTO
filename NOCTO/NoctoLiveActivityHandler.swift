@@ -17,6 +17,7 @@ final class NoctoLiveActivityHandler {
     private init() {}
 
     func sync(with snapshot: OperationalSnapshot) async {
+        guard Self.isEnabledForCurrentProcess else { return }
         hydrateActivityIfNeeded()
 
         let state = NoctoAttributes.ContentState(snapshot: snapshot)
@@ -58,6 +59,15 @@ final class NoctoLiveActivityHandler {
         case .some:
             await update(with: state)
         }
+    }
+
+    private static var isEnabledForCurrentProcess: Bool {
+        let environment = ProcessInfo.processInfo.environment
+        let arguments = ProcessInfo.processInfo.arguments
+
+        let envDisabled = environment["NOCTO_DISABLE_LIVE_ACTIVITY"] == "1"
+        let argDisabled = arguments.contains("--nocto-disable-live-activity")
+        return !(envDisabled || argDisabled)
     }
 
     private func hydrateActivityIfNeeded() {

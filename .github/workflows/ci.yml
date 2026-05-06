@@ -41,3 +41,14 @@ jobs:
             -sdk iphonesimulator \
             -destination 'generic/platform=iOS Simulator' \
             build
+
+      - name: Visual Integrity Gate
+        env:
+          NOCTO_RECORD_SNAPSHOTS: "0"
+        run: |
+          xcodebuild \
+            -project NOCTO.xcodeproj \
+            -scheme NOCTO \
+            -destination 'platform=iOS Simulator,name=iPhone 15,OS=latest' \
+            -only-testing:NOCTOUITests \
+            test
