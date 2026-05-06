@@ -2,7 +2,7 @@
 
 <br>
 
-<img src="NOCTO/Assets.xcassets/AppIcon.appiconset/AppIcon-1024.png" width="88" alt="NOCTO" />
+<img src="docs/icon.png" width="88" alt="NOCTO" />
 
 <br><br>
 
