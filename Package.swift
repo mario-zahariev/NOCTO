@@ -12,6 +12,16 @@ let package = Package(
     ],
     targets: [
         .target(name: "NOCTOCore"),
-        .testTarget(name: "NOCTOCoreTests", dependencies: ["NOCTOCore"])
+        .target(
+            name: "NOCTOAppLogic",
+            dependencies: ["NOCTOCore"],
+            path: "NOCTO",
+            sources: ["OperationalSnapshot.swift"]
+        ),
+        .testTarget(name: "NOCTOCoreTests", dependencies: ["NOCTOCore"]),
+        .testTarget(
+            name: "OperationalSnapshotTests",
+            dependencies: ["NOCTOAppLogic", "NOCTOCore"]
+        )
     ]
 )

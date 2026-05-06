@@ -16,6 +16,7 @@ struct OperationalSnapshot {
     let dataCompletenessPercent: Int
     let primaryVenueTypeLabel: String
     let typeSignals: [VenueTypeSignal]
+    private let venues: [Venue]
 
     init(
         loadLatencyMs: Int,
@@ -23,6 +24,7 @@ struct OperationalSnapshot {
         lastErrorMessage: String?,
         venues: [Venue]
     ) {
+        self.venues = venues
         self.loadLatencyMs = loadLatencyMs
         self.didLoadSucceed = didLoadSucceed
         self.lastErrorMessage = lastErrorMessage
@@ -91,6 +93,28 @@ struct OperationalSnapshot {
         let latencyPenalty = min(loadLatencyMs / 25, 30)
         let reliabilityBonus = didLoadSucceed ? 20 : 0
         return max(0, min(100, venueScore + lateNightScore + completenessScore - latencyPenalty + reliabilityBonus))
+    }
+
+    var bestAfterTime: String {
+        var openingHourCounts: [Int: Int] = [:]
+
+        for venue in venues {
+            guard let opening = Self.hourAndMinute(from: venue.workingHours, at: 0) else { continue }
+            openingHourCounts[opening.hour, default: 0] += 1
+        }
+
+        guard
+            let modalOpeningHour = openingHourCounts.max(by: { lhs, rhs in
+                if lhs.value == rhs.value {
+                    return lhs.key > rhs.key
+                }
+                return lhs.value < rhs.value
+            })?.key
+        else {
+            return "—"
+        }
+
+        return "After \(String(format: "%02d", modalOpeningHour)):00"
     }
 
     private static func label(for type: Venue.VenueType) -> String {
