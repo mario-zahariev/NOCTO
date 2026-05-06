@@ -2,6 +2,7 @@ import SwiftUI
 import NOCTOCore
 
 struct ContentView: View {
+    @Environment(\.scenePhase) private var scenePhase
     @StateObject private var favorites = FavoritesManager()
     @State private var venues: [Venue] = []
     @State private var loadError: String?
@@ -65,6 +66,18 @@ struct ContentView: View {
             }
             loadLatencyMs = Int(Date().timeIntervalSince(startedAt) * 1000)
             isLoading = false
+
+            if #available(iOS 16.1, *) {
+                await NoctoLiveActivityHandler.shared.sync(with: snapshot)
+            }
+        }
+        .onChange(of: scenePhase, initial: false) { _, newPhase in
+            guard newPhase == .active else { return }
+            Task {
+                if #available(iOS 16.1, *) {
+                    await NoctoLiveActivityHandler.shared.sync(with: snapshot)
+                }
+            }
         }
         .preferredColorScheme(.dark)
     }

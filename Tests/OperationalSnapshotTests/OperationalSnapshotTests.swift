@@ -40,4 +40,78 @@ final class OperationalSnapshotTests: XCTestCase {
 
         XCTAssertEqual(snapshot.bestAfterTime, "After 23:00")
     }
+
+    func testConfidenceScoreIsHardWhenValidationIsFull() {
+        let venues = makeVenues(
+            count: 10,
+            type: .club,
+            workingHours: "23:00-05:00",
+            includeOptionalFields: true
+        )
+
+        let snapshot = OperationalSnapshot(
+            loadLatencyMs: 42,
+            didLoadSucceed: true,
+            lastErrorMessage: nil,
+            venues: venues
+        )
+
+        XCTAssertEqual(snapshot.confidenceSource, .hardData)
+        XCTAssertEqual(snapshot.confidenceScore, 100)
+        XCTAssertEqual(snapshot.signalConfidenceLabel, "Пълна")
+        XCTAssertEqual(snapshot.confidenceValidationLabel, "Валидация: Пълна (100%)")
+    }
+
+    func testConfidenceScoreFallsInMixedBand() {
+        let venues = makeVenues(
+            count: 6,
+            type: .bar,
+            workingHours: "22:00-03:00",
+            includeOptionalFields: true
+        )
+
+        let snapshot = OperationalSnapshot(
+            loadLatencyMs: 120,
+            didLoadSucceed: true,
+            lastErrorMessage: nil,
+            venues: venues
+        )
+
+        XCTAssertEqual(snapshot.confidenceSource, .mixedData)
+        XCTAssertTrue((70...90).contains(snapshot.confidenceScore))
+    }
+
+    func testConfidenceScoreStaysBelowSixtyForSoftData() {
+        let snapshot = OperationalSnapshot(
+            loadLatencyMs: 420,
+            didLoadSucceed: false,
+            lastErrorMessage: "decode-failed",
+            venues: []
+        )
+
+        XCTAssertEqual(snapshot.confidenceSource, .softData)
+        XCTAssertTrue(snapshot.confidenceScore < 60)
+        XCTAssertEqual(snapshot.signalConfidenceLabel, "Ниска")
+    }
+
+    private func makeVenues(
+        count: Int,
+        type: Venue.VenueType,
+        workingHours: String,
+        includeOptionalFields: Bool
+    ) -> [Venue] {
+        (0..<count).map { index in
+            Venue(
+                id: UUID(),
+                name: "Venue \(index)",
+                imageName: includeOptionalFields ? "image" : "",
+                type: type,
+                description: includeOptionalFields ? "Описание" : "",
+                latitude: 42.6977 + Double(index) * 0.001,
+                longitude: 23.3219 + Double(index) * 0.001,
+                address: includeOptionalFields ? "Адрес \(index)" : "",
+                workingHours: workingHours
+            )
+        }
+    }
 }

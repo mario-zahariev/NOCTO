@@ -7,8 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-			C0DE00032F0A000100AAA001 /* NOCTOCore in Frameworks */ = {isa = PBXBuildFile; productRef = C0DE00022F0A000100AAA001 /* NOCTOCore */; };
-			B9167C332EF8A92500E2DBFC /* venues.json in Resources */ = {isa = PBXBuildFile; fileRef = B9167C312EF89DBB00E2DBFC /* venues.json */; };
+		322AEFB8402B5D38BC9A09B3 /* NOCTOWidgetExtension.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = 0DB023192249A8E459FDE968 /* NOCTOWidgetExtension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		5212ED0F204FBB7819510280 /* NoctoAttributes.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9E5C67B2F030001005FA51F /* NoctoAttributes.swift */; };
+		B9167C332EF8A92500E2DBFC /* venues.json in Resources */ = {isa = PBXBuildFile; fileRef = B9167C312EF89DBB00E2DBFC /* venues.json */; };
 		B9E5C6572EF95E39005FA51F /* FavoritesManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9E5C6492EF95E39005FA51F /* FavoritesManager.swift */; };
 		B9E5C6582EF95E39005FA51F /* VenueDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9E5C6542EF95E39005FA51F /* VenueDetailView.swift */; };
 		B9E5C6592EF95E39005FA51F /* NightPulseView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9E5C64E2EF95E39005FA51F /* NightPulseView.swift */; };
@@ -28,14 +29,45 @@
 		B9E5C66B2EF970D7005FA51F /* MicroFeedback.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9E5C66A2EF970BD005FA51F /* MicroFeedback.swift */; };
 		B9E5C66D2EF97782005FA51F /* ParallaxCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9E5C66C2EF97778005FA51F /* ParallaxCard.swift */; };
 		B9E5C66F2EF97A8E005FA51F /* HeroParallaxCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9E5C66E2EF97A7A005FA51F /* HeroParallaxCard.swift */; };
-			B9E5C6712EFC7022005FA51F /* Color+Hex.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9E5C6702EFC7017005FA51F /* Color+Hex.swift */; };
-			B9E5C6732EFC8C43005FA51F /* Haptics.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9E5C6722EFC8C3E005FA51F /* Haptics.swift */; };
-			B9E5C6752F001001005FA51F /* VenueDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9E5C6772F001001005FA51F /* VenueDataSource.swift */; };
-			B9E5C6762F001001005FA51F /* OperationalSnapshot.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9E5C6782F001001005FA51F /* OperationalSnapshot.swift */; };
-			B9E5C67A2F020001005FA51F /* ProfileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9E5C6792F020001005FA51F /* ProfileView.swift */; };
+		B9E5C6712EFC7022005FA51F /* Color+Hex.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9E5C6702EFC7017005FA51F /* Color+Hex.swift */; };
+		B9E5C6732EFC8C43005FA51F /* Haptics.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9E5C6722EFC8C3E005FA51F /* Haptics.swift */; };
+		B9E5C6752F001001005FA51F /* VenueDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9E5C6772F001001005FA51F /* VenueDataSource.swift */; };
+		B9E5C6762F001001005FA51F /* OperationalSnapshot.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9E5C6782F001001005FA51F /* OperationalSnapshot.swift */; };
+		B9E5C67A2F020001005FA51F /* ProfileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9E5C6792F020001005FA51F /* ProfileView.swift */; };
+		B9E5C67D2F030001005FA51F /* NoctoAttributes.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9E5C67B2F030001005FA51F /* NoctoAttributes.swift */; };
+		B9E5C67E2F030001005FA51F /* NoctoLiveActivityHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9E5C67C2F030001005FA51F /* NoctoLiveActivityHandler.swift */; };
+		C0DE00032F0A000100AAA001 /* NOCTOCore in Frameworks */ = {isa = PBXBuildFile; productRef = C0DE00022F0A000100AAA001 /* NOCTOCore */; };
+		C821ED3724108825A03FE113 /* NOCTOLiveActivityWidget.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6080975210EC2F04DAE4B11D /* NOCTOLiveActivityWidget.swift */; };
 /* End PBXBuildFile section */
 
+/* Begin PBXContainerItemProxy section */
+		CE47C572AB9B4AD431727409 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = B9481C3E2EEB858500B13953 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = F8EF3B568D3FD9F99BA382A8;
+			remoteInfo = NOCTOWidgetExtension;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		01BF440E8D7B446013139A47 /* Embed App Extensions */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 13;
+			files = (
+				322AEFB8402B5D38BC9A09B3 /* NOCTOWidgetExtension.appex in Embed App Extensions */,
+			);
+			name = "Embed App Extensions";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
 /* Begin PBXFileReference section */
+		0DB023192249A8E459FDE968 /* NOCTOWidgetExtension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = NOCTOWidgetExtension.appex; sourceTree = BUILT_PRODUCTS_DIR; };
+		6080975210EC2F04DAE4B11D /* NOCTOLiveActivityWidget.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = NOCTOLiveActivityWidget.swift; sourceTree = "<group>"; };
+		867B499BECDBDFCBB71E8090 /* Info.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		B9167C312EF89DBB00E2DBFC /* venues.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = venues.json; sourceTree = "<group>"; };
 		B9481C462EEB858500B13953 /* NOCTO.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = NOCTO.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		B9E5C6452EF95E39005FA51F /* AdminDashboardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdminDashboardView.swift; sourceTree = "<group>"; };
@@ -57,31 +89,51 @@
 		B9E5C66A2EF970BD005FA51F /* MicroFeedback.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MicroFeedback.swift; sourceTree = "<group>"; };
 		B9E5C66C2EF97778005FA51F /* ParallaxCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParallaxCard.swift; sourceTree = "<group>"; };
 		B9E5C66E2EF97A7A005FA51F /* HeroParallaxCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HeroParallaxCard.swift; sourceTree = "<group>"; };
-			B9E5C6702EFC7017005FA51F /* Color+Hex.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Color+Hex.swift"; sourceTree = "<group>"; };
-			B9E5C6722EFC8C3E005FA51F /* Haptics.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Haptics.swift; sourceTree = "<group>"; };
-			B9E5C6772F001001005FA51F /* VenueDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VenueDataSource.swift; sourceTree = "<group>"; };
-			B9E5C6782F001001005FA51F /* OperationalSnapshot.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OperationalSnapshot.swift; sourceTree = "<group>"; };
-			B9E5C6792F020001005FA51F /* ProfileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileView.swift; sourceTree = "<group>"; };
+		B9E5C6702EFC7017005FA51F /* Color+Hex.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Color+Hex.swift"; sourceTree = "<group>"; };
+		B9E5C6722EFC8C3E005FA51F /* Haptics.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Haptics.swift; sourceTree = "<group>"; };
+		B9E5C6772F001001005FA51F /* VenueDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VenueDataSource.swift; sourceTree = "<group>"; };
+		B9E5C6782F001001005FA51F /* OperationalSnapshot.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OperationalSnapshot.swift; sourceTree = "<group>"; };
+		B9E5C6792F020001005FA51F /* ProfileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileView.swift; sourceTree = "<group>"; };
+		B9E5C67B2F030001005FA51F /* NoctoAttributes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoctoAttributes.swift; sourceTree = "<group>"; };
+		B9E5C67C2F030001005FA51F /* NoctoLiveActivityHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoctoLiveActivityHandler.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
+		407F965646C86524CEC6F02B /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		B9481C432EEB858500B13953 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
-				files = (
-					C0DE00032F0A000100AAA001 /* NOCTOCore in Frameworks */,
-				);
+			files = (
+				C0DE00032F0A000100AAA001 /* NOCTOCore in Frameworks */,
+			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		55D1B5F76190187B24FFA27D /* NOCTOWidgetExtension */ = {
+			isa = PBXGroup;
+			children = (
+				6080975210EC2F04DAE4B11D /* NOCTOLiveActivityWidget.swift */,
+				867B499BECDBDFCBB71E8090 /* Info.plist */,
+			);
+			name = NOCTOWidgetExtension;
+			path = NOCTOWidgetExtension;
+			sourceTree = "<group>";
+		};
 		B9481C3D2EEB858500B13953 = {
 			isa = PBXGroup;
 			children = (
 				B9E5C6562EF95E39005FA51F /* NOCTO */,
 				B9167C312EF89DBB00E2DBFC /* venues.json */,
 				B9481C472EEB858500B13953 /* Products */,
+				55D1B5F76190187B24FFA27D /* NOCTOWidgetExtension */,
 			);
 			sourceTree = "<group>";
 		};
@@ -89,6 +141,7 @@
 			isa = PBXGroup;
 			children = (
 				B9481C462EEB858500B13953 /* NOCTO.app */,
+				0DB023192249A8E459FDE968 /* NOCTOWidgetExtension.appex */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -105,22 +158,24 @@
 				B9E5C6452EF95E39005FA51F /* AdminDashboardView.swift */,
 				B9E5C6462EF95E39005FA51F /* AllVenuesMapView.swift */,
 				B9E5C6472EF95E39005FA51F /* Assets.xcassets */,
-					B9E5C6482EF95E39005FA51F /* ContentView.swift */,
-					B9E5C6782F001001005FA51F /* OperationalSnapshot.swift */,
-					B9E5C6492EF95E39005FA51F /* FavoritesManager.swift */,
-					B9E5C64A2EF95E39005FA51F /* FavoritesView.swift */,
+				B9E5C6482EF95E39005FA51F /* ContentView.swift */,
+				B9E5C6782F001001005FA51F /* OperationalSnapshot.swift */,
+				B9E5C6492EF95E39005FA51F /* FavoritesManager.swift */,
+				B9E5C64A2EF95E39005FA51F /* FavoritesView.swift */,
 				B9E5C64C2EF95E39005FA51F /* HomeView.swift */,
 				B9E5C64D2EF95E39005FA51F /* LocationManager.swift */,
 				B9E5C64E2EF95E39005FA51F /* NightPulseView.swift */,
 				B9E5C64F2EF95E39005FA51F /* NOCTOApp.swift */,
 				B9E5C6512EF95E39005FA51F /* NoctoTheme.swift */,
+				B9E5C67B2F030001005FA51F /* NoctoAttributes.swift */,
+				B9E5C67C2F030001005FA51F /* NoctoLiveActivityHandler.swift */,
 				B9E5C6792F020001005FA51F /* ProfileView.swift */,
 				B9E5C6522EF95E39005FA51F /* Venue.swift */,
 				B9E5C6532EF95E39005FA51F /* VenueCard.swift */,
-					B9E5C6542EF95E39005FA51F /* VenueDetailView.swift */,
-					B9E5C6772F001001005FA51F /* VenueDataSource.swift */,
-					B9E5C6552EF95E39005FA51F /* VenueRepository.swift */,
-				);
+				B9E5C6542EF95E39005FA51F /* VenueDetailView.swift */,
+				B9E5C6772F001001005FA51F /* VenueDataSource.swift */,
+				B9E5C6552EF95E39005FA51F /* VenueRepository.swift */,
+			);
 			path = NOCTO;
 			sourceTree = "<group>";
 		};
@@ -134,18 +189,37 @@
 				B9481C422EEB858500B13953 /* Sources */,
 				B9481C432EEB858500B13953 /* Frameworks */,
 				B9481C442EEB858500B13953 /* Resources */,
+				01BF440E8D7B446013139A47 /* Embed App Extensions */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				5A91562F79835B4DA4EC0C68 /* PBXTargetDependency */,
+			);
+			name = NOCTO;
+			packageProductDependencies = (
+				C0DE00022F0A000100AAA001 /* NOCTOCore */,
+			);
+			productName = NOCTO;
+			productReference = B9481C462EEB858500B13953 /* NOCTO.app */;
+			productType = "com.apple.product-type.application";
+		};
+		F8EF3B568D3FD9F99BA382A8 /* NOCTOWidgetExtension */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 85691C44F43847BEFD6485F0 /* Build configuration list for PBXNativeTarget "NOCTOWidgetExtension" */;
+			buildPhases = (
+				DD4A1897DC6BB89E0E513A9B /* Sources */,
+				407F965646C86524CEC6F02B /* Frameworks */,
+				641F8F12500B8DCD92DBBF0A /* Resources */,
 			);
 			buildRules = (
 			);
 			dependencies = (
 			);
-			name = NOCTO;
-				packageProductDependencies = (
-					C0DE00022F0A000100AAA001 /* NOCTOCore */,
-				);
-			productName = NOCTO;
-			productReference = B9481C462EEB858500B13953 /* NOCTO.app */;
-			productType = "com.apple.product-type.application";
+			name = NOCTOWidgetExtension;
+			productName = NOCTOWidgetExtension;
+			productReference = 0DB023192249A8E459FDE968 /* NOCTOWidgetExtension.appex */;
+			productType = "com.apple.product-type.app-extension";
 		};
 /* End PBXNativeTarget section */
 
@@ -171,20 +245,28 @@
 			);
 			mainGroup = B9481C3D2EEB858500B13953;
 			minimizedProjectReferenceProxies = 1;
-				packageReferences = (
-					C0DE00012F0A000100AAA001 /* XCLocalSwiftPackageReference "." */,
-				);
+			packageReferences = (
+				C0DE00012F0A000100AAA001 /* XCLocalSwiftPackageReference "." */,
+			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = B9481C472EEB858500B13953 /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
 				B9481C452EEB858500B13953 /* NOCTO */,
+				F8EF3B568D3FD9F99BA382A8 /* NOCTOWidgetExtension */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
+		641F8F12500B8DCD92DBBF0A /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		B9481C442EEB858500B13953 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -211,25 +293,98 @@
 				B9E5C65A2EF95E39005FA51F /* VenueCard.swift in Sources */,
 				B9E5C65B2EF95E39005FA51F /* NoctoTheme.swift in Sources */,
 				B9E5C65C2EF95E39005FA51F /* AllVenuesMapView.swift in Sources */,
-					B9E5C65D2EF95E39005FA51F /* ContentView.swift in Sources */,
-					B9E5C6762F001001005FA51F /* OperationalSnapshot.swift in Sources */,
-					B9E5C65E2EF95E39005FA51F /* HomeView.swift in Sources */,
+				B9E5C67D2F030001005FA51F /* NoctoAttributes.swift in Sources */,
+				B9E5C65D2EF95E39005FA51F /* ContentView.swift in Sources */,
+				B9E5C6762F001001005FA51F /* OperationalSnapshot.swift in Sources */,
+				B9E5C65E2EF95E39005FA51F /* HomeView.swift in Sources */,
 				B9E5C66D2EF97782005FA51F /* ParallaxCard.swift in Sources */,
 				B9E5C6692EF9703A005FA51F /* BlurView.swift in Sources */,
 				B9E5C65F2EF95E39005FA51F /* FavoritesView.swift in Sources */,
+				B9E5C67E2F030001005FA51F /* NoctoLiveActivityHandler.swift in Sources */,
 				B9E5C6602EF95E39005FA51F /* AdminDashboardView.swift in Sources */,
 				B9E5C67A2F020001005FA51F /* ProfileView.swift in Sources */,
-					B9E5C6612EF95E39005FA51F /* NOCTOApp.swift in Sources */,
-					B9E5C6752F001001005FA51F /* VenueDataSource.swift in Sources */,
-					B9E5C6622EF95E39005FA51F /* VenueRepository.swift in Sources */,
+				B9E5C6612EF95E39005FA51F /* NOCTOApp.swift in Sources */,
+				B9E5C6752F001001005FA51F /* VenueDataSource.swift in Sources */,
+				B9E5C6622EF95E39005FA51F /* VenueRepository.swift in Sources */,
 				B9E5C6632EF95E39005FA51F /* Venue.swift in Sources */,
 				B9E5C6642EF95E39005FA51F /* LocationManager.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		DD4A1897DC6BB89E0E513A9B /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				C821ED3724108825A03FE113 /* NOCTOLiveActivityWidget.swift in Sources */,
+				5212ED0F204FBB7819510280 /* NoctoAttributes.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXSourcesBuildPhase section */
 
+/* Begin PBXTargetDependency section */
+		5A91562F79835B4DA4EC0C68 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = NOCTOWidgetExtension;
+			target = F8EF3B568D3FD9F99BA382A8 /* NOCTOWidgetExtension */;
+			targetProxy = CE47C572AB9B4AD431727409 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
 /* Begin XCBuildConfiguration section */
+		64F696E40A3658604980D50F /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				APPLICATION_EXTENSION_API_ONLY = YES;
+				CLANG_ENABLE_OBJC_WEAK = NO;
+					CODE_SIGN_STYLE = Automatic;
+					CURRENT_PROJECT_VERSION = 1;
+					DEVELOPMENT_TEAM = MF59QXM85L;
+					GENERATE_INFOPLIST_FILE = NO;
+					INFOPLIST_FILE = NOCTOWidgetExtension/Info.plist;
+					IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+					PRODUCT_BUNDLE_IDENTIFIER = com.mario.NOCTO.WidgetExtension;
+					PRODUCT_NAME = "$(TARGET_NAME)";
+					SDKROOT = iphoneos;
+					SKIP_INSTALL = YES;
+					SWIFT_VERSION = 5.0;
+					TARGETED_DEVICE_FAMILY = 1;
+					MARKETING_VERSION = 1.0;
+					VALIDATE_PRODUCT = YES;
+				};
+			name = Release;
+		};
+		B50E52022E1DF79F7D1599B0 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				APPLICATION_EXTENSION_API_ONLY = YES;
+				CLANG_ENABLE_OBJC_WEAK = NO;
+					CODE_SIGN_STYLE = Automatic;
+					CURRENT_PROJECT_VERSION = 1;
+					DEVELOPMENT_TEAM = MF59QXM85L;
+					GENERATE_INFOPLIST_FILE = NO;
+					INFOPLIST_FILE = NOCTOWidgetExtension/Info.plist;
+					IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+					PRODUCT_BUNDLE_IDENTIFIER = com.mario.NOCTO.WidgetExtension;
+					PRODUCT_NAME = "$(TARGET_NAME)";
+					SDKROOT = iphoneos;
+					SKIP_INSTALL = YES;
+					SWIFT_VERSION = 5.0;
+					TARGETED_DEVICE_FAMILY = 1;
+					MARKETING_VERSION = 1.0;
+				};
+			name = Debug;
+		};
 		B9481C4F2EEB858600B13953 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -283,6 +438,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
+				INFOPLIST_KEY_NSSupportsLiveActivities = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
 				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
@@ -341,6 +497,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
+				INFOPLIST_KEY_NSSupportsLiveActivities = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
 				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
 				MTL_ENABLE_DEBUG_INFO = NO;
@@ -418,6 +575,15 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
+		85691C44F43847BEFD6485F0 /* Build configuration list for PBXNativeTarget "NOCTOWidgetExtension" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				64F696E40A3658604980D50F /* Release */,
+				B50E52022E1DF79F7D1599B0 /* Debug */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
 		B9481C412EEB858500B13953 /* Build configuration list for PBXProject "NOCTO" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
@@ -439,18 +605,18 @@
 /* End XCConfigurationList section */
 
 /* Begin XCLocalSwiftPackageReference section */
-			C0DE00012F0A000100AAA001 /* XCLocalSwiftPackageReference "." */ = {
-				isa = XCLocalSwiftPackageReference;
-				relativePath = ".";
-			};
+		C0DE00012F0A000100AAA001 /* XCLocalSwiftPackageReference "." */ = {
+			isa = XCLocalSwiftPackageReference;
+			relativePath = ".";
+		};
 /* End XCLocalSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
-			C0DE00022F0A000100AAA001 /* NOCTOCore */ = {
-				isa = XCSwiftPackageProductDependency;
-				package = C0DE00012F0A000100AAA001 /* XCLocalSwiftPackageReference "." */;
-				productName = NOCTOCore;
-			};
+		C0DE00022F0A000100AAA001 /* NOCTOCore */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = C0DE00012F0A000100AAA001 /* XCLocalSwiftPackageReference "." */;
+			productName = NOCTOCore;
+		};
 /* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = B9481C3E2EEB858500B13953 /* Project object */;
