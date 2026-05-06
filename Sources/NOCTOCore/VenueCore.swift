@@ -52,6 +52,18 @@ public struct VenueCore: Codable, Equatable, Identifiable {
             (-180.0...180.0).contains(longitude)
     }
 
+    public var signalLabel: String {
+        if type == .club, let closingTime = Self.normalizedTime(from: workingHours, at: 1) {
+            return Self.clampedLabel("Клуб · До \(closingTime)")
+        }
+
+        if let openingTime = Self.normalizedTime(from: workingHours, at: 0) {
+            return Self.clampedLabel("Най-силно след \(openingTime)")
+        }
+
+        return Self.fallbackLabel(for: type)
+    }
+
     private enum CodingKeys: String, CodingKey {
         case id
         case name
@@ -75,6 +87,42 @@ public struct VenueCore: Codable, Equatable, Identifiable {
         longitude = try c.decode(Double.self, forKey: .longitude)
         address = try c.decodeIfPresent(String.self, forKey: .address) ?? ""
         workingHours = try c.decodeIfPresent(String.self, forKey: .workingHours) ?? ""
+    }
+
+    private static func fallbackLabel(for type: VenueType) -> String {
+        switch type {
+        case .club: return "Клуб късна вълна"
+        case .bar: return "Бар вечерен ритъм"
+        case .lounge: return "Лаундж късен флоу"
+        case .event: return "Събитие тази вечер"
+        case .other: return "Нощен сигнал"
+        }
+    }
+
+    private static func clampedLabel(_ label: String) -> String {
+        guard label.count > 30 else { return label }
+        return String(label.prefix(30))
+    }
+
+    private static func normalizedTime(from workingHours: String, at index: Int) -> String? {
+        let parts = workingHours.split(separator: "-")
+        guard parts.indices.contains(index) else { return nil }
+
+        let timeParts = parts[index]
+            .trimmingCharacters(in: .whitespacesAndNewlines)
+            .split(separator: ":")
+
+        guard
+            timeParts.count == 2,
+            let hour = Int(timeParts[0].trimmingCharacters(in: .whitespacesAndNewlines)),
+            let minute = Int(timeParts[1].trimmingCharacters(in: .whitespacesAndNewlines)),
+            (0...23).contains(hour),
+            (0...59).contains(minute)
+        else {
+            return nil
+        }
+
+        return String(format: "%02d:%02d", hour, minute)
     }
 }
 

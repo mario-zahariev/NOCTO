@@ -31,6 +31,10 @@ struct VenueCard: View {
             Text("Работно време: \(venue.workingHours)")
                 .font(.footnote)
                 .foregroundStyle(NoctoTheme.textSecondary)
+
+            Text(venue.signalLabel)
+                .font(.caption.weight(.semibold))
+                .foregroundStyle(NoctoTheme.accent)
         }
         .padding(16)
         .frame(maxWidth: .infinity, alignment: .leading)
