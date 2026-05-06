@@ -3,6 +3,7 @@ import SwiftUI
 import WidgetKit
 
 @main
+@available(iOSApplicationExtension 16.1, *)
 struct NOCTOWidgetExtensionBundle: WidgetBundle {
     var body: some Widget {
         NOCTOLiveActivityWidget()

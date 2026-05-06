@@ -67,12 +67,17 @@ struct ContentView: View {
             loadLatencyMs = Int(Date().timeIntervalSince(startedAt) * 1000)
             isLoading = false
 
-            if #available(iOS 16.1, *) {
-                await NoctoLiveActivityHandler.shared.sync(with: snapshot)
+        }
+        .onChange(of: scenePhase, initial: true) { _, newPhase in
+            guard newPhase == .active, !isLoading else { return }
+            Task {
+                if #available(iOS 16.1, *) {
+                    await NoctoLiveActivityHandler.shared.sync(with: snapshot)
+                }
             }
         }
-        .onChange(of: scenePhase, initial: false) { _, newPhase in
-            guard newPhase == .active else { return }
+        .onChange(of: isLoading, initial: false) { _, loading in
+            guard loading == false, scenePhase == .active else { return }
             Task {
                 if #available(iOS 16.1, *) {
                     await NoctoLiveActivityHandler.shared.sync(with: snapshot)

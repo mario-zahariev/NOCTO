@@ -336,53 +336,53 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				APPLICATION_EXTENSION_API_ONLY = YES;
-				CLANG_ENABLE_OBJC_WEAK = NO;
-					CODE_SIGN_STYLE = Automatic;
-					CURRENT_PROJECT_VERSION = 1;
-					DEVELOPMENT_TEAM = MF59QXM85L;
-					GENERATE_INFOPLIST_FILE = NO;
-					INFOPLIST_FILE = NOCTOWidgetExtension/Info.plist;
-					IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = MF59QXM85L;
+				GENERATE_INFOPLIST_FILE = NO;
+				INFOPLIST_FILE = NOCTOWidgetExtension/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 					"@executable_path/../../Frameworks",
 				);
-					PRODUCT_BUNDLE_IDENTIFIER = com.mario.NOCTO.WidgetExtension;
-					PRODUCT_NAME = "$(TARGET_NAME)";
-					SDKROOT = iphoneos;
-					SKIP_INSTALL = YES;
-					SWIFT_VERSION = 5.0;
-					TARGETED_DEVICE_FAMILY = 1;
-					MARKETING_VERSION = 1.0;
-					VALIDATE_PRODUCT = YES;
-				};
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.mario.NOCTO.WidgetExtension;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 1;
+				VALIDATE_PRODUCT = YES;
+			};
 			name = Release;
 		};
 		B50E52022E1DF79F7D1599B0 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				APPLICATION_EXTENSION_API_ONLY = YES;
-				CLANG_ENABLE_OBJC_WEAK = NO;
-					CODE_SIGN_STYLE = Automatic;
-					CURRENT_PROJECT_VERSION = 1;
-					DEVELOPMENT_TEAM = MF59QXM85L;
-					GENERATE_INFOPLIST_FILE = NO;
-					INFOPLIST_FILE = NOCTOWidgetExtension/Info.plist;
-					IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = MF59QXM85L;
+				GENERATE_INFOPLIST_FILE = NO;
+				INFOPLIST_FILE = NOCTOWidgetExtension/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 					"@executable_path/../../Frameworks",
 				);
-					PRODUCT_BUNDLE_IDENTIFIER = com.mario.NOCTO.WidgetExtension;
-					PRODUCT_NAME = "$(TARGET_NAME)";
-					SDKROOT = iphoneos;
-					SKIP_INSTALL = YES;
-					SWIFT_VERSION = 5.0;
-					TARGETED_DEVICE_FAMILY = 1;
-					MARKETING_VERSION = 1.0;
-				};
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.mario.NOCTO.WidgetExtension;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 1;
+			};
 			name = Debug;
 		};
 		B9481C4F2EEB858600B13953 /* Debug */ = {
