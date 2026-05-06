@@ -40,13 +40,12 @@ struct NOCTOLiveActivityWidget: Widget {
     }
 
     private func iconName(for state: NoctoAttributes.ContentState) -> String {
-        if state.sourceLabel.contains("Твърд") {
-            return "bolt.fill"
+        switch state.integrityState {
+        case .live:
+            return state.confidenceScore >= 90 ? "bolt.fill" : "dial.medium.fill"
+        case .offlineLowConfidence:
+            return "waveform.slash"
         }
-        if state.sourceLabel.contains("Смесен") {
-            return "dial.medium.fill"
-        }
-        return "waveform.slash"
     }
 }
 

@@ -283,12 +283,8 @@ struct OperationalSnapshot {
         Swift.max(lower, Swift.min(value, upper))
     }
 
-    #if DEBUG && os(iOS)
     // Keep nil by default; use NOCTO_FORCE_CONFIDENCE / --nocto-force-confidence for QA scenarios.
     private static let debugPinnedConfidenceScore: Int? = nil
-    #else
-    private static let debugPinnedConfidenceScore: Int? = nil
-    #endif
 
     private static func isLateNightVenue(_ venue: Venue) -> Bool {
         guard

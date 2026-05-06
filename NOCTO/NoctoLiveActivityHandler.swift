@@ -30,23 +30,17 @@ final class NoctoLiveActivityHandler {
             let dismissAt = Date().addingTimeInterval(Self.lowConfidenceDismissInterval)
             let currentActivities = Activity<NoctoAttributes>.activities
 
-            if currentActivities.isEmpty {
-                await start(with: state)
-                if let activity {
-                    await end(
-                        activity,
-                        using: state,
-                        dismissalPolicy: .after(dismissAt)
-                    )
-                }
-            } else {
-                for current in currentActivities {
-                    await end(
-                        current,
-                        using: state,
-                        dismissalPolicy: .after(dismissAt)
-                    )
-                }
+            guard !currentActivities.isEmpty else {
+                activity = nil
+                return
+            }
+
+            for current in currentActivities {
+                await end(
+                    current,
+                    using: state,
+                    dismissalPolicy: .after(dismissAt)
+                )
             }
 
             activity = nil
@@ -129,14 +123,5 @@ private extension NoctoAttributes.ContentState {
         self.lateNightVenueCount = snapshot.lateNightVenueCount
         self.integrityState = isLowConfidence ? .offlineLowConfidence : .live
         self.updatedAt = Date()
-    }
-
-    static func confidenceLabel(for score: Int) -> String {
-        switch score {
-        case 90...: return "Пълна"
-        case 70...: return "Стабилна"
-        case 60...: return "Ограничена"
-        default: return "Ниска"
-        }
     }
 }
