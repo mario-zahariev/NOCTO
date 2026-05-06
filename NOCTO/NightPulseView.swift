@@ -54,6 +54,7 @@ struct NightPulseView: View {
             sectionLabel("Сигнали")
             signalRow("Основен формат", value: snapshot.primaryVenueTypeLabel, systemImage: "music.note.house")
             signalRow("Късно покритие", value: "\(snapshot.lateNightVenueCount) места", systemImage: "moon.stars")
+            signalRow("Най-добре след", value: snapshot.bestAfterTime, systemImage: "clock.badge")
             signalRow("Зареждане", value: "\(snapshot.loadLatencyMs) ms · \(snapshot.latencyBandLabel)", systemImage: "speedometer")
             signalRow("Статус на данните", value: snapshot.decodeHealthLabel, systemImage: "checkmark.seal")
         }
