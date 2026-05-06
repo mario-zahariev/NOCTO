@@ -52,11 +52,13 @@ struct NightPulseView: View {
     private var signalCard: some View {
         VStack(alignment: .leading, spacing: 12) {
             sectionLabel("Сигнали")
+            confidenceStrip
             signalRow("Основен формат", value: snapshot.primaryVenueTypeLabel, systemImage: "music.note.house")
-            signalRow("Късно покритие", value: "\(snapshot.lateNightVenueCount) места", systemImage: "moon.stars")
+            signalRow("Късно покритие", value: "\(snapshot.lateNightVenueCount) места · 4 ч", systemImage: "moon.stars")
             signalRow("Най-добре след", value: snapshot.bestAfterTime, systemImage: "clock.badge")
             signalRow("Зареждане", value: "\(snapshot.loadLatencyMs) ms · \(snapshot.latencyBandLabel)", systemImage: "speedometer")
-            signalRow("Статус на данните", value: snapshot.decodeHealthLabel, systemImage: "checkmark.seal")
+            signalRow("Валидация", value: snapshot.confidenceValidationLabel, systemImage: "checkmark.seal")
+            signalRow("Източник", value: snapshot.confidenceSource.label, systemImage: "internaldrive")
         }
         .nightPulseCard()
     }
@@ -99,6 +101,32 @@ struct NightPulseView: View {
                 .minimumScaleFactor(0.8)
         }
         .frame(maxWidth: .infinity, alignment: .leading)
+    }
+
+    private var confidenceStrip: some View {
+        VStack(alignment: .leading, spacing: 8) {
+            HStack {
+                Text("Сигнал над шум")
+                    .font(.caption.weight(.semibold))
+                    .foregroundStyle(NoctoTheme.textSecondary)
+                Spacer()
+                Text("\(snapshot.confidenceScore)%")
+                    .font(.caption.weight(.semibold))
+                    .foregroundStyle(NoctoTheme.ultraviolet)
+            }
+
+            GeometryReader { proxy in
+                ZStack(alignment: .leading) {
+                    Capsule()
+                        .fill(NoctoTheme.cardBorder.opacity(0.65))
+
+                    Capsule()
+                        .fill(NoctoTheme.ultraviolet)
+                        .frame(width: proxy.size.width * CGFloat(snapshot.confidenceScore) / 100.0)
+                }
+            }
+            .frame(height: 4)
+        }
     }
 
     private func signalRow(_ title: String, value: String, systemImage: String) -> some View {

@@ -7,6 +7,20 @@ struct VenueTypeSignal: Identifiable {
     let count: Int
 }
 
+enum ConfidenceSource: Equatable {
+    case hardData
+    case mixedData
+    case softData
+
+    var label: String {
+        switch self {
+        case .hardData: return "Твърд източник"
+        case .mixedData: return "Смесен източник"
+        case .softData: return "Мек източник"
+        }
+    }
+}
+
 struct OperationalSnapshot {
     let loadLatencyMs: Int
     let didLoadSucceed: Bool
@@ -76,14 +90,45 @@ struct OperationalSnapshot {
     }
 
     var signalConfidenceLabel: String {
-        guard didLoadSucceed else { return "Ниска" }
-        if venuesCount >= 10 && dataCompletenessPercent >= 90 {
-            return "Висока"
+        switch confidenceScore {
+        case 90...: return "Пълна"
+        case 70...: return "Стабилна"
+        case 60...: return "Ограничена"
+        default: return "Ниска"
         }
-        if venuesCount >= 6 && dataCompletenessPercent >= 70 {
-            return "Средна"
+    }
+
+    var confidenceSource: ConfidenceSource {
+        if let confidenceOverride = Self.confidenceOverride {
+            return confidenceOverride.source ?? Self.sourceFromScore(confidenceOverride.score)
         }
-        return "Ниска"
+
+        if didLoadSucceed, lastErrorMessage == nil, dataCompletenessPercent >= 95, venuesCount >= 8 {
+            return .hardData
+        }
+        if didLoadSucceed, dataCompletenessPercent >= 70, venuesCount >= 4 {
+            return .mixedData
+        }
+        return .softData
+    }
+
+    var confidenceScore: Int {
+        if let confidenceOverride = Self.confidenceOverride {
+            return confidenceOverride.score
+        }
+
+        switch confidenceSource {
+        case .hardData:
+            return 100
+        case .mixedData:
+            return mixedConfidenceScore
+        case .softData:
+            return softConfidenceScore
+        }
+    }
+
+    var confidenceValidationLabel: String {
+        "Валидация: \(signalConfidenceLabel) (\(confidenceScore)%)"
     }
 
     var trafficIndex: Int {
@@ -117,6 +162,32 @@ struct OperationalSnapshot {
         return "After \(String(format: "%02d", modalOpeningHour)):00"
     }
 
+    private var mixedConfidenceScore: Int {
+        let completeness = clamped(dataCompletenessPercent, min: 70, max: 100)
+        let completenessBoost = Int(((Double(completeness - 70) / 30.0) * 12.0).rounded())
+
+        let coverage = clamped(venuesCount, min: 4, max: 12)
+        let coverageBoost = Int(((Double(coverage - 4) / 8.0) * 6.0).rounded())
+
+        let latency = clamped(loadLatencyMs, min: 0, max: 220)
+        let latencyBoost = Int(((Double(220 - latency) / 220.0) * 2.0).rounded())
+
+        return clamped(70 + completenessBoost + coverageBoost + latencyBoost, min: 70, max: 90)
+    }
+
+    private var softConfidenceScore: Int {
+        let loadBonus = didLoadSucceed ? 10 : 0
+        let completenessBoost = Int(((Double(clamped(dataCompletenessPercent, min: 0, max: 70)) / 70.0) * 10.0).rounded())
+        let coverageBoost = min(venuesCount, 4)
+        let latencyPenalty = Int(((Double(clamped(loadLatencyMs, min: 120, max: 520) - 120) / 400.0) * 9.0).rounded())
+
+        return clamped(35 + loadBonus + completenessBoost + coverageBoost - latencyPenalty, min: 20, max: 59)
+    }
+
+    private func clamped(_ value: Int, min lower: Int, max upper: Int) -> Int {
+        Swift.max(lower, Swift.min(value, upper))
+    }
+
     private static func label(for type: Venue.VenueType) -> String {
         switch type {
         case .club: return "Клубове"
@@ -146,6 +217,78 @@ struct OperationalSnapshot {
     private static func fieldScore(_ value: String) -> Int {
         value.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty ? 0 : 1
     }
+
+    private struct ConfidenceOverride {
+        let score: Int
+        let source: ConfidenceSource?
+    }
+
+    private static var confidenceOverride: ConfidenceOverride? {
+        #if DEBUG
+        if let debugPinnedConfidenceScore {
+            return ConfidenceOverride(
+                score: clamped(debugPinnedConfidenceScore, min: 0, max: 100),
+                source: .softData
+            )
+        }
+        #endif
+
+        let environment = ProcessInfo.processInfo.environment
+        let arguments = ProcessInfo.processInfo.arguments
+
+        let forcedScoreRaw = environment["NOCTO_FORCE_CONFIDENCE"] ??
+            arguments.first(where: { $0.hasPrefix("--nocto-force-confidence=") })?
+                .replacingOccurrences(of: "--nocto-force-confidence=", with: "")
+        guard let forcedScoreRaw, let forcedScore = Int(forcedScoreRaw) else {
+            return nil
+        }
+
+        let forcedSourceRaw = environment["NOCTO_FORCE_SOURCE"] ??
+            arguments.first(where: { $0.hasPrefix("--nocto-force-source=") })?
+                .replacingOccurrences(of: "--nocto-force-source=", with: "")
+
+        return ConfidenceOverride(
+            score: clamped(forcedScore, min: 0, max: 100),
+            source: sourceFromRaw(forcedSourceRaw)
+        )
+    }
+
+    private static func sourceFromRaw(_ raw: String?) -> ConfidenceSource? {
+        guard let raw else { return nil }
+        let normalized = raw
+            .trimmingCharacters(in: .whitespacesAndNewlines)
+            .lowercased()
+
+        if normalized.contains("hard") || normalized.contains("твърд") {
+            return .hardData
+        }
+        if normalized.contains("mixed") || normalized.contains("смес") {
+            return .mixedData
+        }
+        if normalized.contains("soft") || normalized.contains("мек") {
+            return .softData
+        }
+        return nil
+    }
+
+    private static func sourceFromScore(_ score: Int) -> ConfidenceSource {
+        switch score {
+        case 90...: return .hardData
+        case 70...: return .mixedData
+        default: return .softData
+        }
+    }
+
+    private static func clamped(_ value: Int, min lower: Int, max upper: Int) -> Int {
+        Swift.max(lower, Swift.min(value, upper))
+    }
+
+    #if DEBUG && os(iOS)
+    // Keep nil by default; use NOCTO_FORCE_CONFIDENCE / --nocto-force-confidence for QA scenarios.
+    private static let debugPinnedConfidenceScore: Int? = nil
+    #else
+    private static let debugPinnedConfidenceScore: Int? = nil
+    #endif
 
     private static func isLateNightVenue(_ venue: Venue) -> Bool {
         guard
