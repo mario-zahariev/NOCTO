@@ -89,6 +89,10 @@ struct OperationalSnapshot {
         }
     }
 
+    var lateNightCoverageHours: Int {
+        venues.compactMap(Self.lateNightCoverageHours(for:)).max() ?? 0
+    }
+
     var signalConfidenceLabel: String {
         switch confidenceScore {
         case 90...: return "Пълна"
@@ -231,7 +235,6 @@ struct OperationalSnapshot {
                 source: .softData
             )
         }
-        #endif
 
         let environment = ProcessInfo.processInfo.environment
         let arguments = ProcessInfo.processInfo.arguments
@@ -251,6 +254,9 @@ struct OperationalSnapshot {
             score: clamped(forcedScore, min: 0, max: 100),
             source: sourceFromRaw(forcedSourceRaw)
         )
+        #else
+        return nil
+        #endif
     }
 
     private static func sourceFromRaw(_ raw: String?) -> ConfidenceSource? {
@@ -298,6 +304,27 @@ struct OperationalSnapshot {
             (closing.hour == opening.hour && closing.minute <= opening.minute)
         let closingMinuteOfDay = closing.hour * 60 + closing.minute
         return closesNextDay && (180..<720).contains(closingMinuteOfDay)
+    }
+
+    private static func lateNightCoverageHours(for venue: Venue) -> Int? {
+        guard
+            isLateNightVenue(venue),
+            let opening = hourAndMinute(from: venue.workingHours, at: 0),
+            let closing = hourAndMinute(from: venue.workingHours, at: 1)
+        else {
+            return nil
+        }
+
+        let openingMinutes = opening.hour * 60 + opening.minute
+        var closingMinutes = closing.hour * 60 + closing.minute
+
+        if closingMinutes <= openingMinutes {
+            closingMinutes += 24 * 60
+        }
+
+        let durationMinutes = closingMinutes - openingMinutes
+        guard durationMinutes > 0 else { return nil }
+        return Int(ceil(Double(durationMinutes) / 60.0))
     }
 
     private static func hourAndMinute(from workingHours: String, at index: Int) -> (hour: Int, minute: Int)? {

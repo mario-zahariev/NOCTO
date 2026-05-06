@@ -1,5 +1,6 @@
 import ActivityKit
 import Foundation
+import os
 
 @available(iOS 16.1, *)
 @MainActor
@@ -8,6 +9,7 @@ final class NoctoLiveActivityHandler {
 
     private static let activeStaleInterval: TimeInterval = 15 * 60
     private static let lowConfidenceDismissInterval: TimeInterval = 5 * 60
+    private static let logger = Logger(subsystem: "com.mario.NOCTO", category: "LiveActivity")
 
     private var activity: Activity<NoctoAttributes>?
     private let sessionID = UUID().uuidString
@@ -22,7 +24,10 @@ final class NoctoLiveActivityHandler {
         print("[NOCTO LiveActivity] score=\(state.confidenceScore) state=\(state.integrityState.rawValue) source=\(state.sourceLabel)")
         #endif
         guard ActivityAuthorizationInfo().areActivitiesEnabled else {
-            await endCurrent(using: state, dismissalPolicy: .immediate)
+            for current in Activity<NoctoAttributes>.activities {
+                await end(current, using: state, dismissalPolicy: .immediate)
+            }
+            activity = nil
             return
         }
 
@@ -75,6 +80,7 @@ final class NoctoLiveActivityHandler {
                 pushType: nil
             )
         } catch {
+            Self.logger.error("Activity.request failed: \(error.localizedDescription, privacy: .public)")
             activity = nil
         }
     }

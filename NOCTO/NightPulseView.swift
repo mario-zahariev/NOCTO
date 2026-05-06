@@ -54,7 +54,7 @@ struct NightPulseView: View {
             sectionLabel("Сигнали")
             confidenceStrip
             signalRow("Основен формат", value: snapshot.primaryVenueTypeLabel, systemImage: "music.note.house")
-            signalRow("Късно покритие", value: "\(snapshot.lateNightVenueCount) места · 4 ч", systemImage: "moon.stars")
+            signalRow("Късно покритие", value: "\(snapshot.lateNightVenueCount) места · \(snapshot.lateNightCoverageHours) ч", systemImage: "moon.stars")
             signalRow("Най-добре след", value: snapshot.bestAfterTime, systemImage: "clock.badge")
             signalRow("Зареждане", value: "\(snapshot.loadLatencyMs) ms · \(snapshot.latencyBandLabel)", systemImage: "speedometer")
             signalRow("Валидация", value: snapshot.confidenceValidationLabel, systemImage: "checkmark.seal")
@@ -116,13 +116,14 @@ struct NightPulseView: View {
             }
 
             GeometryReader { proxy in
+                let safeScore = min(max(snapshot.confidenceScore, 0), 100)
                 ZStack(alignment: .leading) {
                     Capsule()
                         .fill(NoctoTheme.cardBorder.opacity(0.65))
 
                     Capsule()
                         .fill(NoctoTheme.ultraviolet)
-                        .frame(width: proxy.size.width * CGFloat(snapshot.confidenceScore) / 100.0)
+                        .frame(width: proxy.size.width * CGFloat(safeScore) / 100.0)
                 }
             }
             .frame(height: 4)
