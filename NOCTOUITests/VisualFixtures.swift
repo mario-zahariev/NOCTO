@@ -1,12 +1,13 @@
 import Foundation
+import XCTest
 @testable import NOCTO
 
 @MainActor
 enum VisualFixtures {
     static let venueIDs: [UUID] = [
-        UUID(uuidString: "00000000-0000-0000-0000-000000000001")!,
-        UUID(uuidString: "00000000-0000-0000-0000-000000000002")!,
-        UUID(uuidString: "00000000-0000-0000-0000-000000000003")!
+        fixtureUUID("00000000-0000-0000-0000-000000000001"),
+        fixtureUUID("00000000-0000-0000-0000-000000000002"),
+        fixtureUUID("00000000-0000-0000-0000-000000000003")
     ]
 
     static let venues: [Venue] = [
@@ -56,12 +57,19 @@ enum VisualFixtures {
 
     static func favoritesManager(favoriteIDs: Set<UUID>) -> FavoritesManager {
         let suiteName = "NOCTOUITests.Favorites"
-        guard let defaults = UserDefaults(suiteName: suiteName) else {
-            fatalError("Cannot create dedicated test defaults suite")
+        let key = "com.nocto.favoriteVenueIDs"
+        let defaults: UserDefaults
+
+        if let scopedDefaults = UserDefaults(suiteName: suiteName) {
+            scopedDefaults.removePersistentDomain(forName: suiteName)
+            defaults = scopedDefaults
+        } else {
+            XCTFail("Cannot create dedicated test defaults suite '\(suiteName)'. Falling back to standard defaults.")
+            UserDefaults.standard.removeObject(forKey: key)
+            defaults = .standard
         }
 
-        defaults.removePersistentDomain(forName: suiteName)
-        defaults.set(favoriteIDs.map(\.uuidString).sorted(), forKey: "com.nocto.favoriteVenueIDs")
+        defaults.set(favoriteIDs.map(\.uuidString).sorted(), forKey: key)
         return FavoritesManager(defaults: defaults)
     }
 
@@ -102,5 +110,13 @@ enum VisualFixtures {
             return "Смесен източник"
         }
         return "Мек източник"
+    }
+
+    private static func fixtureUUID(_ raw: String) -> UUID {
+        if let uuid = UUID(uuidString: raw) {
+            return uuid
+        }
+        XCTFail("Invalid fixture UUID: \(raw)")
+        return UUID()
     }
 }

@@ -31,7 +31,7 @@ class SnapshotTestCase: XCTestCase {
         line: UInt = #line
     ) {
         let image = render(view: view, viewport: viewport)
-        let referenceURL = snapshotsDirectory().appendingPathComponent("\(name).png")
+        let referenceURL = snapshotsDirectory(for: file).appendingPathComponent("\(name).png")
 
         if recordMode {
             writeReference(image, to: referenceURL)
@@ -56,7 +56,7 @@ class SnapshotTestCase: XCTestCase {
             return
         }
 
-        let mismatch = pixelMismatchRatio(lhs: image, rhs: referenceImage)
+        let mismatch = pixelMismatchRatio(lhs: image, rhs: referenceImage, file: file, line: line)
         if mismatch > pixelTolerance {
             let renderedAttachment = XCTAttachment(image: image)
             renderedAttachment.name = "rendered-\(name)"
@@ -84,29 +84,70 @@ class SnapshotTestCase: XCTestCase {
     private func render<V: View>(view: V, viewport: SnapshotViewport) -> UIImage {
         let size = CGSize(width: viewport.width, height: viewport.height)
         let host = UIHostingController(rootView: view.preferredColorScheme(.dark))
+
+        let window = UIWindow(frame: CGRect(origin: .zero, size: size))
+        window.overrideUserInterfaceStyle = .dark
+        window.backgroundColor = .black
+        window.rootViewController = host
+
+        let animationsEnabled = UIView.areAnimationsEnabled
+        UIView.setAnimationsEnabled(false)
+        defer {
+            UIView.setAnimationsEnabled(animationsEnabled)
+            window.isHidden = true
+            window.rootViewController = nil
+        }
+
         host.overrideUserInterfaceStyle = .dark
-        host.view.frame = CGRect(origin: .zero, size: size)
+        host.view.frame = window.bounds
         host.view.backgroundColor = .black
+        window.isHidden = false
+        window.layoutIfNeeded()
+        host.view.setNeedsLayout()
         host.view.layoutIfNeeded()
+        RunLoop.main.run(until: Date(timeIntervalSinceNow: 0.05))
 
         let format = UIGraphicsImageRendererFormat.default()
         format.scale = viewport.scale
         format.opaque = true
 
         return UIGraphicsImageRenderer(size: size, format: format).image { context in
-            host.view.layer.render(in: context.cgContext)
+            window.layer.render(in: context.cgContext)
         }
     }
 
-    private func pixelMismatchRatio(lhs: UIImage, rhs: UIImage) -> Double {
-        guard
-            let lhsImage = lhs.cgImage,
-            let rhsImage = rhs.cgImage,
-            lhsImage.width == rhsImage.width,
-            lhsImage.height == rhsImage.height,
-            let lhsBuffer = rgbaBuffer(from: lhsImage),
-            let rhsBuffer = rgbaBuffer(from: rhsImage)
-        else {
+    private func pixelMismatchRatio(
+        lhs: UIImage,
+        rhs: UIImage,
+        file: StaticString,
+        line: UInt
+    ) -> Double {
+        guard let lhsImage = lhs.cgImage else {
+            XCTFail("Rendered snapshot has no CGImage backing.", file: file, line: line)
+            return 1
+        }
+
+        guard let rhsImage = rhs.cgImage else {
+            XCTFail("Reference snapshot has no CGImage backing.", file: file, line: line)
+            return 1
+        }
+
+        guard lhsImage.width == rhsImage.width, lhsImage.height == rhsImage.height else {
+            XCTFail(
+                "Snapshot size mismatch: rendered \(lhsImage.width)x\(lhsImage.height) vs reference \(rhsImage.width)x\(rhsImage.height).",
+                file: file,
+                line: line
+            )
+            return 1
+        }
+
+        guard let lhsBuffer = rgbaBuffer(from: lhsImage) else {
+            XCTFail("Failed to read rendered snapshot pixel buffer.", file: file, line: line)
+            return 1
+        }
+
+        guard let rhsBuffer = rgbaBuffer(from: rhsImage) else {
+            XCTFail("Failed to read reference snapshot pixel buffer.", file: file, line: line)
             return 1
         }
 
@@ -158,13 +199,20 @@ class SnapshotTestCase: XCTestCase {
 
     private func writeReference(_ image: UIImage, to url: URL) {
         let directory = url.deletingLastPathComponent()
-        try? FileManager.default.createDirectory(at: directory, withIntermediateDirectories: true)
-        guard let data = image.pngData() else { return }
-        try? data.write(to: url)
+        do {
+            try FileManager.default.createDirectory(at: directory, withIntermediateDirectories: true)
+            guard let data = image.pngData() else {
+                XCTFail("pngData() returned nil for baseline: \(url.lastPathComponent)")
+                return
+            }
+            try data.write(to: url)
+        } catch {
+            XCTFail("Failed to write snapshot baseline at \(url.path): \(error)")
+        }
     }
 
-    private func snapshotsDirectory() -> URL {
-        URL(fileURLWithPath: #filePath)
+    private func snapshotsDirectory(for file: StaticString) -> URL {
+        URL(fileURLWithPath: String(describing: file))
             .deletingLastPathComponent()
             .appendingPathComponent("__Snapshots__", isDirectory: true)
     }
