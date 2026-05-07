@@ -59,9 +59,16 @@ jobs:
         env:
           NOCTO_RECORD_SNAPSHOTS: "0"
         run: |
-          xcodebuild \
-            -project NOCTO.xcodeproj \
-            -scheme NOCTO \
-            -destination 'platform=iOS Simulator,name=iPhone 17,OS=26.1' \
-            -only-testing:NOCTOUITests \
-            test
+          run_visual_snapshot() {
+            xcodebuild \
+              -project NOCTO.xcodeproj \
+              -scheme NOCTO \
+              -destination 'platform=iOS Simulator,name=iPhone 17,OS=26.1' \
+              -only-testing:"$1" \
+              test
+          }
+
+          run_visual_snapshot 'NOCTOUITests/LiveActivitySnapshotTests'
+          run_visual_snapshot 'NOCTOUITests/ScreenSnapshotTests/testHomeView_snapshot'
+          run_visual_snapshot 'NOCTOUITests/ScreenSnapshotTests/testNightPulseView_snapshot'
+          run_visual_snapshot 'NOCTOUITests/ScreenSnapshotTests/testProfileView_snapshot'
