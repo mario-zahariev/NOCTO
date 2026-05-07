@@ -10,8 +10,6 @@ struct ContentView: View {
     @State private var loadLatencyMs = 0
     @State private var lastLoadSucceeded = false
 
-    private let repository = VenueRepository()
-
     var body: some View {
         ZStack {
             NoctoTheme.background.ignoresSafeArea()
@@ -56,8 +54,8 @@ struct ContentView: View {
             isLoading = true
             loadError = nil
             do {
-                venues = try await Task.detached(priority: .userInitiated) { [repository] in
-                    try repository.loadVenues()
+                venues = try await Task.detached(priority: .userInitiated) {
+                    try LocalVenueRepository().loadVenues()
                 }.value
                 lastLoadSucceeded = true
             } catch {
