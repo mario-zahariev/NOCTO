@@ -40,9 +40,13 @@ struct NightPulseView: View {
 
             HStack(spacing: 12) {
                 compactMetric("Наличност", value: snapshot.lateNightAvailabilityLabel)
-                Divider().overlay(NoctoTheme.cardBorder)
+                Rectangle()
+                    .fill(NoctoTheme.cardBorder)
+                    .frame(width: 1)
                 compactMetric("Увереност", value: snapshot.signalConfidenceLabel)
-                Divider().overlay(NoctoTheme.cardBorder)
+                Rectangle()
+                    .fill(NoctoTheme.cardBorder)
+                    .frame(width: 1)
                 compactMetric("Данни", value: "\(snapshot.dataCompletenessPercent)%")
             }
         }
@@ -115,17 +119,7 @@ struct NightPulseView: View {
                     .foregroundStyle(NoctoTheme.ultraviolet)
             }
 
-            GeometryReader { proxy in
-                let safeScore = min(max(snapshot.confidenceScore, 0), 100)
-                ZStack(alignment: .leading) {
-                    Capsule()
-                        .fill(NoctoTheme.cardBorder.opacity(0.65))
-
-                    Capsule()
-                        .fill(NoctoTheme.ultraviolet)
-                        .frame(width: proxy.size.width * CGFloat(safeScore) / 100.0)
-                }
-            }
+            pulseProgressBar(value: snapshot.confidenceScore, total: 100, tint: NoctoTheme.ultraviolet)
             .frame(height: 4)
         }
     }
@@ -184,18 +178,23 @@ struct NightPulseView: View {
     }
 
     private func pulseProgressBar(value: Int, total: Int, tint: Color) -> some View {
-        GeometryReader { proxy in
-            let safeTotal = max(total, 1)
-            let safeValue = min(max(value, 0), safeTotal)
-            ZStack(alignment: .leading) {
-                Capsule()
-                    .fill(NoctoTheme.cardBorder.opacity(0.65))
+        let safeTotal = max(total, 1)
+        let safeValue = min(max(value, 0), safeTotal)
+        let ratio = Double(safeValue) / Double(safeTotal)
 
-                Capsule()
-                    .fill(tint)
-                    .frame(width: proxy.size.width * CGFloat(safeValue) / CGFloat(safeTotal))
-            }
-        }
+        return Capsule()
+            .fill(
+                LinearGradient(
+                    stops: [
+                        .init(color: tint, location: 0),
+                        .init(color: tint, location: ratio),
+                        .init(color: NoctoTheme.cardBorder.opacity(0.65), location: ratio),
+                        .init(color: NoctoTheme.cardBorder.opacity(0.65), location: 1)
+                    ],
+                    startPoint: .leading,
+                    endPoint: .trailing
+                )
+            )
     }
 }
 
