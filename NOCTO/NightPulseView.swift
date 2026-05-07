@@ -35,8 +35,8 @@ struct NightPulseView: View {
                 scoreBadge("\(snapshot.trafficIndex)")
             }
 
-            ProgressView(value: Double(snapshot.trafficIndex), total: 100)
-                .tint(NoctoTheme.accent)
+            pulseProgressBar(value: snapshot.trafficIndex, total: 100, tint: NoctoTheme.accent)
+                .frame(height: 5)
 
             HStack(spacing: 12) {
                 compactMetric("Наличност", value: snapshot.lateNightAvailabilityLabel)
@@ -162,8 +162,8 @@ struct NightPulseView: View {
                     .foregroundStyle(NoctoTheme.textSecondary)
             }
 
-            ProgressView(value: Double(signal.count), total: Double(max(snapshot.venuesCount, 1)))
-                .tint(NoctoTheme.accent)
+            pulseProgressBar(value: signal.count, total: max(snapshot.venuesCount, 1), tint: NoctoTheme.accent)
+                .frame(height: 4)
         }
     }
 
@@ -181,6 +181,21 @@ struct NightPulseView: View {
             .padding(.horizontal, 12)
             .background(Capsule().fill(NoctoTheme.accent.opacity(0.22)))
             .overlay(Capsule().stroke(NoctoTheme.accent.opacity(0.7), lineWidth: 1))
+    }
+
+    private func pulseProgressBar(value: Int, total: Int, tint: Color) -> some View {
+        GeometryReader { proxy in
+            let safeTotal = max(total, 1)
+            let safeValue = min(max(value, 0), safeTotal)
+            ZStack(alignment: .leading) {
+                Capsule()
+                    .fill(NoctoTheme.cardBorder.opacity(0.65))
+
+                Capsule()
+                    .fill(tint)
+                    .frame(width: proxy.size.width * CGFloat(safeValue) / CGFloat(safeTotal))
+            }
+        }
     }
 }
 
