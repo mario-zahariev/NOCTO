@@ -35,7 +35,12 @@ struct NightPulseView: View {
                 scoreBadge("\(snapshot.trafficIndex)")
             }
 
-            pulseProgressBar(value: snapshot.trafficIndex, total: 100, tint: NoctoTheme.accent)
+            pulseProgressBar(
+                value: snapshot.trafficIndex,
+                total: 100,
+                tint: NoctoTheme.accent,
+                accessibilityLabel: "Вечерен трафик"
+            )
                 .frame(height: 5)
 
             HStack(spacing: 12) {
@@ -119,8 +124,13 @@ struct NightPulseView: View {
                     .foregroundStyle(NoctoTheme.ultraviolet)
             }
 
-            pulseProgressBar(value: snapshot.confidenceScore, total: 100, tint: NoctoTheme.ultraviolet)
-            .frame(height: 4)
+            pulseProgressBar(
+                value: snapshot.confidenceScore,
+                total: 100,
+                tint: NoctoTheme.ultraviolet,
+                accessibilityLabel: "Сигнал над шум"
+            )
+                .frame(height: 4)
         }
     }
 
@@ -156,7 +166,12 @@ struct NightPulseView: View {
                     .foregroundStyle(NoctoTheme.textSecondary)
             }
 
-            pulseProgressBar(value: signal.count, total: max(snapshot.venuesCount, 1), tint: NoctoTheme.accent)
+            pulseProgressBar(
+                value: signal.count,
+                total: max(snapshot.venuesCount, 1),
+                tint: NoctoTheme.accent,
+                accessibilityLabel: signal.label
+            )
                 .frame(height: 4)
         }
     }
@@ -177,7 +192,12 @@ struct NightPulseView: View {
             .overlay(Capsule().stroke(NoctoTheme.accent.opacity(0.7), lineWidth: 1))
     }
 
-    private func pulseProgressBar(value: Int, total: Int, tint: Color) -> some View {
+    private func pulseProgressBar(
+        value: Int,
+        total: Int,
+        tint: Color,
+        accessibilityLabel: String
+    ) -> some View {
         let safeTotal = max(total, 1)
         let safeValue = min(max(value, 0), safeTotal)
         let ratio = Double(safeValue) / Double(safeTotal)
@@ -195,6 +215,9 @@ struct NightPulseView: View {
                     endPoint: .trailing
                 )
             )
+            .accessibilityElement(children: .ignore)
+            .accessibilityLabel(accessibilityLabel)
+            .accessibilityValue("\(safeValue) от \(safeTotal)")
     }
 }
 

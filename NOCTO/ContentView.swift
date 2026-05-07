@@ -58,6 +58,9 @@ struct ContentView: View {
                     try LocalVenueRepository().loadVenues()
                 }.value
                 lastLoadSucceeded = true
+            } catch is CancellationError {
+                isLoading = false
+                return
             } catch {
                 loadError = error.localizedDescription
                 lastLoadSucceeded = false
