@@ -5,20 +5,14 @@
   <defs>
     <style>
       :root {
-        --bg: #04040A;
         --ink: rgba(255,255,255,.86);
         --muted: rgba(255,255,255,.34);
-        --soft: rgba(255,255,255,.18);
-        --violet: #6B50D8;
-        --violet-hi: #9B7CFF;
-        --ember: #F97316;
       }
 
       @keyframes archBreathe { 0%,100% { opacity:.50 } 50% { opacity:.92 } }
       @keyframes waveBreath { 0%,100% { opacity:.12 } 50% { opacity:.38 } }
       @keyframes nodePulse { 0%,100% { opacity:.95; transform:scale(1) } 50% { opacity:.36; transform:scale(.82) } }
       @keyframes fadeIn { from { opacity:0; transform:translateY(3px) } to { opacity:1; transform:translateY(0) } }
-      @keyframes scan { from { transform:translateX(0) } to { transform:translateX(520px) } }
 
       .mono { font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace; }
       .sans { font-family: Inter, -apple-system, BlinkMacSystemFont, "Helvetica Neue", Arial, sans-serif; }
@@ -84,7 +78,7 @@
     </mask>
   </defs>
 
-  <rect width="1200" height="480" fill="var(--bg)"/>
+  <rect width="1200" height="480" fill="#04040A"/>
   <rect width="1200" height="480" fill="url(#bgGlow)"/>
   <rect x="620" y="0" width="580" height="480" fill="url(#microGrid)" opacity=".75"/>
 
