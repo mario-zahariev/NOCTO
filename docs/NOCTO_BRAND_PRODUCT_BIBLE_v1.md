@@ -2,7 +2,7 @@
 
 Дата: 2026-05-05
 Статус: активен продуктово-брандов source of truth
-Repo: `github.com/mariozahariev69-design/NOCTO`
+Repo: `github.com/mario-zahariev/NOCTO`
 
 ## 1. Цел
 

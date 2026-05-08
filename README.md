@@ -136,7 +136,7 @@ scripts/
 NOCTO is currently source-first in this repository. Public TestFlight or App Store distribution is not declared here yet.
 
 ```zsh
-git clone https://github.com/mariozahariev69-design/NOCTO.git
+git clone https://github.com/mario-zahariev/NOCTO.git
 open NOCTO.xcodeproj
 # Select NOCTO scheme → run on iOS 17+ simulator or device
 ```
@@ -167,7 +167,7 @@ Referenced as a local Swift package via the `.` relative path in `NOCTO.xcodepro
 
 ```swift
 .package(
-    url: "https://github.com/mariozahariev69-design/NOCTO.git",
+    url: "https://github.com/mario-zahariev/NOCTO.git",
     from: "1.0.0"
 )
 ```

@@ -17,6 +17,10 @@ final class NoctoLiveActivityHandler {
     private init() {}
 
     func sync(with snapshot: OperationalSnapshot) async {
+        if !Self.isEnabledForCurrentProcess {
+            await cleanupActivitiesWhenDisabled()
+            return
+        }
         hydrateActivityIfNeeded()
 
         let state = NoctoAttributes.ContentState(snapshot: snapshot)
@@ -58,6 +62,33 @@ final class NoctoLiveActivityHandler {
         case .some:
             await update(with: state)
         }
+    }
+
+    private func cleanupActivitiesWhenDisabled() async {
+        let state = NoctoAttributes.ContentState(
+            confidenceScore: 0,
+            confidenceLabel: "Ниска",
+            sourceLabel: "Мек източник",
+            activeVenueCount: 0,
+            lateNightVenueCount: 0,
+            integrityState: .offlineLowConfidence,
+            updatedAt: Date()
+        )
+
+        for current in Activity<NoctoAttributes>.activities {
+            await end(current, using: state, dismissalPolicy: .immediate)
+        }
+
+        activity = nil
+    }
+
+    private static var isEnabledForCurrentProcess: Bool {
+        let environment = ProcessInfo.processInfo.environment
+        let arguments = ProcessInfo.processInfo.arguments
+
+        let envDisabled = environment["NOCTO_DISABLE_LIVE_ACTIVITY"] == "1"
+        let argDisabled = arguments.contains("--nocto-disable-live-activity")
+        return !(envDisabled || argDisabled)
     }
 
     private func hydrateActivityIfNeeded() {
