@@ -167,10 +167,25 @@ class SnapshotTestCase: XCTestCase {
 
         for pixelIndex in 0..<pixelCount {
             let offset = pixelIndex * 4
-            let deltaR = abs(Int(lhsBuffer[offset]) - Int(rhsBuffer[offset]))
-            let deltaG = abs(Int(lhsBuffer[offset + 1]) - Int(rhsBuffer[offset + 1]))
-            let deltaB = abs(Int(lhsBuffer[offset + 2]) - Int(rhsBuffer[offset + 2]))
-            let deltaA = abs(Int(lhsBuffer[offset + 3]) - Int(rhsBuffer[offset + 3]))
+            let lhsAlpha = lhsBuffer[offset + 3]
+            let rhsAlpha = rhsBuffer[offset + 3]
+            let lhsRGB = unpremultiply(
+                r: lhsBuffer[offset],
+                g: lhsBuffer[offset + 1],
+                b: lhsBuffer[offset + 2],
+                a: lhsAlpha
+            )
+            let rhsRGB = unpremultiply(
+                r: rhsBuffer[offset],
+                g: rhsBuffer[offset + 1],
+                b: rhsBuffer[offset + 2],
+                a: rhsAlpha
+            )
+
+            let deltaR = abs(Int(lhsRGB.r) - Int(rhsRGB.r))
+            let deltaG = abs(Int(lhsRGB.g) - Int(rhsRGB.g))
+            let deltaB = abs(Int(lhsRGB.b) - Int(rhsRGB.b))
+            let deltaA = abs(Int(lhsAlpha) - Int(rhsAlpha))
 
             if deltaR > mismatchThresholdPerChannel ||
                 deltaG > mismatchThresholdPerChannel ||
@@ -181,6 +196,19 @@ class SnapshotTestCase: XCTestCase {
         }
 
         return Double(mismatchPixels) / Double(pixelCount)
+    }
+
+    private func unpremultiply(r: UInt8, g: UInt8, b: UInt8, a: UInt8) -> (r: UInt8, g: UInt8, b: UInt8) {
+        guard a > 0 else { return (0, 0, 0) }
+
+        let alpha = Double(a) / 255.0
+        let invAlpha = 1.0 / alpha
+
+        let rr = min(255.0, round(Double(r) * invAlpha))
+        let gg = min(255.0, round(Double(g) * invAlpha))
+        let bb = min(255.0, round(Double(b) * invAlpha))
+
+        return (UInt8(rr), UInt8(gg), UInt8(bb))
     }
 
     private func rgbaBuffer(from image: CGImage) -> [UInt8]? {
