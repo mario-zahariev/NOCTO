@@ -59,13 +59,35 @@ jobs:
         env:
           NOCTO_RECORD_SNAPSHOTS: "0"
         run: |
+          IOS_RUNTIME_VERSION="26.1"
+          NOCTO_VISUAL_DERIVED_DATA="${RUNNER_TEMP}/nocto-visual-derived-data"
+          NOCTO_VISUAL_DESTINATION="platform=iOS Simulator,name=iPhone 17,OS=${IOS_RUNTIME_VERSION}"
+
+          if ! xcrun simctl list runtimes | grep -Fq "iOS $IOS_RUNTIME_VERSION"; then
+            xcodebuild -downloadPlatform iOS -buildVersion "$IOS_RUNTIME_VERSION"
+          fi
+
+          if ! xcrun simctl list runtimes | grep -Fq "iOS $IOS_RUNTIME_VERSION"; then
+            echo "iOS $IOS_RUNTIME_VERSION Simulator runtime is not installed."
+            xcrun simctl list runtimes
+            exit 1
+          fi
+
+          xcodebuild \
+            -project NOCTO.xcodeproj \
+            -scheme NOCTO \
+            -destination "$NOCTO_VISUAL_DESTINATION" \
+            -derivedDataPath "$NOCTO_VISUAL_DERIVED_DATA" \
+            build-for-testing
+
           run_visual_snapshot() {
             xcodebuild \
               -project NOCTO.xcodeproj \
               -scheme NOCTO \
-              -destination 'platform=iOS Simulator,name=iPhone 17,OS=26.1' \
+              -destination "$NOCTO_VISUAL_DESTINATION" \
+              -derivedDataPath "$NOCTO_VISUAL_DERIVED_DATA" \
               -only-testing:"$1" \
-              test
+              test-without-building
           }
 
           run_visual_snapshot 'NOCTOUITests/LiveActivitySnapshotTests'

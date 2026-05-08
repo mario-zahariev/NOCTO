@@ -29,8 +29,8 @@ class SnapshotTestCase: XCTestCase {
         pixelTolerance: Double = 0.01,
         file: StaticString = #filePath,
         line: UInt = #line
-    ) {
-        let image = render(view: view, viewport: viewport)
+    ) async {
+        let image = await render(view: view, viewport: viewport)
         let referenceURL = snapshotsDirectory(for: file).appendingPathComponent("\(name).png")
 
         if recordMode {
@@ -70,7 +70,7 @@ class SnapshotTestCase: XCTestCase {
 
             XCTFail(
                 String(
-                    format: "Visual regression in %@. Mismatch %.3f%% > %.3f%%",
+                    format: "Визуална регресия в %@. Несъответствие %.3f%% > %.3f%%",
                     name,
                     mismatch * 100,
                     pixelTolerance * 100
@@ -81,7 +81,7 @@ class SnapshotTestCase: XCTestCase {
         }
     }
 
-    private func render<V: View>(view: V, viewport: SnapshotViewport) -> UIImage {
+    private func render<V: View>(view: V, viewport: SnapshotViewport) async -> UIImage {
         let size = CGSize(width: viewport.width, height: viewport.height)
         let host = UIHostingController(rootView: view.preferredColorScheme(.dark))
 
@@ -105,7 +105,9 @@ class SnapshotTestCase: XCTestCase {
         window.layoutIfNeeded()
         host.view.setNeedsLayout()
         host.view.layoutIfNeeded()
-        RunLoop.main.run(until: Date(timeIntervalSinceNow: 0.05))
+        await Task.yield()
+        window.layoutIfNeeded()
+        host.view.layoutIfNeeded()
 
         let format = UIGraphicsImageRendererFormat.default()
         format.scale = viewport.scale
@@ -152,6 +154,15 @@ class SnapshotTestCase: XCTestCase {
         }
 
         let pixelCount = lhsImage.width * lhsImage.height
+        guard pixelCount > 0 else {
+            XCTFail(
+                "Snapshot image е с нулев размер: rendered \(lhsImage.width)x\(lhsImage.height), reference \(rhsImage.width)x\(rhsImage.height).",
+                file: file,
+                line: line
+            )
+            return 1
+        }
+
         var mismatchPixels = 0
 
         for pixelIndex in 0..<pixelCount {
