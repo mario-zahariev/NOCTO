@@ -66,6 +66,12 @@ jobs:
 
           if ! xcrun simctl list runtimes | grep -Fq "iOS $IOS_RUNTIME_VERSION"; then
             xcodebuild -downloadPlatform iOS -buildVersion "$IOS_RUNTIME_VERSION" -exportPath "$IOS_RUNTIME_EXPORT_PATH"
+            IOS_RUNTIME_DMG=$(find "$IOS_RUNTIME_EXPORT_PATH" -type f -name "*.dmg" | head -n 1)
+            if [ -z "$IOS_RUNTIME_DMG" ]; then
+              echo "Downloaded runtime image not found in $IOS_RUNTIME_EXPORT_PATH"
+              exit 1
+            fi
+            xcodebuild -importPlatform "$IOS_RUNTIME_DMG"
           fi
 
           if ! xcrun simctl list runtimes | grep -Fq "iOS $IOS_RUNTIME_VERSION"; then
