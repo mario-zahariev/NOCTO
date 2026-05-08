@@ -6,7 +6,14 @@
 
 ---
 
-NOCTO answers one question: *where in Sofia is actually worth going tonight?* Venue records flow from `venues.json` through `NOCTOCore`'s typed decode-and-validate pipeline before any view receives data — invalid entries are rejected at the repository boundary, not silently ignored. Firebase is deliberately absent; it re-enters only through a defined remote adapter contract, not as passive dependency weight.
+NOCTO is a local-first nightlife guide for Sofia: fast venue discovery, clear Night Pulse signal, and zero tracker noise.
+
+<details>
+<summary><strong>Technical depth (for contributors)</strong></summary>
+
+Venue records flow from `venues.json` through `NOCTOCore`'s typed decode-and-validate pipeline before any view receives data. Invalid entries are rejected at the repository boundary, not silently ignored. Firebase is deliberately absent; it re-enters only through a defined remote adapter contract, not as passive dependency weight.
+
+</details>
 
 ---
 
