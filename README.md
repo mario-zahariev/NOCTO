@@ -2,17 +2,17 @@
 
 <br>
 
-<img src="docs/icon.png" width="88" alt="NOCTO" />
+<img src="docs/svg/hero-nocto-dark.svg" width="1200" alt="Mario Zahariev — Night Intelligence for Sofia" />
 
 <br><br>
 
 # NOCTO
 
-**OLED nightlife intelligence for Sofia.**
+**Nightlife intelligence for Sofia.**
 
 <br>
 
-[![CI](https://github.com/mariozahariev69-design/NOCTO/actions/workflows/ci.yml/badge.svg)](https://github.com/mariozahariev69-design/NOCTO/actions/workflows/ci.yml)&nbsp;&nbsp;[![Swift](https://img.shields.io/badge/Swift-5.10-F05138?logo=swift&logoColor=white&labelColor=111111)](https://swift.org)&nbsp;&nbsp;[![iOS](https://img.shields.io/badge/iOS-17%2B-000000?logo=apple&logoColor=white&labelColor=111111)](https://developer.apple.com)&nbsp;&nbsp;[![macOS](https://img.shields.io/badge/macOS-14%2B-000000?logo=apple&logoColor=white&labelColor=111111)](https://developer.apple.com)&nbsp;&nbsp;[![License](https://img.shields.io/badge/License-MIT-3a3a3c?labelColor=111111)](LICENSE)
+[![CI](https://github.com/mariozahariev69-design/NOCTO/actions/workflows/ci.yml/badge.svg)](https://github.com/mariozahariev69-design/NOCTO/actions/workflows/ci.yml)&nbsp;&nbsp;[![Swift](https://img.shields.io/badge/Swift-5.10-F05138?logo=swift&logoColor=white&labelColor=111111)](https://swift.org)&nbsp;&nbsp;[![iOS](https://img.shields.io/badge/iOS-17%2B-000000?logo=apple&logoColor=white&labelColor=111111)](https://developer.apple.com)&nbsp;&nbsp;[![macOS](https://img.shields.io/badge/macOS-14%2B-000000?logo=apple&logoColor=white&labelColor=111111)](https://developer.apple.com)&nbsp;&nbsp;[![SwiftPM](https://img.shields.io/badge/SwiftPM-compatible-3a3a3c?labelColor=111111)](https://www.swift.org/package-manager/)&nbsp;&nbsp;[![License](https://img.shields.io/badge/License-MIT-3a3a3c?labelColor=111111)](LICENSE)
 
 <br>
 
@@ -21,6 +21,21 @@
 ---
 
 NOCTO answers one question: *where in Sofia is actually worth going tonight?* Venue records flow from `venues.json` through `NOCTOCore`'s typed decode-and-validate pipeline before any view receives data — invalid entries are rejected at the repository boundary, not silently ignored. Firebase is deliberately absent; it re-enters only through a defined remote adapter contract, not as passive dependency weight.
+
+---
+
+## What is NOCTO?
+
+NOCTO is a local-first iOS nightlife app for Sofia. It helps users quickly find relevant venues, track live operational signal quality through Night Pulse, and keep favorites persisted on-device.
+
+For users:
+- Discover venues across Home, Map, Favorites, and Night Pulse.
+- Save personal favorites with local persistence (`UserDefaults`).
+- Use proximity-aware ranking with `authorizedWhenInUse` location access.
+
+For contributors:
+- `NOCTOCore` enforces typed venue decoding and validation boundaries.
+- UI layers consume validated data only; failures remain explicit and typed.
 
 ---
 
@@ -55,6 +70,13 @@ Every layer fails loudly with typed errors. No degraded state reaches a view.
 | **Night Pulse** | `NightPulseView` — `OperationalSnapshot` signals: pulse index, type mix, latency, completeness |
 | **Profile** | `ProfileView` — Night Pass surface; Admin behind `#if DEBUG` only |
 
+### Night Pulse Signals
+
+- **Pulse index** — composite activity score for the active venue dataset.
+- **Type mix** — distribution across venue categories (`club`, `bar`, `lounge`, `event`, `other`).
+- **Latency band** — freshness band for the current signal window.
+- **Completeness** — share of venue records that passed validation and are renderable.
+
 ---
 
 ## Requirements
@@ -63,8 +85,8 @@ Every layer fails loudly with typed errors. No degraded state reaches a view.
 |---|---|
 | iOS deployment target | 17.0 |
 | macOS (test target) | 14.0 |
-| Xcode | 26.1+ |
-| Swift tools | 5.10 |
+| Xcode | 26.1+ (Swift 5 language mode supported) |
+| Swift tools | 5.10 (package tools baseline) |
 | Bundle identifier | `com.mario.NOCTO` |
 
 ---
@@ -117,6 +139,8 @@ scripts/
 ---
 
 ## Quick Start
+
+NOCTO is currently source-first in this repository. Public TestFlight or App Store distribution is not declared here yet.
 
 ```zsh
 git clone https://github.com/mariozahariev69-design/NOCTO.git
@@ -257,7 +281,7 @@ cp NOCTO/GoogleService-Info.plist.example NOCTO/GoogleService-Info.plist
 
 <div align="center">
 
-[Contributing](CONTRIBUTING.md) &nbsp;·&nbsp; [Security](SECURITY.md) &nbsp;·&nbsp; [License](LICENSE) &nbsp;·&nbsp; [Architecture](docs/ARCHITECTURE.md) &nbsp;·&nbsp; [Product Bible](docs/NOCTO_BRAND_PRODUCT_BIBLE_v1.md)
+[Contributing](CONTRIBUTING.md) &nbsp;·&nbsp; [Code of Conduct](CODE_OF_CONDUCT.md) &nbsp;·&nbsp; [Security](SECURITY.md) &nbsp;·&nbsp; [License](LICENSE) &nbsp;·&nbsp; [Architecture](docs/ARCHITECTURE.md) &nbsp;·&nbsp; [Product Bible](docs/NOCTO_BRAND_PRODUCT_BIBLE_v1.md)
 
 <br>
 
