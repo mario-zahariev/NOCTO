@@ -1,26 +1,19 @@
 <div align="center">
 
-<br>
-
-<img src="docs/svg/hero-nocto-dark.svg" width="1200" alt="Mario Zahariev — Night Intelligence for Sofia" />
-
-<br><br>
-
-# NOCTO
-
-**Nightlife intelligence for Sofia.**
-
-<br>
-
-[![CI](https://github.com/mario-zahariev/NOCTO/actions/workflows/ci.yml/badge.svg)](https://github.com/mario-zahariev/NOCTO/actions/workflows/ci.yml)&nbsp;&nbsp;[![Swift](https://img.shields.io/badge/Swift-5.10-F05138?logo=swift&logoColor=white&labelColor=111111)](https://swift.org)&nbsp;&nbsp;[![iOS](https://img.shields.io/badge/iOS-17%2B-000000?logo=apple&logoColor=white&labelColor=111111)](https://developer.apple.com)&nbsp;&nbsp;[![macOS](https://img.shields.io/badge/macOS-14%2B-000000?logo=apple&logoColor=white&labelColor=111111)](https://developer.apple.com)&nbsp;&nbsp;[![SwiftPM](https://img.shields.io/badge/SwiftPM-compatible-3a3a3c?labelColor=111111)](https://www.swift.org/package-manager/)&nbsp;&nbsp;[![License](https://img.shields.io/badge/License-MIT-3a3a3c?labelColor=111111)](LICENSE)
-
-<br>
+<img src="docs/svg/hero-nocto-dark.svg" alt="Mario Zahariev — Night Intelligence for Sofia" />
 
 </div>
 
 ---
 
-NOCTO answers one question: *where in Sofia is actually worth going tonight?* Venue records flow from `venues.json` through `NOCTOCore`'s typed decode-and-validate pipeline before any view receives data — invalid entries are rejected at the repository boundary, not silently ignored. Firebase is deliberately absent; it re-enters only through a defined remote adapter contract, not as passive dependency weight.
+NOCTO is a local-first nightlife guide for Sofia: fast venue discovery, clear Night Pulse signal, and zero tracker noise.
+
+<details>
+<summary><strong>Technical depth (for contributors)</strong></summary>
+
+Venue records flow from `venues.json` through `NOCTOCore`'s typed decode-and-validate pipeline before any view receives data. Invalid entries are rejected at the repository boundary, not silently ignored. Firebase is deliberately absent; it re-enters only through a defined remote adapter contract, not as passive dependency weight.
+
+</details>
 
 ---
 
