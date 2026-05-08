@@ -1,0 +1,184 @@
+<svg width="1200" height="480" viewBox="0 0 1200 480" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="title desc">
+  <title id="title">Mario Zahariev — Night Intelligence for Sofia</title>
+  <desc id="desc">A cinematic dark GitHub README hero banner with refined typography, subtle purple instrumentation, waveform pulse, and Sofia night identity.</desc>
+
+  <defs>
+    <style>
+      :root {
+        --bg: #04040A;
+        --ink: rgba(255,255,255,.86);
+        --muted: rgba(255,255,255,.34);
+        --soft: rgba(255,255,255,.18);
+        --violet: #6B50D8;
+        --violet-hi: #9B7CFF;
+        --ember: #F97316;
+      }
+
+      @keyframes archBreathe { 0%,100% { opacity:.50 } 50% { opacity:.92 } }
+      @keyframes waveBreath { 0%,100% { opacity:.12 } 50% { opacity:.38 } }
+      @keyframes nodePulse { 0%,100% { opacity:.95; transform:scale(1) } 50% { opacity:.36; transform:scale(.82) } }
+      @keyframes fadeIn { from { opacity:0; transform:translateY(3px) } to { opacity:1; transform:translateY(0) } }
+      @keyframes scan { from { transform:translateX(0) } to { transform:translateX(520px) } }
+
+      .mono { font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace; }
+      .sans { font-family: Inter, -apple-system, BlinkMacSystemFont, "Helvetica Neue", Arial, sans-serif; }
+      .fade-1 { animation: fadeIn .72s ease both; }
+      .fade-2 { animation: fadeIn .72s ease .10s both; }
+      .fade-3 { animation: fadeIn .72s ease .20s both; }
+      .fade-4 { animation: fadeIn .72s ease .32s both; }
+      .archPulse { animation: archBreathe 4.8s ease-in-out infinite; }
+      .wavePulse { animation: waveBreath 3.6s ease-in-out infinite; }
+      .nodePulse { transform-origin:center; animation: nodePulse 2.4s ease-in-out infinite; }
+      .label { fill: var(--muted); font-size:8px; font-weight:300; letter-spacing:2.6px; }
+      .value { fill: var(--ink); font-size:12px; font-weight:520; letter-spacing:1.25px; }
+    </style>
+
+    <radialGradient id="bgGlow" cx="74%" cy="51%" r="39%">
+      <stop offset="0" stop-color="#180835" stop-opacity=".38"/>
+      <stop offset=".48" stop-color="#120628" stop-opacity=".14"/>
+      <stop offset="1" stop-color="#04040A" stop-opacity="0"/>
+    </radialGradient>
+
+    <linearGradient id="nameFade" x1="130" y1="0" x2="640" y2="0" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#F2F0F8" stop-opacity=".96"/>
+      <stop offset=".54" stop-color="#D7D3E7" stop-opacity=".86"/>
+      <stop offset="1" stop-color="#9E98B8" stop-opacity=".58"/>
+    </linearGradient>
+
+    <linearGradient id="thinViolet" x1="136" y1="0" x2="236" y2="0" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#5A3AD5"/>
+      <stop offset=".55" stop-color="#9D78FF"/>
+      <stop offset="1" stop-color="#5A3AD5"/>
+    </linearGradient>
+
+    <filter id="fArch" x="-80%" y="-35%" width="260%" height="180%" color-interpolation-filters="sRGB">
+      <feGaussianBlur stdDeviation="10" result="b1"/>
+      <feGaussianBlur stdDeviation="2.4" result="b2"/>
+      <feMerge><feMergeNode in="b1"/><feMergeNode in="b2"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+
+    <filter id="fWave" x="-8%" y="-95%" width="116%" height="290%" color-interpolation-filters="sRGB">
+      <feGaussianBlur stdDeviation="4" result="b"/>
+      <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+
+    <filter id="fDot" x="-300%" y="-300%" width="700%" height="700%" color-interpolation-filters="sRGB">
+      <feGaussianBlur stdDeviation="5"/>
+    </filter>
+
+    <filter id="softShadow" x="-10%" y="-20%" width="130%" height="150%" color-interpolation-filters="sRGB">
+      <feDropShadow dx="0" dy="12" stdDeviation="16" flood-color="#000" flood-opacity=".64"/>
+    </filter>
+
+    <pattern id="microGrid" width="32" height="32" patternUnits="userSpaceOnUse">
+      <path d="M32 0H0V32" stroke="#7452FF" stroke-opacity=".035" stroke-width="1"/>
+    </pattern>
+
+    <path id="wavePath" d="M648 242 C666 242 670 237 680 240 C690 243 694 249 704 246 C714 243 718 238 728 240 C738 242 742 247 750 244 C758 241 761 236 767 229 C773 222 775 211 779 199 C783 184 785 173 789 161 C793 176 795 206 798 229 C801 249 804 263 809 271 C814 279 818 274 823 264 C828 254 830 245 836 241 C842 237 849 241 860 243 C876 246 884 243 901 242 C918 241 934 245 952 244 C970 243 990 242 1015 243 C1040 244 1056 242 1082 243"/>
+
+    <mask id="scanMask">
+      <use href="#wavePath" stroke="white" stroke-width="14" fill="none"/>
+      <rect x="620" y="0" width="90" height="480" fill="white" opacity=".9">
+        <animateTransform attributeName="transform" type="translate" from="0 0" to="520 0" dur="4.2s" repeatCount="indefinite" calcMode="linear"/>
+      </rect>
+    </mask>
+  </defs>
+
+  <rect width="1200" height="480" fill="var(--bg)"/>
+  <rect width="1200" height="480" fill="url(#bgGlow)"/>
+  <rect x="620" y="0" width="580" height="480" fill="url(#microGrid)" opacity=".75"/>
+
+  <g opacity=".32">
+    <circle cx="612" cy="206" r="1.4" fill="#F97316"/>
+    <circle cx="1096" cy="187" r="1" fill="#F97316"/>
+    <circle cx="1018" cy="414" r=".9" fill="#6B50D8"/>
+    <circle cx="735" cy="86" r=".8" fill="#6B50D8"/>
+  </g>
+
+  <line x1="116" y1="54" x2="116" y2="426" stroke="rgba(255,255,255,.075)" stroke-width="1"/>
+
+  <g transform="translate(40 192)">
+    <path d="M0 78V15Q0 0 14 0Q28 0 28 15V78" stroke="#4B30B8" stroke-width="3" fill="none" opacity=".16" filter="url(#fArch)" class="archPulse"/>
+    <path d="M0 78V15Q0 0 14 0Q28 0 28 15V78" stroke="#6A50E0" stroke-width="1.25" fill="none" opacity=".74" class="archPulse"/>
+    <circle cx="28" cy="15" r="7" fill="#F97316" opacity=".22" filter="url(#fDot)"/>
+    <circle cx="28" cy="15" r="3" fill="#F97316" class="nodePulse"/>
+  </g>
+
+  <g class="fade-1">
+    <text x="136" y="103" class="mono" font-size="9.5" font-weight="350" letter-spacing="3.8" fill="rgba(255,255,255,.29)">
+      NIGHT <tspan fill="#8065F0" font-weight="450">INTELLIGENCE</tspan> FOR SOFIA
+    </text>
+    <line x1="136" y1="113" x2="205" y2="113" stroke="url(#thinViolet)" stroke-width="1" opacity=".78"/>
+  </g>
+
+  <g filter="url(#softShadow)">
+    <text x="130" y="221" class="sans fade-2" font-size="100" font-weight="100" letter-spacing="-3" fill="url(#nameFade)">mario<tspan fill="#8D6CFF" font-weight="180">.</tspan></text>
+    <text x="130" y="314" class="sans fade-3" font-size="96" font-weight="100" letter-spacing="10" fill="rgba(205,200,226,.66)">zahariev</text>
+  </g>
+
+  <text x="136" y="362" class="mono fade-4" font-size="9" font-weight="320" letter-spacing="3.8" fill="rgba(255,255,255,.30)">
+    BUILDS INSTRUMENTS FOR THE NIGHT  ·  <tspan fill="#8065F0">SOFIA</tspan>
+  </text>
+
+  <g class="mono fade-4" font-size="8.5" font-weight="320" letter-spacing="2.35" fill="rgba(255,255,255,.30)">
+    <text x="136" y="394">⌖ SOFIA, BULGARIA</text>
+    <text x="282" y="394">⟨/⟩ IOS DEVELOPER</text>
+    <text x="416" y="394">◗ NIGHT OWL</text>
+    <text x="518" y="394">✦ PROBLEM SOLVER</text>
+  </g>
+
+  <ellipse cx="868" cy="270" rx="140" ry="225" fill="rgba(42,14,125,.07)"/>
+
+  <path d="M748 438V188A120 120 0 0 1 988 188V438" stroke="#3B24A0" stroke-width="6" fill="none" opacity=".24" filter="url(#fArch)" class="archPulse"/>
+  <path d="M748 438V188A120 120 0 0 1 988 188V438" stroke="#7257EA" stroke-width="1.35" fill="none" opacity=".82" class="archPulse"/>
+  <path d="M750 438V188A118 118 0 0 1 986 188V438" fill="rgba(38,12,110,.035)"/>
+
+  <line x1="648" y1="70" x2="1090" y2="70" stroke="rgba(255,255,255,.08)" stroke-width=".8"/>
+  <g stroke="rgba(255,255,255,.14)" stroke-width=".7">
+    <path d="M648 66v4M659 67v3M670 67v3M681 66v4M692 67v3M703 67v3M714 66v4M725 67v3M736 67v3M747 66v4M758 67v3M769 67v3M780 66v4M791 67v3M802 67v3M813 66v4M824 67v3M835 67v3M846 66v4M857 67v3M868 66v4M879 67v3M890 67v3M901 66v4M912 67v3M923 67v3M934 66v4M945 67v3M956 67v3M967 66v4M978 67v3M989 67v3M1000 66v4M1011 67v3M1022 67v3M1033 66v4M1044 67v3M1055 67v3M1066 66v4M1077 67v3M1088 67v3"/>
+  </g>
+
+  <g class="sans" font-size="9.5" font-weight="320" fill="rgba(255,255,255,.26)" letter-spacing=".5">
+    <text x="665" y="60" text-anchor="middle">00</text><circle cx="710" cy="57" r="1.4" fill="rgba(255,255,255,.18)"/>
+    <text x="768" y="60" text-anchor="middle">06</text><circle cx="818" cy="57" r="1.4" fill="rgba(255,255,255,.18)"/>
+    <text x="868" y="60" text-anchor="middle">12</text><circle cx="918" cy="57" r="1.4" fill="rgba(255,255,255,.18)"/>
+    <text x="968" y="60" text-anchor="middle">18</text><circle cx="1020" cy="57" r="1.4" fill="rgba(255,255,255,.18)"/>
+    <text x="1070" y="60" text-anchor="middle">24</text>
+  </g>
+
+  <use href="#wavePath" stroke="#7060DD" stroke-width="6" fill="none" class="wavePulse" filter="url(#fWave)"/>
+  <use href="#wavePath" stroke="#4A3898" stroke-width="1.25" fill="none" opacity=".45"/>
+  <use href="#wavePath" stroke="#B5A8FF" stroke-width="1.65" fill="none" opacity=".88"/>
+  <use href="#wavePath" stroke="#fff" stroke-width="2.2" fill="none" mask="url(#scanMask)" opacity=".50"/>
+
+  <circle cx="789" cy="161" r="16" fill="rgba(95,70,200,.16)" filter="url(#fDot)" class="nodePulse"/>
+  <circle cx="789" cy="161" r="5" fill="#9880FF" opacity=".94" class="nodePulse"/>
+  <circle cx="789" cy="161" r="2.1" fill="#DDD8FF"/>
+  <line x1="789" y1="171" x2="789" y2="300" stroke="rgba(95,70,200,.20)" stroke-width="1" stroke-dasharray="4 5"/>
+
+  <circle cx="860" cy="243" r="7" fill="#F97316" opacity=".18" filter="url(#fDot)"/>
+  <circle cx="860" cy="243" r="3" fill="#F97316" class="nodePulse"/>
+
+  <g class="sans fade-4">
+    <text x="664" y="316" class="label">STATUS</text><text x="664" y="336" class="value">ACTIVE</text>
+    <text x="756" y="316" class="label">FOCUS</text><text x="756" y="336" class="value">NIGHT PULSE</text>
+    <text x="896" y="316" class="label">SIGNAL</text><text x="896" y="336" class="value">72/100</text>
+    <text x="982" y="316" class="label">LATENCY</text><text x="982" y="336" fill="#8065F0" font-size="12px" font-weight="520" letter-spacing="1.25px">LOW</text>
+  </g>
+
+  <g fill="rgba(255,255,255,.32)" class="fade-4">
+    <g transform="translate(664 346)"><rect x="0" y="1" width="2.2" height="7"/><rect x="4" y="3" width="2.2" height="5"/><rect x="8" y="0" width="2.2" height="8"/><rect x="12" y="2" width="2.2" height="6"/><rect x="16" y="4" width="2.2" height="4"/><rect x="20" y="1" width="2.2" height="7"/><rect x="24" y="3" width="2.2" height="5"/></g>
+    <g transform="translate(756 346)"><rect x="0" y="2" width="2.2" height="6"/><rect x="4" y="0" width="2.2" height="8"/><rect x="8" y="3" width="2.2" height="5"/><rect x="12" y="1" width="2.2" height="7"/><rect x="16" y="4" width="2.2" height="4"/><rect x="20" y="0" width="2.2" height="8"/><rect x="24" y="2" width="2.2" height="6"/><rect x="28" y="5" width="2.2" height="3"/><rect x="32" y="1" width="2.2" height="7"/></g>
+    <g transform="translate(896 346)"><rect x="0" y="1" width="2.2" height="7"/><rect x="4" y="4" width="2.2" height="4"/><rect x="8" y="0" width="2.2" height="8"/><rect x="12" y="2" width="2.2" height="6"/><rect x="16" y="3" width="2.2" height="5"/><rect x="20" y="1" width="2.2" height="7"/><rect x="24" y="5" width="2.2" height="3"/></g>
+    <g transform="translate(982 346)"><rect x="0" y="3" width="2.2" height="5"/><rect x="4" y="1" width="2.2" height="7"/><rect x="8" y="4" width="2.2" height="4"/><rect x="12" y="0" width="2.2" height="8"/><rect x="16" y="2" width="2.2" height="6"/><rect x="20" y="3" width="2.2" height="5"/></g>
+  </g>
+
+  <rect x="1070" y="220" width="116" height="26" rx="13" fill="rgba(4,3,12,.90)" stroke="rgba(95,70,200,.34)" stroke-width="1"/>
+  <circle cx="1084" cy="233" r="6" fill="#F97316" opacity=".20" filter="url(#fDot)"/>
+  <circle cx="1084" cy="233" r="3" fill="#F97316" class="nodePulse"/>
+  <text x="1094" y="237" class="sans" font-size="7.8" font-weight="320" letter-spacing="1.55" fill="rgba(255,255,255,.63)">LIVE · SOFIA · 02:14</text>
+
+  <text x="1184" y="462" class="sans" font-size="7.5" font-weight="320" letter-spacing="3.2" fill="rgba(255,255,255,.13)" text-anchor="end">
+    INTELLIGENT · SELECTIVE · PREMIUM · SOFIA
+  </text>
+</svg>
