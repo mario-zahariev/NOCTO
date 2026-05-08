@@ -29,8 +29,8 @@ class SnapshotTestCase: XCTestCase {
         pixelTolerance: Double = 0.01,
         file: StaticString = #filePath,
         line: UInt = #line
-    ) {
-        let image = render(view: view, viewport: viewport)
+    ) async {
+        let image = await render(view: view, viewport: viewport)
         let referenceURL = snapshotsDirectory(for: file).appendingPathComponent("\(name).png")
 
         if recordMode {
@@ -70,7 +70,7 @@ class SnapshotTestCase: XCTestCase {
 
             XCTFail(
                 String(
-                    format: "Visual regression in %@. Mismatch %.3f%% > %.3f%%",
+                    format: "Визуална регресия в %@. Несъответствие %.3f%% > %.3f%%",
                     name,
                     mismatch * 100,
                     pixelTolerance * 100
@@ -81,7 +81,7 @@ class SnapshotTestCase: XCTestCase {
         }
     }
 
-    private func render<V: View>(view: V, viewport: SnapshotViewport) -> UIImage {
+    private func render<V: View>(view: V, viewport: SnapshotViewport) async -> UIImage {
         let size = CGSize(width: viewport.width, height: viewport.height)
         let host = UIHostingController(rootView: view.preferredColorScheme(.dark))
 
@@ -105,7 +105,9 @@ class SnapshotTestCase: XCTestCase {
         window.layoutIfNeeded()
         host.view.setNeedsLayout()
         host.view.layoutIfNeeded()
-        RunLoop.main.run(until: Date(timeIntervalSinceNow: 0.05))
+        await Task.yield()
+        window.layoutIfNeeded()
+        host.view.layoutIfNeeded()
 
         let format = UIGraphicsImageRendererFormat.default()
         format.scale = viewport.scale
@@ -152,14 +154,38 @@ class SnapshotTestCase: XCTestCase {
         }
 
         let pixelCount = lhsImage.width * lhsImage.height
+        guard pixelCount > 0 else {
+            XCTFail(
+                "Snapshot image е с нулев размер: rendered \(lhsImage.width)x\(lhsImage.height), reference \(rhsImage.width)x\(rhsImage.height).",
+                file: file,
+                line: line
+            )
+            return 1
+        }
+
         var mismatchPixels = 0
 
         for pixelIndex in 0..<pixelCount {
             let offset = pixelIndex * 4
-            let deltaR = abs(Int(lhsBuffer[offset]) - Int(rhsBuffer[offset]))
-            let deltaG = abs(Int(lhsBuffer[offset + 1]) - Int(rhsBuffer[offset + 1]))
-            let deltaB = abs(Int(lhsBuffer[offset + 2]) - Int(rhsBuffer[offset + 2]))
-            let deltaA = abs(Int(lhsBuffer[offset + 3]) - Int(rhsBuffer[offset + 3]))
+            let lhsAlpha = lhsBuffer[offset + 3]
+            let rhsAlpha = rhsBuffer[offset + 3]
+            let lhsRGB = unpremultiply(
+                r: lhsBuffer[offset],
+                g: lhsBuffer[offset + 1],
+                b: lhsBuffer[offset + 2],
+                a: lhsAlpha
+            )
+            let rhsRGB = unpremultiply(
+                r: rhsBuffer[offset],
+                g: rhsBuffer[offset + 1],
+                b: rhsBuffer[offset + 2],
+                a: rhsAlpha
+            )
+
+            let deltaR = abs(Int(lhsRGB.r) - Int(rhsRGB.r))
+            let deltaG = abs(Int(lhsRGB.g) - Int(rhsRGB.g))
+            let deltaB = abs(Int(lhsRGB.b) - Int(rhsRGB.b))
+            let deltaA = abs(Int(lhsAlpha) - Int(rhsAlpha))
 
             if deltaR > mismatchThresholdPerChannel ||
                 deltaG > mismatchThresholdPerChannel ||
@@ -170,6 +196,19 @@ class SnapshotTestCase: XCTestCase {
         }
 
         return Double(mismatchPixels) / Double(pixelCount)
+    }
+
+    private func unpremultiply(r: UInt8, g: UInt8, b: UInt8, a: UInt8) -> (r: UInt8, g: UInt8, b: UInt8) {
+        guard a > 0 else { return (0, 0, 0) }
+
+        let alpha = Double(a) / 255.0
+        let invAlpha = 1.0 / alpha
+
+        let rr = min(255.0, round(Double(r) * invAlpha))
+        let gg = min(255.0, round(Double(g) * invAlpha))
+        let bb = min(255.0, round(Double(b) * invAlpha))
+
+        return (UInt8(rr), UInt8(gg), UInt8(bb))
     }
 
     private func rgbaBuffer(from image: CGImage) -> [UInt8]? {

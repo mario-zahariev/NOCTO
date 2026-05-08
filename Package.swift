@@ -3,6 +3,7 @@ import PackageDescription
 
 let package = Package(
     name: "NOCTOCore",
+    defaultLocalization: "bg",
     platforms: [
         .iOS(.v17),
         .macOS(.v14)
@@ -16,35 +17,6 @@ let package = Package(
             name: "NOCTOAppLogic",
             dependencies: ["NOCTOCore"],
             path: "NOCTO",
-            exclude: [
-                "AdminDashboardView.swift",
-                "AllVenuesMapView.swift",
-                "Assets.xcassets",
-                "BlurView.swift",
-                "Color+Hex.swift",
-                "ContentView.swift",
-                "FavoritesManager.swift",
-                "FavoritesView.swift",
-                "GoogleService-Info.plist.example",
-                "Haptics.swift",
-                "HeroParallaxCard.swift",
-                "HomeView.swift",
-                "LiveActivitySignalViews.swift",
-                "LocationManager.swift",
-                "MicroFeedback.swift",
-                "NOCTOApp.swift",
-                "NightPulseView.swift",
-                "NoctoAttributes.swift",
-                "NoctoLiveActivityHandler.swift",
-                "NoctoTheme.swift",
-                "ParallaxCard.swift",
-                "ProfileView.swift",
-                "Venue.swift",
-                "VenueCard.swift",
-                "VenueDataSource.swift",
-                "VenueDetailView.swift",
-                "VenueRepository.swift"
-            ],
             sources: ["OperationalSnapshot.swift"]
         ),
         .testTarget(name: "NOCTOCoreTests", dependencies: ["NOCTOCore"]),

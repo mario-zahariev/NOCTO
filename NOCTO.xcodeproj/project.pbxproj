@@ -15,6 +15,8 @@
 		8E2C4FF825AADCE07D9A11B2 /* LiveActivitySignalViews.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF98ECE38605E376996AE93B /* LiveActivitySignalViews.swift */; };
 		B44900BF6619EC75867643DC /* ScreenSnapshotTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F4410FA18960305D205456C /* ScreenSnapshotTests.swift */; };
 		B9167C332EF8A92500E2DBFC /* venues.json in Resources */ = {isa = PBXBuildFile; fileRef = B9167C312EF89DBB00E2DBFC /* venues.json */; };
+		B91A00102F11000100ABC001 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = B91A00122F11000100ABC001 /* Localizable.strings */; };
+		B91A00112F11000100ABC001 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = B91A00122F11000100ABC001 /* Localizable.strings */; };
 		B9E5C6572EF95E39005FA51F /* FavoritesManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9E5C6492EF95E39005FA51F /* FavoritesManager.swift */; };
 		B9E5C6582EF95E39005FA51F /* VenueDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9E5C6542EF95E39005FA51F /* VenueDetailView.swift */; };
 		B9E5C6592EF95E39005FA51F /* NightPulseView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9E5C64E2EF95E39005FA51F /* NightPulseView.swift */; };
@@ -84,6 +86,8 @@
 		844F470D249C7674602D3C17 /* VisualFixtures.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = VisualFixtures.swift; sourceTree = "<group>"; };
 		867B499BECDBDFCBB71E8090 /* Info.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		8F4410FA18960305D205456C /* ScreenSnapshotTests.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = ScreenSnapshotTests.swift; sourceTree = "<group>"; };
+		B91A00132F11000100ABC001 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
+		B91A00142F11000100ABC001 /* bg */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = bg; path = bg.lproj/Localizable.strings; sourceTree = "<group>"; };
 		B9167C312EF89DBB00E2DBFC /* venues.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = venues.json; sourceTree = "<group>"; };
 		B9481C462EEB858500B13953 /* NOCTO.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = NOCTO.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		B9E5C6452EF95E39005FA51F /* AdminDashboardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdminDashboardView.swift; sourceTree = "<group>"; };
@@ -186,6 +190,7 @@
 				B9E5C6452EF95E39005FA51F /* AdminDashboardView.swift */,
 				B9E5C6462EF95E39005FA51F /* AllVenuesMapView.swift */,
 				B9E5C6472EF95E39005FA51F /* Assets.xcassets */,
+				B91A00122F11000100ABC001 /* Localizable.strings */,
 				B9E5C6482EF95E39005FA51F /* ContentView.swift */,
 				B9E5C6782F001001005FA51F /* OperationalSnapshot.swift */,
 				B9E5C6492EF95E39005FA51F /* FavoritesManager.swift */,
@@ -314,6 +319,7 @@
 			knownRegions = (
 				en,
 				Base,
+				bg,
 			);
 			mainGroup = B9481C3D2EEB858500B13953;
 			minimizedProjectReferenceProxies = 1;
@@ -344,6 +350,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				B91A00112F11000100ABC001 /* Localizable.strings in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -353,6 +360,7 @@
 			files = (
 				B9167C332EF8A92500E2DBFC /* venues.json in Resources */,
 				B9E5C6672EF95E39005FA51F /* Assets.xcassets in Resources */,
+				B91A00102F11000100ABC001 /* Localizable.strings in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -429,6 +437,18 @@
 			targetProxy = CE47C572AB9B4AD431727409 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
+
+/* Begin PBXVariantGroup section */
+		B91A00122F11000100ABC001 /* Localizable.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				B91A00132F11000100ABC001 /* en */,
+				B91A00142F11000100ABC001 /* bg */,
+			);
+			name = Localizable.strings;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
 		453E7878114BE318B9F04878 /* Debug */ = {

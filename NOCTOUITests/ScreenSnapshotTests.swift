@@ -4,30 +4,41 @@ import XCTest
 
 @MainActor
 final class ScreenSnapshotTests: SnapshotTestCase {
-    func testHomeView_snapshot() {
-        let favorites = VisualFixtures.favoritesManager(favoriteIDs: [VisualFixtures.venueIDs[0]])
+    func testHomeView_snapshot() async {
+        guard let firstVenueID = VisualFixtures.venueIDs.first else {
+            XCTFail("Visual fixture is missing venue IDs.")
+            return
+        }
+
+        let favorites = VisualFixtures.favoritesManager(favoriteIDs: [firstVenueID])
         let view = HomeView(venues: VisualFixtures.venues, favorites: favorites)
-        assertSnapshot(of: view, named: "home_view", viewport: .iPhone16Pro)
+        await assertSnapshot(of: view, named: "home_view", viewport: .iPhone16Pro)
     }
 
-    func testNightPulseView_snapshot() {
+    func testNightPulseView_snapshot() async {
         let view = NightPulseView(snapshot: VisualFixtures.snapshot())
-        assertSnapshot(of: view, named: "night_pulse_view", viewport: .iPhone16Pro)
+        await assertSnapshot(of: view, named: "night_pulse_view", viewport: .iPhone16Pro)
     }
 
-    func testProfileView_snapshot() {
+    func testProfileView_snapshot() async {
+        guard VisualFixtures.venueIDs.count >= 2 else {
+            XCTFail("Visual fixture requires at least two venue IDs.")
+            return
+        }
+
+        let favoriteIDs: Set<UUID> = [VisualFixtures.venueIDs[0], VisualFixtures.venueIDs[1]]
         let favorites = VisualFixtures.favoritesManager(
-            favoriteIDs: [VisualFixtures.venueIDs[0], VisualFixtures.venueIDs[1]]
+            favoriteIDs: favoriteIDs
         )
         let snapshot = VisualFixtures.snapshot()
 
         let view = ProfileView(
-            favoritesCount: 2,
+            favoritesCount: favoriteIDs.count,
             snapshot: snapshot,
             venues: VisualFixtures.venues,
             favorites: favorites
         )
 
-        assertSnapshot(of: view, named: "profile_view", viewport: .iPhone16Pro)
+        await assertSnapshot(of: view, named: "profile_view", viewport: .iPhone16Pro)
     }
 }
