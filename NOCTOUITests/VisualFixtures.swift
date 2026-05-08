@@ -66,7 +66,6 @@ enum VisualFixtures {
         defaults.removePersistentDomain(forName: suiteName)
         defaults.set(favoriteIDs.map(\.uuidString).sorted(), forKey: key)
         let manager = FavoritesManager(defaults: defaults)
-        defaults.removePersistentDomain(forName: suiteName)
         return manager
     }
 
