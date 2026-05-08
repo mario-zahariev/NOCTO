@@ -54,9 +54,7 @@ struct ContentView: View {
             isLoading = true
             loadError = nil
             do {
-                venues = try await Task.detached(priority: .userInitiated) {
-                    try LocalVenueRepository().loadVenues()
-                }.value
+                venues = try LocalVenueRepository().loadVenues()
                 lastLoadSucceeded = true
             } catch is CancellationError {
                 isLoading = false

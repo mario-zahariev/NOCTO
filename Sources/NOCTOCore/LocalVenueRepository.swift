@@ -41,6 +41,8 @@ public struct LocalVenueRepository: VenueRepositoryProtocol {
     }
 
     public func loadVenues() throws -> [Venue] {
+        try Task.checkCancellation()
+
         guard let url = bundle.url(forResource: resourceName, withExtension: resourceExtension) else {
             throw LocalVenueRepositoryError.missingResource
         }
@@ -51,10 +53,13 @@ public struct LocalVenueRepository: VenueRepositoryProtocol {
         } catch {
             throw LocalVenueRepositoryError.invalidData
         }
+        try Task.checkCancellation()
         guard !data.isEmpty else { throw LocalVenueRepositoryError.invalidData }
 
         do {
-            return try decoder.decode(from: data)
+            let venues = try decoder.decode(from: data)
+            try Task.checkCancellation()
+            return venues
         } catch let error as VenueRepositoryCoreError {
             switch error {
             case .invalidJSON:

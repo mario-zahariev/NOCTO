@@ -4,30 +4,31 @@ import XCTest
 
 @MainActor
 final class ScreenSnapshotTests: SnapshotTestCase {
-    func testHomeView_snapshot() {
+    func testHomeView_snapshot() async {
         let favorites = VisualFixtures.favoritesManager(favoriteIDs: [VisualFixtures.venueIDs[0]])
         let view = HomeView(venues: VisualFixtures.venues, favorites: favorites)
-        assertSnapshot(of: view, named: "home_view", viewport: .iPhone16Pro)
+        await assertSnapshot(of: view, named: "home_view", viewport: .iPhone16Pro)
     }
 
-    func testNightPulseView_snapshot() {
+    func testNightPulseView_snapshot() async {
         let view = NightPulseView(snapshot: VisualFixtures.snapshot())
-        assertSnapshot(of: view, named: "night_pulse_view", viewport: .iPhone16Pro)
+        await assertSnapshot(of: view, named: "night_pulse_view", viewport: .iPhone16Pro)
     }
 
-    func testProfileView_snapshot() {
+    func testProfileView_snapshot() async {
+        let favoriteIDs: Set<UUID> = [VisualFixtures.venueIDs[0], VisualFixtures.venueIDs[1]]
         let favorites = VisualFixtures.favoritesManager(
-            favoriteIDs: [VisualFixtures.venueIDs[0], VisualFixtures.venueIDs[1]]
+            favoriteIDs: favoriteIDs
         )
         let snapshot = VisualFixtures.snapshot()
 
         let view = ProfileView(
-            favoritesCount: 2,
+            favoritesCount: favoriteIDs.count,
             snapshot: snapshot,
             venues: VisualFixtures.venues,
             favorites: favorites
         )
 
-        assertSnapshot(of: view, named: "profile_view", viewport: .iPhone16Pro)
+        await assertSnapshot(of: view, named: "profile_view", viewport: .iPhone16Pro)
     }
 }

@@ -1,0 +1,4 @@
+"low_confidence_label" = "Low";
+"soft_source_label" = "Soft Source";
+"offline_low_confidence_display_text" = "Offline - Low Confidence";
+"signal_strength_accessibility_label" = "Signal Strength";

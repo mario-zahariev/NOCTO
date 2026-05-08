@@ -65,10 +65,11 @@ final class NoctoLiveActivityHandler {
     }
 
     private func cleanupActivitiesWhenDisabled() async {
+        // The offline state is only used as an immediate dismissal payload when Live Activities are disabled.
         let state = NoctoAttributes.ContentState(
             confidenceScore: 0,
-            confidenceLabel: "Ниска",
-            sourceLabel: "Мек източник",
+            confidenceLabel: NoctoAttributes.ContentState.lowConfidenceLabel,
+            sourceLabel: NoctoAttributes.ContentState.softSourceLabel,
             activeVenueCount: 0,
             lateNightVenueCount: 0,
             integrityState: .offlineLowConfidence,

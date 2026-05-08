@@ -56,27 +56,36 @@ enum VisualFixtures {
     }
 
     static func favoritesManager(favoriteIDs: Set<UUID>) -> FavoritesManager {
-        let suiteName = "NOCTOUITests.Favorites"
+        let suiteName = "NOCTOUITests.Favorites.\(UUID().uuidString)"
         let key = "com.nocto.favoriteVenueIDs"
-        let defaults: UserDefaults
 
-        if let scopedDefaults = UserDefaults(suiteName: suiteName) {
-            scopedDefaults.removePersistentDomain(forName: suiteName)
-            defaults = scopedDefaults
-        } else {
-            XCTFail("Cannot create dedicated test defaults suite '\(suiteName)'. Falling back to standard defaults.")
-            UserDefaults.standard.removeObject(forKey: key)
-            defaults = .standard
+        guard let defaults = UserDefaults(suiteName: suiteName) else {
+            fatalError("Cannot create dedicated test defaults suite '\(suiteName)'.")
         }
 
+        defaults.removePersistentDomain(forName: suiteName)
         defaults.set(favoriteIDs.map(\.uuidString).sorted(), forKey: key)
-        return FavoritesManager(defaults: defaults)
+        let manager = FavoritesManager(defaults: defaults)
+        defaults.removePersistentDomain(forName: suiteName)
+        return manager
     }
 
     @available(iOS 16.1, *)
     static func liveActivityState(score: Int) -> NoctoAttributes.ContentState {
+        activityState(score: score, integrityState: .live)
+    }
+
+    @available(iOS 16.1, *)
+    static func offlineActivityState(score: Int) -> NoctoAttributes.ContentState {
+        activityState(score: score, integrityState: .offlineLowConfidence)
+    }
+
+    @available(iOS 16.1, *)
+    private static func activityState(
+        score: Int,
+        integrityState: NoctoAttributes.ContentState.IntegrityState
+    ) -> NoctoAttributes.ContentState {
         let clampedScore = max(0, min(score, 100))
-        let integrityState: NoctoAttributes.ContentState.IntegrityState = clampedScore < 60 ? .offlineLowConfidence : .live
 
         return NoctoAttributes.ContentState(
             confidenceScore: clampedScore,
@@ -116,7 +125,6 @@ enum VisualFixtures {
         if let uuid = UUID(uuidString: raw) {
             return uuid
         }
-        XCTFail("Invalid fixture UUID: \(raw)")
-        return UUID()
+        fatalError("Invalid fixture UUID: \(raw)")
     }
 }

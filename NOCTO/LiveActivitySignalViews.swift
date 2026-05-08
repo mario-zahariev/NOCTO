@@ -11,13 +11,25 @@ func pulseActivityIconName(for state: NoctoAttributes.ContentState) -> String {
 }
 
 @available(iOS 16.1, *)
+func venueCountLabel(_ count: Int) -> String {
+    switch count {
+    case 1:
+        return "активен обект"
+    case 2...4:
+        return "активни обекта"
+    default:
+        return "активни обекти"
+    }
+}
+
+@available(iOS 16.1, *)
 struct LockScreenSignalView: View {
     let state: NoctoAttributes.ContentState
 
     var body: some View {
         VStack(alignment: .leading, spacing: 10) {
             if state.integrityState == .offlineLowConfidence {
-                Text("OFFLINE - LOW CONFIDENCE")
+                Text(NoctoAttributes.ContentState.offlineLowConfidenceDisplayText)
                     .font(.headline.weight(.semibold))
                     .foregroundStyle(PulseActivityPalette.neutral)
             } else {
@@ -25,7 +37,7 @@ struct LockScreenSignalView: View {
                     Text("\(state.activeVenueCount)")
                         .font(.system(size: 40, weight: .bold, design: .rounded))
                         .foregroundStyle(PulseActivityPalette.textPrimary)
-                    Text("активни обекта")
+                    Text(venueCountLabel(state.activeVenueCount))
                         .font(.subheadline.weight(.semibold))
                         .foregroundStyle(PulseActivityPalette.textSecondary)
                 }
@@ -48,7 +60,7 @@ struct ExpandedSignalHubView: View {
     var body: some View {
         VStack(alignment: .leading, spacing: 10) {
             if state.integrityState == .offlineLowConfidence {
-                Text("OFFLINE - LOW CONFIDENCE")
+                Text(NoctoAttributes.ContentState.offlineLowConfidenceDisplayText)
                     .font(.headline.weight(.semibold))
                     .foregroundStyle(PulseActivityPalette.neutral)
             } else {
@@ -57,7 +69,7 @@ struct ExpandedSignalHubView: View {
                     Text("\(state.activeVenueCount)")
                         .font(.system(size: 30, weight: .bold, design: .rounded))
                         .foregroundStyle(PulseActivityPalette.textPrimary)
-                    Text("активни обекта")
+                    Text(venueCountLabel(state.activeVenueCount))
                         .font(.subheadline.weight(.semibold))
                         .foregroundStyle(PulseActivityPalette.textSecondary)
                 }
@@ -75,6 +87,14 @@ struct SignalProgressBar: View {
     let value: Int
     let active: Bool
 
+    private var clampedValue: Int {
+        max(0, min(value, 100))
+    }
+
+    private var progressAccessibilityValue: String {
+        active ? "\(clampedValue) процента" : "неактивен"
+    }
+
     var body: some View {
         GeometryReader { proxy in
             ZStack(alignment: .leading) {
@@ -82,16 +102,20 @@ struct SignalProgressBar: View {
                     .fill(PulseActivityPalette.track)
                 Capsule()
                     .fill(active ? PulseActivityPalette.ultraviolet : PulseActivityPalette.neutral)
-                    .frame(width: proxy.size.width * CGFloat(max(0, min(value, 100))) / 100.0)
+                    .frame(width: proxy.size.width * CGFloat(clampedValue) / 100.0)
             }
         }
         .frame(height: 4)
+        .accessibilityElement(children: .ignore)
+        .accessibilityLabel(NoctoAttributes.ContentState.signalStrengthAccessibilityLabel)
+        .accessibilityValue(progressAccessibilityValue)
+        .accessibilityAddTraits(active ? .updatesFrequently : [])
     }
 }
 
 @available(iOS 16.1, *)
 enum PulseActivityPalette {
-    static let ultraviolet = Color(red: 124.0 / 255.0, green: 92.0 / 255.0, blue: 1.0)
+    static let ultraviolet = Color(red: 124.0 / 255.0, green: 92.0 / 255.0, blue: 255.0 / 255.0)
     static let neutral = Color(red: 142.0 / 255.0, green: 149.0 / 255.0, blue: 160.0 / 255.0)
     static let surface = Color.black
     static let track = Color.white.opacity(0.14)
