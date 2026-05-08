@@ -60,11 +60,12 @@ jobs:
           NOCTO_RECORD_SNAPSHOTS: "0"
         run: |
           IOS_RUNTIME_VERSION="26.1"
+          IOS_RUNTIME_EXPORT_PATH="${RUNNER_TEMP}/nocto-ios-runtime"
           NOCTO_VISUAL_DERIVED_DATA="${RUNNER_TEMP}/nocto-visual-derived-data"
           NOCTO_VISUAL_DESTINATION="platform=iOS Simulator,name=iPhone 17,OS=${IOS_RUNTIME_VERSION}"
 
           if ! xcrun simctl list runtimes | grep -Fq "iOS $IOS_RUNTIME_VERSION"; then
-            xcodebuild -downloadPlatform iOS -buildVersion "$IOS_RUNTIME_VERSION"
+            xcodebuild -downloadPlatform iOS -buildVersion "$IOS_RUNTIME_VERSION" -exportPath "$IOS_RUNTIME_EXPORT_PATH"
           fi
 
           if ! xcrun simctl list runtimes | grep -Fq "iOS $IOS_RUNTIME_VERSION"; then
