@@ -4,6 +4,7 @@ set -euo pipefail
 PROJECT_FILE="${PROJECT_FILE:-NOCTO.xcodeproj/project.pbxproj}"
 PLIST_FILE="${PLIST_FILE:-NOCTO/GoogleService-Info.plist.example}"
 REAL_PLIST_FILE="${REAL_PLIST_FILE:-NOCTO/GoogleService-Info.plist}"
+PLISTBUDDY="${PLISTBUDDY:-/usr/libexec/PlistBuddy}"
 
 if [[ ! -f "$PROJECT_FILE" ]]; then
   echo "error: missing $PROJECT_FILE"
@@ -43,7 +44,7 @@ check_plist_placeholder() {
   local expected="$2"
   local actual
 
-  actual="$(/usr/libexec/PlistBuddy -c "Print :$key" "$PLIST_FILE" 2>/dev/null || true)"
+  actual="$("$PLISTBUDDY" -c "Print :$key" "$PLIST_FILE" 2>/dev/null || true)"
   if [[ "$actual" != "$expected" ]]; then
     echo "❌ $PLIST_FILE placeholder mismatch for $key."
     echo "expected: $expected"
@@ -52,7 +53,13 @@ check_plist_placeholder() {
   fi
 }
 
-if [[ -f "$PLIST_FILE" ]]; then
+if [[ -f "$PLIST_FILE" && ! -x "$PLISTBUDDY" ]]; then
+  echo "error: macOS PlistBuddy is required but not executable at $PLISTBUDDY."
+  echo "error: validating Firebase plist placeholder file: $PLIST_FILE"
+  fail=1
+fi
+
+if [[ -f "$PLIST_FILE" && -x "$PLISTBUDDY" ]]; then
   check_plist_placeholder "API_KEY" "REPLACE_ME"
   check_plist_placeholder "PROJECT_ID" "nocto-placeholder"
   check_plist_placeholder "GOOGLE_APP_ID" "1:000000000000:ios:placeholder"
