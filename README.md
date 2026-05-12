@@ -126,7 +126,7 @@ Tests/NOCTOCoreTests/
 
 scripts/
 ├── validate_venues_json.py     9 required fields · UUID · coordinate range · ≥10 entries
-└── ci/check_firebase_detached.sh  Scans .pbxproj for Firebase markers; fails on tracked plist
+└── ci/check_firebase_detached.sh  Guards Firebase detachment and example plist placeholder values
 ```
 
 ---
@@ -246,15 +246,17 @@ Fully detached at every level.
 no FirebaseApp.configure()
 no firebase-ios-sdk package reference in project.pbxproj
 no FirebaseAnalytics or FirebaseFirestore target linkage
-no tracked GoogleService-Info.plist
+no GoogleService-Info.plist in target Build Resources
+NOCTO/GoogleService-Info.plist remains ignored and local-only
+NOCTO/GoogleService-Info.plist.example remains the tracked placeholder fixture
 ```
 
-`scripts/ci/check_firebase_detached.sh` scans `NOCTO.xcodeproj/project.pbxproj` for Firebase linkage markers and fails the build if any are found, or if `GoogleService-Info.plist` is re-tracked in git.
+`scripts/ci/check_firebase_detached.sh` scans `NOCTO.xcodeproj/project.pbxproj` for Firebase linkage markers and fails the build if any are found, if `GoogleService-Info.plist` is re-added to Build Resources, if the real `NOCTO/GoogleService-Info.plist` becomes tracked by git, or if `NOCTO/GoogleService-Info.plist.example` is missing or no longer contains the expected placeholder values.
 
 Firebase re-enters only when a remote `VenueDataSource` adapter exists — with a defined contract, security rules, health metrics, and a fallback strategy. Not before.
 
 ```zsh
-# Local Firebase testing only — never commit this file
+# Create a local Firebase config only when intentionally testing Firebase locally
 cp NOCTO/GoogleService-Info.plist.example NOCTO/GoogleService-Info.plist
 ```
 
