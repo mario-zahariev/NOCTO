@@ -41,4 +41,5 @@
 - CI runs `scripts/ci/check_firebase_detached.sh` before tests.
 - The guard fails if `NOCTO.xcodeproj/project.pbxproj` contains Firebase linkage markers (`firebase-ios-sdk`, `FirebaseAnalytics`, `FirebaseFirestore`).
 - The guard fails if `GoogleService-Info.plist` is re-added to target Build Resources.
+- The guard fails if `NOCTO/GoogleService-Info.plist` is missing or no longer contains the expected placeholder values.
 - Purpose: keep Firebase detachment explicit and prevent accidental re-attach in routine project edits.

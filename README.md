@@ -14,7 +14,7 @@ NOCTO is a premium iOS nightlife intelligence app focused on Sofia venues.
 
 - SwiftUI
 - MapKit
-- Firebase packages configured in Xcode project (optional runtime setup)
+- Local JSON data source via `NOCTOCore`
 
 ## Project Structure
 
@@ -44,6 +44,7 @@ Required fields:
 
 - Unit tests for JSON decoding and validation in the package core module (`NOCTOCore`)
 - CI workflow for lint/build/test checks
+- Firebase detachment guard for project linkage and placeholder config
 - Dependabot for dependency updates
 - Security policy and contribution rules
 
