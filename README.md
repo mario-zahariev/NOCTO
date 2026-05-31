@@ -268,7 +268,7 @@ cp NOCTO/GoogleService-Info.plist.example NOCTO/GoogleService-Info.plist
 |---|---|---|
 | Local venue intelligence | ✦ Active | Expand `OperationalSnapshot` Night Pulse signals |
 | Profile · Night Pass | ✦ Active | Real user state and preference persistence |
-| Admin | ⬡ Dev-only | Enforce `#if DEBUG` gate; remove from consumer navigation |
+| Admin | ✦ Done (Dev-only) | Keep `#if DEBUG` gate in `ProfileView`; keep it out of consumer navigation |
 | Remote backend | ◯ Planned | Define `VenueDataSource` remote adapter contract first |
 | UI coverage | ◯ Planned | Snapshot and smoke tests for key surfaces |
 

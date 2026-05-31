@@ -126,15 +126,6 @@ final class NoctoLiveActivityHandler {
         await activity.update(content)
     }
 
-    private func endCurrent(
-        using state: NoctoAttributes.ContentState,
-        dismissalPolicy: ActivityUIDismissalPolicy
-    ) async {
-        guard let activity else { return }
-        await end(activity, using: state, dismissalPolicy: dismissalPolicy)
-        self.activity = nil
-    }
-
     private func end(
         _ activity: Activity<NoctoAttributes>,
         using state: NoctoAttributes.ContentState,
