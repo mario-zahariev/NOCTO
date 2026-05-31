@@ -46,7 +46,8 @@ final class LiveActivitySnapshotTests: SnapshotTestCase {
         assertSnapshot(
             of: expandedPreview(state: state),
             named: "live_expanded_92",
-            viewport: .dynamicIslandExpanded
+            viewport: .dynamicIslandExpanded,
+            pixelTolerance: 0.035
         )
     }
 

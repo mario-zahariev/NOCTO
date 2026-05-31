@@ -19,7 +19,7 @@ Venue records flow from `venues.json` through `NOCTOCore`'s typed decode-and-val
 
 ## What is NOCTO?
 
-NOCTO is a local-first iOS nightlife app for Sofia. It helps users quickly find relevant venues, track live operational signal quality through Night Pulse, and keep favorites persisted on-device.
+NOCTO is a local-first iOS nightlife app for Sofia. It helps users quickly find relevant venues, track computed local operational signal quality through Night Pulse, and keep favorites persisted on-device.
 
 For users:
 - Discover venues across Home, Map, Favorites, and Night Pulse.

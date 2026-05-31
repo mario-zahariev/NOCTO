@@ -63,7 +63,7 @@ struct NightPulseView: View {
             sectionLabel("Сигнали")
             confidenceStrip
             signalRow("Основен формат", value: snapshot.primaryVenueTypeLabel, systemImage: "music.note.house")
-            signalRow("Късно покритие", value: "\(snapshot.lateNightVenueCount) места · \(snapshot.lateNightCoverageHours) ч", systemImage: "moon.stars")
+            signalRow("Късно покритие", value: "\(snapshot.lateNightVenueCount) места · до \(snapshot.lateNightCoverageHours) ч", systemImage: "moon.stars")
             signalRow("Най-добре след", value: snapshot.bestAfterTime, systemImage: "clock.badge")
             signalRow("Зареждане", value: "\(snapshot.loadLatencyMs) ms · \(snapshot.latencyBandLabel)", systemImage: "speedometer")
             signalRow("Валидация", value: snapshot.confidenceValidationLabel, systemImage: "checkmark.seal")
