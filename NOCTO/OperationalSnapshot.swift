@@ -163,7 +163,7 @@ struct OperationalSnapshot {
             return "—"
         }
 
-        return "After \(String(format: "%02d", modalOpeningHour)):00"
+        return "след \(String(format: "%02d", modalOpeningHour)):00"
     }
 
     private var mixedConfidenceScore: Int {

@@ -38,7 +38,7 @@ final class OperationalSnapshotTests: XCTestCase {
             venues: venues
         )
 
-        XCTAssertEqual(snapshot.bestAfterTime, "After 23:00")
+        XCTAssertEqual(snapshot.bestAfterTime, "след 23:00")
     }
 
     func testConfidenceScoreIsHardWhenValidationIsFull() {
@@ -78,7 +78,7 @@ final class OperationalSnapshotTests: XCTestCase {
         )
 
         XCTAssertEqual(snapshot.confidenceSource, .mixedData)
-        XCTAssertTrue((70...90).contains(snapshot.confidenceScore))
+        XCTAssertEqual(snapshot.confidenceScore, 85)
     }
 
     func testConfidenceScoreStaysBelowSixtyForSoftData() {
