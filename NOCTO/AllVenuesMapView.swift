@@ -16,19 +16,8 @@ struct AllVenuesMapView: View {
         NavigationStack {
             Map(position: $cameraPosition) {
                 ForEach(venues) { venue in
-                    Annotation(venue.name, coordinate: venue.coordinate) {
-                        VStack(spacing: 2) {
-                            Image(systemName: "mappin.circle.fill")
-                                .font(.title2)
-                                .foregroundStyle(NoctoTheme.accent)
-                            Text(venue.name)
-                                .font(.caption2.weight(.semibold))
-                                .padding(.horizontal, 6)
-                                .padding(.vertical, 3)
-                                .background(.ultraThinMaterial)
-                                .clipShape(Capsule())
-                        }
-                    }
+                    Marker(venue.name, coordinate: venue.coordinate)
+                        .tint(NoctoTheme.accent)
                 }
             }
             .navigationTitle("Карта")

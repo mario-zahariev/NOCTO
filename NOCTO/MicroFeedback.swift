@@ -7,10 +7,13 @@ struct MicroFeedback: ViewModifier {
         content
             .scaleEffect(isPressed ? 0.98 : 1)
             .animation(.easeOut(duration: 0.12), value: isPressed)
-            .simultaneousGesture(
-                DragGesture(minimumDistance: 0)
-                    .onChanged { _ in isPressed = true }
-                    .onEnded { _ in isPressed = false }
+            .onLongPressGesture(
+                minimumDuration: 0,
+                maximumDistance: .infinity,
+                pressing: { pressing in
+                    isPressed = pressing
+                },
+                perform: {}
             )
     }
 }
