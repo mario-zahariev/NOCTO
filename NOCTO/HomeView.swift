@@ -8,7 +8,7 @@ struct HomeView: View {
     var body: some View {
         NavigationStack {
             ScrollView {
-                VStack(spacing: 14) {
+                LazyVStack(spacing: 14) {
                     HeroParallaxCard(title: "NOCTO", subtitle: "Интелигентен гид за нощна София")
                         .padding(.horizontal, 16)
 
