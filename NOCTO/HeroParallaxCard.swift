@@ -1,12 +1,12 @@
 import SwiftUI
 
-struct HeroParallaxCard: View {
+struct HeroParallaxCard: View, Equatable {
     let title: String
     let subtitle: String
 
     var body: some View {
         ZStack(alignment: .bottomLeading) {
-            RoundedRectangle(cornerRadius: 20)
+            RoundedRectangle(cornerRadius: Self.cornerRadius)
                 .fill(
                     LinearGradient(
                         colors: [NoctoTheme.card, NoctoTheme.accent.opacity(0.3)],
@@ -15,7 +15,7 @@ struct HeroParallaxCard: View {
                     )
                 )
                 .overlay(
-                    RoundedRectangle(cornerRadius: 20)
+                    RoundedRectangle(cornerRadius: Self.cornerRadius)
                         .stroke(NoctoTheme.cardBorder, lineWidth: 1)
                 )
 
@@ -29,6 +29,10 @@ struct HeroParallaxCard: View {
             }
             .padding(16)
         }
-        .frame(height: 180)
+        .frame(height: Self.height)
+        .allowsHitTesting(false)
     }
+
+    private static let cornerRadius: CGFloat = 20
+    private static let height: CGFloat = 180
 }
