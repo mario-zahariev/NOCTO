@@ -31,7 +31,7 @@ struct LockScreenSignalView: View {
                 }
 
                 SignalProgressBar(value: state.confidenceScore, active: true)
-                Text("Валидация: \(state.sourceLabel)")
+                Text("Източник: \(state.sourceLabel)")
                     .font(.caption.weight(.semibold))
                     .foregroundStyle(PulseActivityPalette.textSecondary)
             }
@@ -61,7 +61,7 @@ struct ExpandedSignalHubView: View {
                         .font(.subheadline.weight(.semibold))
                         .foregroundStyle(PulseActivityPalette.textSecondary)
                 }
-                Text("Валидация: \(state.sourceLabel)")
+                Text("Източник: \(state.sourceLabel)")
                     .font(.caption.weight(.semibold))
                     .foregroundStyle(PulseActivityPalette.textSecondary)
             }

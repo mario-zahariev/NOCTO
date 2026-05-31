@@ -11,7 +11,7 @@ struct NoctoAttributes: ActivityAttributes {
             var bannerLabel: String {
                 switch self {
                 case .live:
-                    return "LIVE"
+                    return "ЛОКАЛЕН СИГНАЛ"
                 case .offlineLowConfidence:
                     return "ОФЛАЙН · НИСКА УВЕРЕНОСТ"
                 }
