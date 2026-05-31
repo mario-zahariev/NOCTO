@@ -24,7 +24,7 @@ struct VenueDetailView: View {
             VStack(alignment: .leading, spacing: 14) {
                 Map(position: $cameraPosition) {
                     Marker(venue.name, coordinate: venue.coordinate)
-                        .tint(.pink)
+                        .tint(NoctoTheme.accent)
                 }
                 .frame(height: 260)
                 .clipShape(RoundedRectangle(cornerRadius: 18))
