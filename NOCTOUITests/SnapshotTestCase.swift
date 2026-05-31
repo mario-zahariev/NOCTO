@@ -23,16 +23,24 @@ class SnapshotTestCase: XCTestCase {
 
     private var defaultPixelTolerance: Double {
         let environment = ProcessInfo.processInfo.environment
-        guard let value = environment["NOCTO_SNAPSHOT_PIXEL_TOLERANCE"] else {
-            return 0.01
+        if let parsed = parsePixelTolerance(environment["NOCTO_SNAPSHOT_PIXEL_TOLERANCE"]) {
+            return parsed
         }
-        guard let parsed = Double(value), parsed >= 0, parsed <= 1 else {
-            return 0.01
+        if let parsed = parsePixelTolerance(environment["TEST_RUNNER_NOCTO_SNAPSHOT_PIXEL_TOLERANCE"]) {
+            return parsed
         }
-        return parsed
+        return 0.01
     }
 
     private let mismatchThresholdPerChannel = 2
+
+    private func parsePixelTolerance(_ rawValue: String?) -> Double? {
+        guard let rawValue else { return nil }
+        guard let parsed = Double(rawValue), parsed >= 0, parsed <= 1 else {
+            return nil
+        }
+        return parsed
+    }
 
     func assertSnapshot<V: View>(
         of view: V,
