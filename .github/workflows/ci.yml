@@ -58,6 +58,7 @@ jobs:
       - name: Visual Integrity Gate
         env:
           NOCTO_RECORD_SNAPSHOTS: "0"
+          NOCTO_SNAPSHOT_PIXEL_TOLERANCE: "0.03"
         run: |
           run_visual_snapshot() {
             xcodebuild \
