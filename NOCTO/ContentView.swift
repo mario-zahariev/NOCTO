@@ -9,6 +9,7 @@ struct ContentView: View {
     @State private var isLoading = true
     @State private var loadLatencyMs = 0
     @State private var lastLoadSucceeded = false
+    @State private var selectedTab: NoctoInstrumentTab = .home
 
     var body: some View {
         ZStack {
@@ -25,28 +26,25 @@ struct ContentView: View {
                 )
                 .padding()
             } else {
-                TabView {
-                    HomeView(venues: venues, favorites: favorites)
-                        .tabItem { Label("Начало", systemImage: "house") }
-
-                    AllVenuesMapView(venues: venues)
-                        .tabItem { Label("Карта", systemImage: "map") }
-
-                    FavoritesView(venues: venues, favorites: favorites)
-                        .tabItem { Label("Любими", systemImage: "heart") }
-
-                    NightPulseView(snapshot: snapshot)
-                        .tabItem { Label("Пулс", systemImage: "waveform.path.ecg") }
-
-                    ProfileView(
-                        favoritesCount: favorites.favoriteIDs.count,
-                        snapshot: snapshot,
-                        venues: venues,
-                        favorites: favorites
-                    )
-                    .tabItem { Label("Профил", systemImage: "person.crop.circle") }
+                NoctoInstrumentTabShell(selection: $selectedTab) {
+                    switch selectedTab {
+                    case .home:
+                        HomeView(venues: venues, favorites: favorites)
+                    case .map:
+                        AllVenuesMapView(venues: venues)
+                    case .favorites:
+                        FavoritesView(venues: venues, favorites: favorites)
+                    case .pulse:
+                        NightPulseView(snapshot: snapshot)
+                    case .profile:
+                        ProfileView(
+                            favoritesCount: favorites.favoriteIDs.count,
+                            snapshot: snapshot,
+                            venues: venues,
+                            favorites: favorites
+                        )
+                    }
                 }
-                .tint(NoctoTheme.accent)
             }
         }
         .task {

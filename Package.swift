@@ -36,6 +36,7 @@ let package = Package(
                 "NightPulseView.swift",
                 "NoctoAttributes.swift",
                 "NoctoLiveActivityHandler.swift",
+                "NoctoInstrumentTabBar.swift",
                 "NoctoTheme.swift",
                 "ParallaxCard.swift",
                 "ProfileView.swift",
