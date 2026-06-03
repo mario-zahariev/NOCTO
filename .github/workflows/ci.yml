@@ -40,6 +40,7 @@ jobs:
 
   iOS-build-smoke:
     runs-on: macos-15
+    timeout-minutes: 20
     steps:
       - name: Checkout
         uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5
@@ -67,21 +68,19 @@ jobs:
             build
 
       - name: Visual Integrity Gate
+        timeout-minutes: 12
         env:
           NOCTO_RECORD_SNAPSHOTS: "0"
+          TEST_RUNNER_NOCTO_RECORD_SNAPSHOTS: "0"
           NOCTO_SNAPSHOT_PIXEL_TOLERANCE: "0.03"
           TEST_RUNNER_NOCTO_SNAPSHOT_PIXEL_TOLERANCE: "0.03"
         run: |
-          run_visual_snapshot() {
-            xcodebuild \
-              -project NOCTO.xcodeproj \
-              -scheme NOCTO \
-              -destination 'platform=iOS Simulator,name=iPhone 17' \
-              -only-testing:"$1" \
-              test
-          }
-
-          run_visual_snapshot 'NOCTOUITests/LiveActivitySnapshotTests'
-          run_visual_snapshot 'NOCTOUITests/ScreenSnapshotTests/testHomeView_snapshot'
-          run_visual_snapshot 'NOCTOUITests/ScreenSnapshotTests/testNightPulseView_snapshot'
-          run_visual_snapshot 'NOCTOUITests/ScreenSnapshotTests/testProfileView_snapshot'
+          xcodebuild \
+            -project NOCTO.xcodeproj \
+            -scheme NOCTO \
+            -destination 'platform=iOS Simulator,name=iPhone 17' \
+            -only-testing:NOCTOUITests/LiveActivitySnapshotTests \
+            -only-testing:NOCTOUITests/ScreenSnapshotTests/testHomeView_snapshot \
+            -only-testing:NOCTOUITests/ScreenSnapshotTests/testNightPulseView_snapshot \
+            -only-testing:NOCTOUITests/ScreenSnapshotTests/testProfileView_snapshot \
+            test
