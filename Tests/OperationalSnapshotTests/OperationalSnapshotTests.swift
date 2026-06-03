@@ -217,6 +217,84 @@ final class OperationalSnapshotTests: XCTestCase {
         XCTAssertEqual(snapshot.lateNightCoverageHours, 8)
     }
 
+    func testVenueSignalResolverReturnsLateWaveForClubWithoutDuplicatingCloseTime() {
+        let venue = Venue(
+            id: UUID(),
+            name: "Club X",
+            type: .club,
+            latitude: 42.6977,
+            longitude: 23.3219,
+            workingHours: "23:00-06:00"
+        )
+
+        XCTAssertEqual(VenueSignalResolver.badge(for: venue), .lateWave)
+    }
+
+    func testVenueSignalResolverReturnsQuietPickForEarlyClosingBar() {
+        let venue = Venue(
+            id: UUID(),
+            name: "Bar Friday",
+            type: .bar,
+            latitude: 42.6977,
+            longitude: 23.3219,
+            workingHours: "18:00-02:00"
+        )
+
+        XCTAssertEqual(VenueSignalResolver.badge(for: venue), .quietPick)
+    }
+
+    func testVenueSignalResolverDoesNotReturnQuietPickAtExactlyThreeAM() {
+        let venue = Venue(
+            id: UUID(),
+            name: "Bar Boundary",
+            type: .bar,
+            latitude: 42.6977,
+            longitude: 23.3219,
+            workingHours: "18:00-03:00"
+        )
+
+        XCTAssertEqual(VenueSignalResolver.badge(for: venue), .closesAt("03:00"))
+    }
+
+    func testVenueSignalResolverReturnsClosingBadgeForNonClubLateClose() {
+        let venue = Venue(
+            id: UUID(),
+            name: "Terminal 1",
+            type: .event,
+            latitude: 42.6977,
+            longitude: 23.3219,
+            workingHours: "21:00-04:00"
+        )
+
+        XCTAssertEqual(VenueSignalResolver.badge(for: venue), .closesAt("04:00"))
+    }
+
+    func testVenueSignalResolverFallsBackToStartTimeForSameDayVenue() {
+        let venue = Venue(
+            id: UUID(),
+            name: "Early Lounge",
+            type: .lounge,
+            latitude: 42.6977,
+            longitude: 23.3219,
+            workingHours: "17:00-23:00"
+        )
+
+        XCTAssertEqual(VenueSignalResolver.badge(for: venue), .startsAt("17:00"))
+    }
+
+    func testVenueSignalResolverReturnsNilForInvalidWorkingHours() {
+        let venue = Venue(
+            id: UUID(),
+            name: "Invalid",
+            type: .bar,
+            latitude: 42.6977,
+            longitude: 23.3219,
+            workingHours: "n/a"
+        )
+
+        XCTAssertNil(VenueSignalResolver.badge(for: venue))
+    }
+
     private func makeVenues(
         count: Int,
         type: Venue.VenueType,

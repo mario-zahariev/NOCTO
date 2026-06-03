@@ -28,6 +28,7 @@ struct HomeView: View {
                             VenueCard(
                                 venue: venue,
                                 isFavorite: favorites.isFavorite(venue.id),
+                                badge: VenueSignalResolver.badge(for: venue),
                                 onToggleFavorite: {
                                     favorites.toggle(venue.id)
                                     Haptics.tap()

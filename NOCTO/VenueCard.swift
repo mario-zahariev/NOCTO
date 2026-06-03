@@ -4,6 +4,7 @@ import NOCTOCore
 struct VenueCard: View {
     let venue: Venue
     let isFavorite: Bool
+    let badge: NOCTOVenueBadge?
     let onToggleFavorite: () -> Void
 
     var body: some View {
@@ -42,19 +43,23 @@ struct VenueCard: View {
                 VenueMetaRow(icon: "clock", text: "Работно време: \(venue.workingHours)")
             }
 
-            HStack(spacing: 6) {
-                Image(systemName: "waveform.path.ecg")
-                    .font(.caption2.weight(.semibold))
-                Text(venue.signalLabel)
-                    .font(.caption.weight(.semibold))
-                    .lineLimit(1)
+            HStack(spacing: 8) {
+                venueBadge(
+                    icon: "waveform.path.ecg",
+                    text: venue.signalLabel,
+                    tint: NoctoTheme.accent,
+                    accessibilityLabel: "Сигнал: \(venue.signalLabel)"
+                )
+
+                if let badge {
+                    venueBadge(
+                        icon: badge.systemImage,
+                        text: badge.label,
+                        tint: NoctoTheme.ultraviolet,
+                        accessibilityLabel: "Насока: \(badge.label)"
+                    )
+                }
             }
-            .foregroundStyle(NoctoTheme.accent)
-            .padding(.horizontal, 10)
-            .padding(.vertical, 6)
-            .background(NoctoTheme.accent.opacity(0.14))
-            .clipShape(Capsule())
-            .accessibilityLabel("Сигнал: \(venue.signalLabel)")
         }
         .padding(16)
         .frame(maxWidth: .infinity, alignment: .leading)
@@ -65,6 +70,28 @@ struct VenueCard: View {
                 .stroke(NoctoTheme.cardBorder, lineWidth: 1)
         )
         .microFeedback()
+    }
+
+    private func venueBadge(
+        icon: String,
+        text: String,
+        tint: Color,
+        accessibilityLabel: String
+    ) -> some View {
+        HStack(spacing: 6) {
+            Image(systemName: icon)
+                .font(.caption2.weight(.semibold))
+            Text(text)
+                .font(.caption.weight(.semibold))
+                .lineLimit(1)
+                .minimumScaleFactor(0.82)
+        }
+        .foregroundStyle(tint)
+        .padding(.horizontal, 10)
+        .padding(.vertical, 6)
+        .background(tint.opacity(0.14))
+        .clipShape(Capsule())
+        .accessibilityLabel(accessibilityLabel)
     }
 }
 
