@@ -3,8 +3,8 @@ import NOCTOCore
 
 typealias VenueDataSourceError = LocalVenueRepositoryError
 
-protocol VenueDataSource {
-    func loadVenues() throws -> [Venue]
+protocol VenueDataSource: Sendable {
+    func loadVenues() async throws -> [Venue]
 }
 
 struct LocalVenueDataSource: VenueDataSource {
@@ -14,7 +14,7 @@ struct LocalVenueDataSource: VenueDataSource {
         self.repository = repository
     }
 
-    func loadVenues() throws -> [Venue] {
+    func loadVenues() async throws -> [Venue] {
         try repository.loadVenues()
     }
 }

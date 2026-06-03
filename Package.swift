@@ -10,6 +10,9 @@ let package = Package(
     products: [
         .library(name: "NOCTOCore", targets: ["NOCTOCore"])
     ],
+    dependencies: [
+        .package(url: "https://github.com/swiftlang/swift-syntax.git", from: "603.0.0")
+    ],
     targets: [
         .target(name: "NOCTOCore"),
         .target(
@@ -39,18 +42,29 @@ let package = Package(
                 "NoctoTheme.swift",
                 "ParallaxCard.swift",
                 "ProfileView.swift",
-                "Venue.swift",
                 "VenueCard.swift",
-                "VenueDataSource.swift",
+                "VenueCatalogView.swift",
                 "VenueDetailView.swift",
-                "VenueRepository.swift"
+                "Venue.swift"
             ],
-            sources: ["OperationalSnapshot.swift"]
+            sources: [
+                "OperationalSnapshot.swift",
+                "VenueCatalogViewModel.swift",
+                "VenueDataSource.swift",
+                "VenueRepository.swift"
+            ]
         ),
         .testTarget(name: "NOCTOCoreTests", dependencies: ["NOCTOCore"]),
         .testTarget(
             name: "OperationalSnapshotTests",
             dependencies: ["NOCTOAppLogic", "NOCTOCore"]
+        ),
+        .testTarget(
+            name: "ArchitectureGuardTests",
+            dependencies: [
+                .product(name: "SwiftParser", package: "swift-syntax"),
+                .product(name: "SwiftSyntax", package: "swift-syntax")
+            ]
         )
     ]
 )

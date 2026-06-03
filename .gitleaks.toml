@@ -1,0 +1,69 @@
+title = "NOCTO secret scanning rules"
+
+[extend]
+useDefault = true
+
+[[rules]]
+id = "nocto-internal-api-token"
+description = "NOCTO internal API token detected."
+regex = '''\bNCT_(?:PROD|DEV|STAGE|TEST)_[A-Za-z0-9_-]{24,128}\b'''
+secretGroup = 0
+entropy = 3.5
+keywords = [
+  "NCT_PROD_",
+  "NCT_DEV_",
+  "NCT_STAGE_",
+  "NCT_TEST_",
+]
+tags = ["nocto", "api-key"]
+
+[[rules]]
+id = "nocto-labeled-secret-value"
+description = "NOCTO labeled secret-like value detected."
+regex = '''(?i)(?:nocto[_-]?(?:secret|token|api[_-]?key|client[_-]?secret)|(?:api|auth|access|refresh)[_-]?token)\s*[:=]\s*['"]?([A-Za-z0-9_./+=-]{32,})['"]?'''
+secretGroup = 1
+entropy = 3.5
+keywords = [
+  "nocto",
+  "secret",
+  "token",
+  "api_key",
+  "client_secret",
+  "access_token",
+  "refresh_token",
+]
+tags = ["nocto", "credential"]
+
+[[rules]]
+id = "google-api-key"
+description = "Google API key detected."
+regex = '''\bAIza[0-9A-Za-z_-]{35}\b'''
+secretGroup = 0
+keywords = ["AIza"]
+tags = ["google", "api-key"]
+
+[[rules]]
+id = "apple-private-key-block"
+description = "Apple or generic private key material detected."
+regex = '''-----BEGIN (?:RSA |EC |OPENSSH |)?PRIVATE KEY-----'''
+secretGroup = 0
+keywords = ["BEGIN", "PRIVATE KEY"]
+tags = ["apple", "private-key"]
+
+[[rules]]
+id = "apple-signing-material-file"
+description = "Apple signing or provisioning material must not be committed."
+path = '''(^|/).*\.(p8|p12|mobileprovision|provisionprofile)$'''
+tags = ["apple", "signing", "file"]
+
+[[rules]]
+id = "nocto-local-secret-file"
+description = "NOCTO local-only secret/config file must not be committed."
+path = '''(^|/)(Secrets\.plist|Config\.local\.json|GoogleService-Info\.plist|GoogleService-Info\.local\.plist|google-services\.json|\.env|\.env\.(local|development|test|production))$'''
+tags = ["nocto", "local-config", "file"]
+
+[[allowlists]]
+description = "The scanner configuration contains detection patterns by design."
+paths = [
+  '''(^|/)\.gitleaks\.toml$''',
+]

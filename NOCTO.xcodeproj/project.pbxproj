@@ -41,6 +41,8 @@
 		B9E5C67A2F020001005FA51F /* ProfileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9E5C6792F020001005FA51F /* ProfileView.swift */; };
 		B9E5C67D2F030001005FA51F /* NoctoAttributes.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9E5C67B2F030001005FA51F /* NoctoAttributes.swift */; };
 		B9E5C67E2F030001005FA51F /* NoctoLiveActivityHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9E5C67C2F030001005FA51F /* NoctoLiveActivityHandler.swift */; };
+		C0DE00102F0A000100AAA001 /* VenueCatalogViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0DE000F2F0A000100AAA001 /* VenueCatalogViewModel.swift */; };
+		C0DE00122F0A000100AAA001 /* VenueCatalogView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0DE00112F0A000100AAA001 /* VenueCatalogView.swift */; };
 		C0DE00032F0A000100AAA001 /* NOCTOCore in Frameworks */ = {isa = PBXBuildFile; productRef = C0DE00022F0A000100AAA001 /* NOCTOCore */; };
 		C821ED3724108825A03FE113 /* NOCTOLiveActivityWidget.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6080975210EC2F04DAE4B11D /* NOCTOLiveActivityWidget.swift */; };
 		EA83B75F781AB87BDD119D8B /* LiveActivitySignalViews.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF98ECE38605E376996AE93B /* LiveActivitySignalViews.swift */; };
@@ -112,6 +114,8 @@
 		B9E5C6792F020001005FA51F /* ProfileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileView.swift; sourceTree = "<group>"; };
 		B9E5C67B2F030001005FA51F /* NoctoAttributes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoctoAttributes.swift; sourceTree = "<group>"; };
 		B9E5C67C2F030001005FA51F /* NoctoLiveActivityHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoctoLiveActivityHandler.swift; sourceTree = "<group>"; };
+		C0DE000F2F0A000100AAA001 /* VenueCatalogViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VenueCatalogViewModel.swift; sourceTree = "<group>"; };
+		C0DE00112F0A000100AAA001 /* VenueCatalogView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VenueCatalogView.swift; sourceTree = "<group>"; };
 		E3D705C17264CB994A5D6ECD /* SnapshotTestCase.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = SnapshotTestCase.swift; sourceTree = "<group>"; };
 		F494849DDA3D18056B26211D /* NOCTOUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = NOCTOUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		FF98ECE38605E376996AE93B /* LiveActivitySignalViews.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = LiveActivitySignalViews.swift; sourceTree = "<group>"; };
@@ -200,6 +204,8 @@
 				B9E5C6792F020001005FA51F /* ProfileView.swift */,
 				B9E5C6522EF95E39005FA51F /* Venue.swift */,
 				B9E5C6532EF95E39005FA51F /* VenueCard.swift */,
+				C0DE00112F0A000100AAA001 /* VenueCatalogView.swift */,
+				C0DE000F2F0A000100AAA001 /* VenueCatalogViewModel.swift */,
 				B9E5C6542EF95E39005FA51F /* VenueDetailView.swift */,
 				B9E5C6772F001001005FA51F /* VenueDataSource.swift */,
 				B9E5C6552EF95E39005FA51F /* VenueRepository.swift */,
@@ -384,6 +390,8 @@
 				B9E5C6602EF95E39005FA51F /* AdminDashboardView.swift in Sources */,
 				B9E5C67A2F020001005FA51F /* ProfileView.swift in Sources */,
 				B9E5C6612EF95E39005FA51F /* NOCTOApp.swift in Sources */,
+				C0DE00122F0A000100AAA001 /* VenueCatalogView.swift in Sources */,
+				C0DE00102F0A000100AAA001 /* VenueCatalogViewModel.swift in Sources */,
 				B9E5C6752F001001005FA51F /* VenueDataSource.swift in Sources */,
 				B9E5C6622EF95E39005FA51F /* VenueRepository.swift in Sources */,
 				B9E5C6632EF95E39005FA51F /* Venue.swift in Sources */,

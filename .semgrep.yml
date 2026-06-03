@@ -1,0 +1,149 @@
+rules:
+  - id: nocto.swift.no-http-url-literal
+    message: "Hardcoded http:// URL detected. Use HTTPS or route the endpoint through a reviewed networking boundary."
+    severity: HIGH
+    languages: [swift]
+    pattern-regex: '"http://[^"]+"'
+    paths:
+      include:
+        - NOCTO/**/*.swift
+        - Sources/**/*.swift
+        - NOCTOWidgetExtension/**/*.swift
+    metadata:
+      category: security
+      technology: [ios, swift]
+
+  - id: nocto.swift.no-urlsession-shared
+    message: "Direct URLSession.shared usage detected. Networking must go through an explicit service/repository boundary with policy controls."
+    severity: HIGH
+    languages: [swift]
+    pattern-regex: '\bURLSession\.shared\b'
+    paths:
+      include:
+        - NOCTO/**/*.swift
+        - Sources/**/*.swift
+        - NOCTOWidgetExtension/**/*.swift
+      exclude:
+        - NOCTO/Networking/**
+        - Sources/NOCTONetworking/**
+    metadata:
+      category: security
+      technology: [ios, swift]
+
+  - id: nocto.swift.no-urlcredential-trust-bypass
+    message: "URLCredential(trust:) can accept server trust without proper validation. Keep TLS trust handling inside a reviewed networking boundary."
+    severity: CRITICAL
+    languages: [swift]
+    pattern-regex: '\bURLCredential\s*\(\s*trust\s*:'
+    paths:
+      include:
+        - NOCTO/**/*.swift
+        - Sources/**/*.swift
+        - NOCTOWidgetExtension/**/*.swift
+      exclude:
+        - NOCTO/Networking/**
+        - Sources/NOCTONetworking/**
+    metadata:
+      category: security
+      technology: [ios, swift, tls]
+
+  - id: nocto.swift.no-weak-crypto
+    message: "Weak cryptography detected. Do not use MD5/SHA1; use a reviewed CryptoKit/security wrapper for hashing or signing."
+    severity: HIGH
+    languages: [swift]
+    pattern-regex: '\b(Insecure\.(MD5|SHA1)|CC_(MD5|SHA1)\s*\()'
+    paths:
+      include:
+        - NOCTO/**/*.swift
+        - Sources/**/*.swift
+        - NOCTOWidgetExtension/**/*.swift
+    metadata:
+      category: security
+      technology: [ios, swift, cryptography]
+
+  - id: nocto.swift.no-direct-keychain-outside-security-boundary
+    message: "Direct SecItem* usage detected outside the security boundary. Keychain access must live in NOCTO/Security or Sources/NOCTOSecurity."
+    severity: HIGH
+    languages: [swift]
+    pattern-regex: '\bSecItem(Add|CopyMatching|Update|Delete)\s*\('
+    paths:
+      include:
+        - NOCTO/**/*.swift
+        - Sources/**/*.swift
+        - NOCTOWidgetExtension/**/*.swift
+      exclude:
+        - NOCTO/Security/**
+        - Sources/NOCTOSecurity/**
+    metadata:
+      category: security
+      technology: [ios, swift, keychain]
+
+  - id: nocto.swift.no-userdefaults-outside-state-boundary
+    message: "Direct UserDefaults usage detected outside the approved state boundary. Route persisted app state through a dedicated manager."
+    severity: MEDIUM
+    languages: [swift]
+    pattern-regex: '\bUserDefaults\b'
+    paths:
+      include:
+        - NOCTO/**/*.swift
+        - Sources/**/*.swift
+      exclude:
+        - NOCTO/FavoritesManager.swift
+        - Tests/**
+    metadata:
+      category: security
+      technology: [ios, swift, persistence]
+
+  - id: nocto.swift.no-firebase-runtime
+    message: "Firebase runtime code is blocked while NOCTO is local-first. Add a reviewed remote adapter contract before Firebase enters Swift code."
+    severity: CRITICAL
+    languages: [swift]
+    pattern-regex: '(?m)^\s*import\s+Firebase[A-Za-z]*\b|FirebaseApp\.configure\s*\('
+    paths:
+      include:
+        - NOCTO/**/*.swift
+        - Sources/**/*.swift
+        - NOCTOWidgetExtension/**/*.swift
+    metadata:
+      category: security
+      technology: [ios, swift, firebase]
+
+  - id: nocto.swift.no-local-repository-bypass
+    message: "Direct local repository/data-source access detected. App code should use the app-facing VenueRepository boundary."
+    severity: MEDIUM
+    languages: [swift]
+    pattern-regex: '\b(LocalVenueRepository|LocalVenueDataSource)\b'
+    paths:
+      include:
+        - NOCTO/**/*.swift
+      exclude:
+        - NOCTO/VenueDataSource.swift
+        - NOCTO/VenueRepository.swift
+        - Tests/**
+    metadata:
+      category: maintainability
+      technology: [ios, swift, architecture]
+
+  - id: nocto.plist.no-ats-arbitrary-loads
+    message: "NSAllowsArbitraryLoads=true disables App Transport Security. Do not weaken ATS without a reviewed exception."
+    severity: CRITICAL
+    languages: [xml]
+    pattern-regex: '<key>\s*NSAllowsArbitraryLoads\s*</key>\s*<true\s*/>'
+    paths:
+      include:
+        - "**/*.plist"
+    metadata:
+      category: security
+      technology: [ios, plist, ats]
+
+  - id: nocto.plist.no-insecure-http-domain-exception
+    message: "NSExceptionAllowsInsecureHTTPLoads=true allows insecure HTTP loads for a domain. Keep ATS exceptions reviewed and explicit."
+    severity: HIGH
+    languages: [xml]
+    pattern-regex: '<key>\s*NSExceptionAllowsInsecureHTTPLoads\s*</key>\s*<true\s*/>'
+    paths:
+      include:
+        - "**/*.plist"
+    metadata:
+      category: security
+      technology: [ios, plist, ats]
