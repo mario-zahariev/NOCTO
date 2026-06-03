@@ -69,7 +69,6 @@ struct VenueCard: View {
             RoundedRectangle(cornerRadius: 16)
                 .stroke(NoctoTheme.cardBorder, lineWidth: 1)
         )
-        .microFeedback()
     }
 
     private func venueBadge(
