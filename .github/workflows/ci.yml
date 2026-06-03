@@ -75,12 +75,26 @@ jobs:
           NOCTO_SNAPSHOT_PIXEL_TOLERANCE: "0.03"
           TEST_RUNNER_NOCTO_SNAPSHOT_PIXEL_TOLERANCE: "0.03"
         run: |
+          DERIVED_DATA="$RUNNER_TEMP/nocto-visual-derived-data"
+
           xcodebuild \
             -project NOCTO.xcodeproj \
             -scheme NOCTO \
             -destination 'platform=iOS Simulator,name=iPhone 17' \
-            -only-testing:NOCTOUITests/LiveActivitySnapshotTests \
-            -only-testing:NOCTOUITests/ScreenSnapshotTests/testHomeView_snapshot \
-            -only-testing:NOCTOUITests/ScreenSnapshotTests/testNightPulseView_snapshot \
-            -only-testing:NOCTOUITests/ScreenSnapshotTests/testProfileView_snapshot \
-            test
+            -derivedDataPath "$DERIVED_DATA" \
+            build-for-testing
+
+          run_visual_snapshot() {
+            xcodebuild \
+              -project NOCTO.xcodeproj \
+              -scheme NOCTO \
+              -destination 'platform=iOS Simulator,name=iPhone 17' \
+              -derivedDataPath "$DERIVED_DATA" \
+              -only-testing:"$1" \
+              test-without-building
+          }
+
+          run_visual_snapshot 'NOCTOUITests/LiveActivitySnapshotTests'
+          run_visual_snapshot 'NOCTOUITests/ScreenSnapshotTests/testHomeView_snapshot'
+          run_visual_snapshot 'NOCTOUITests/ScreenSnapshotTests/testNightPulseView_snapshot'
+          run_visual_snapshot 'NOCTOUITests/ScreenSnapshotTests/testProfileView_snapshot'
