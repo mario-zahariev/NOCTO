@@ -115,8 +115,10 @@ class SnapshotTestCase: XCTestCase {
         UIView.setAnimationsEnabled(false)
         defer {
             UIView.setAnimationsEnabled(animationsEnabled)
+            host.view.removeFromSuperview()
             window.isHidden = true
             window.rootViewController = nil
+            RunLoop.main.run(until: Date(timeIntervalSinceNow: 0.02))
         }
 
         host.overrideUserInterfaceStyle = .dark
