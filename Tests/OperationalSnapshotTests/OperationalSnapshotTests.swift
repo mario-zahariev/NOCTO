@@ -243,6 +243,19 @@ final class OperationalSnapshotTests: XCTestCase {
         XCTAssertEqual(VenueSignalResolver.badge(for: venue), .quietPick)
     }
 
+    func testVenueSignalResolverDoesNotReturnQuietPickAtExactlyThreeAM() {
+        let venue = Venue(
+            id: UUID(),
+            name: "Bar Boundary",
+            type: .bar,
+            latitude: 42.6977,
+            longitude: 23.3219,
+            workingHours: "18:00-03:00"
+        )
+
+        XCTAssertEqual(VenueSignalResolver.badge(for: venue), .closesAt("03:00"))
+    }
+
     func testVenueSignalResolverReturnsClosingBadgeForNonClubLateClose() {
         let venue = Venue(
             id: UUID(),

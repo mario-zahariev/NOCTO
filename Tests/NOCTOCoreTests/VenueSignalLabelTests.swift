@@ -40,6 +40,7 @@ final class VenueSignalLabelTests: XCTestCase {
     func testHourMinuteTupleRejectsInvalidWorkingHours() {
         XCTAssertNil(Venue.hourMinuteTuple(from: "n/a", at: 0))
         XCTAssertNil(Venue.hourMinuteTuple(from: "22:99-05:00", at: 0))
+        XCTAssertNil(Venue.hourMinuteTuple(from: "24:00-05:00", at: 0))
         XCTAssertNil(Venue.hourMinuteTuple(from: "22:00", at: 1))
     }
 }
