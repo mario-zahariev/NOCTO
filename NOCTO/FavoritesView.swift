@@ -28,6 +28,7 @@ struct FavoritesView: View {
                                     VenueCard(
                                         venue: venue,
                                         isFavorite: true,
+                                        badge: VenueSignalResolver.badge(for: venue),
                                         onToggleFavorite: {
                                             withAnimation {
                                                 favorites.toggle(venue.id)

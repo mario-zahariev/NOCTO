@@ -7,6 +7,63 @@ struct VenueTypeSignal: Identifiable {
     let count: Int
 }
 
+enum NOCTOVenueBadge: Equatable {
+    case closesAt(String)
+    case startsAt(String)
+    case lateWave
+    case quietPick
+
+    var label: String {
+        switch self {
+        case .closesAt(let time): return "До \(time)"
+        case .startsAt(let time): return "След \(time)"
+        case .lateWave: return "Късна вълна"
+        case .quietPick: return "Тих избор"
+        }
+    }
+
+    var systemImage: String {
+        switch self {
+        case .closesAt: return "moon.stars"
+        case .startsAt: return "clock.badge"
+        case .lateWave: return "waveform.path.ecg"
+        case .quietPick: return "sparkles"
+        }
+    }
+}
+
+enum VenueSignalResolver {
+    static func badge(for venue: Venue) -> NOCTOVenueBadge? {
+        guard
+            let opening = Venue.hourMinuteTuple(from: venue.workingHours, at: 0),
+            let closing = Venue.hourMinuteTuple(from: venue.workingHours, at: 1)
+        else {
+            return nil
+        }
+
+        let openingMinutes = opening.h * 60 + opening.m
+        let closingMinutes = closing.h * 60 + closing.m
+
+        if closingMinutes < 3 * 60 {
+            return .quietPick
+        }
+
+        if venue.type == .club {
+            return .lateWave
+        }
+
+        if closingMinutes <= openingMinutes {
+            return .closesAt(Self.formatted(closing))
+        }
+
+        return .startsAt(Self.formatted(opening))
+    }
+
+    private static func formatted(_ tuple: (h: Int, m: Int)) -> String {
+        String(format: "%02d:%02d", tuple.h, tuple.m)
+    }
+}
+
 enum ConfidenceSource: Equatable {
     case hardData
     case mixedData
