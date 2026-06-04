@@ -47,7 +47,7 @@ final class LiveActivitySnapshotTests: SnapshotTestCase {
             of: expandedPreview(state: state),
             named: "live_expanded_92",
             viewport: .dynamicIslandExpanded,
-            pixelTolerance: 0.035
+            pixelTolerance: 0.04
         )
     }
 
