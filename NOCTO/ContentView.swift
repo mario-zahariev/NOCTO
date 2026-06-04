@@ -8,44 +8,50 @@ struct ContentView: View {
     @State private var loadLatencyMs = 0
     @State private var lastLoadSucceeded = false
     @State private var selectedTab: NoctoTab = .home
+    @State private var hidesRootChrome = false
 
     var body: some View {
-        ZStack {
-            NoctoTheme.background.ignoresSafeArea()
+        GeometryReader { proxy in
+            let scale = proxy.size.width / NoctoHTML.baseWidth
 
-            TabView(selection: $selectedTab) {
-                VenueCatalogView(
-                    viewModel: catalogViewModel,
-                    favorites: favorites,
-                    onInitialLoad: loadCatalogIfNeeded,
-                    onRefresh: loadCatalog
-                )
-                .tag(NoctoTab.home)
+            ZStack(alignment: .bottom) {
+                NoctoTheme.background.ignoresSafeArea()
 
-                AllVenuesMapView(venues: catalogViewModel.venues)
-                    .tag(NoctoTab.map)
+                TabView(selection: $selectedTab) {
+                    VenueCatalogView(
+                        viewModel: catalogViewModel,
+                        favorites: favorites,
+                        onInitialLoad: loadCatalogIfNeeded,
+                        onRefresh: loadCatalog
+                    )
+                    .tag(NoctoTab.home)
 
-                FavoritesView(venues: catalogViewModel.venues, favorites: favorites)
-                    .tag(NoctoTab.favorites)
+                    AllVenuesMapView(venues: catalogViewModel.venues)
+                        .tag(NoctoTab.map)
 
-                NightPulseView(snapshot: snapshot)
-                    .tag(NoctoTab.pulse)
+                    FavoritesView(venues: catalogViewModel.venues, favorites: favorites)
+                        .tag(NoctoTab.favorites)
 
-                ProfileView(
-                    favoritesCount: favorites.favoriteIDs.count,
-                    snapshot: snapshot,
-                    venues: catalogViewModel.venues,
-                    favorites: favorites
-                )
-                .tag(NoctoTab.profile)
+                    ProfileView(
+                        favoritesCount: favorites.favoriteIDs.count,
+                        snapshot: snapshot,
+                        venues: catalogViewModel.venues,
+                        favorites: favorites
+                    )
+                    .tag(NoctoTab.profile)
+                }
+                .toolbar(.hidden, for: .tabBar)
+
+                if !hidesRootChrome {
+                    NoctoInstrumentTabBar(selection: $selectedTab, scale: scale)
+                        .padding(.horizontal, 12 * scale)
+                        .padding(.bottom, 14 * scale)
+                        .zIndex(20)
+                }
             }
-            .toolbar(.hidden, for: .tabBar)
-            .safeAreaInset(edge: .bottom) {
-                NoctoInstrumentTabBar(selection: $selectedTab)
-                    .padding(.horizontal, 16)
-                    .padding(.bottom, 8)
-            }
+            .ignoresSafeArea()
         }
+        .onPreferenceChange(NoctoChromeHiddenPreferenceKey.self) { hidesRootChrome = $0 }
         .onChange(of: scenePhase, initial: true) { _, newPhase in
             guard
                 newPhase == .active,
@@ -68,6 +74,7 @@ struct ContentView: View {
             }
         }
         .preferredColorScheme(.dark)
+        .statusBarHidden(true)
     }
 
     private var snapshot: OperationalSnapshot {
@@ -98,15 +105,13 @@ private enum NoctoTab: CaseIterable, Hashable {
     case home
     case map
     case favorites
-    case pulse
     case profile
 
     var label: String {
         switch self {
-        case .home: return "Начало"
+        case .home: return "Пулс"
         case .map: return "Карта"
-        case .favorites: return "Любими"
-        case .pulse: return "Пулс"
+        case .favorites: return "Запазени"
         case .profile: return "Профил"
         }
     }
@@ -114,75 +119,49 @@ private enum NoctoTab: CaseIterable, Hashable {
 
 private struct NoctoInstrumentTabBar: View {
     @Binding var selection: NoctoTab
+    let scale: CGFloat
 
     var body: some View {
-        HStack(spacing: 2) {
+        HStack(spacing: 0) {
             ForEach(NoctoTab.allCases, id: \.self) { tab in
                 Button {
                     selection = tab
                     Haptics.tap()
                 } label: {
-                    NoctoInstrumentTabItem(tab: tab, isSelected: selection == tab)
+                    NoctoInstrumentTabItem(tab: tab, isSelected: selection == tab, scale: scale)
                 }
                 .buttonStyle(.plain)
                 .accessibilityLabel(tab.label)
             }
         }
-        .padding(5)
-        .noctoSurface(.floatingBar, cornerRadius: 32)
+        .frame(height: 52 * scale)
+        .padding(.horizontal, 6 * scale)
+        .noctoElevatedSurface(cornerRadius: NoctoTheme.Radius.tabBar * scale)
     }
 }
 
 private struct NoctoInstrumentTabItem: View {
     let tab: NoctoTab
     let isSelected: Bool
+    let scale: CGFloat
 
     var body: some View {
-        VStack(spacing: 4) {
+        VStack(spacing: 3 * scale) {
             NoctoInstrumentGlyph(tab: tab, isSelected: isSelected)
-                .frame(width: 28, height: 28)
+                .frame(width: 18 * scale, height: 18 * scale)
+                .opacity(isSelected ? 1 : 0.28)
 
             Text(tab.label)
-                .font(.caption2.weight(.black))
+                .font(.system(size: 6 * scale, weight: .bold))
+                .tracking(1.5 * scale)
+                .textCase(.uppercase)
                 .lineLimit(1)
-                .minimumScaleFactor(0.78)
+                .minimumScaleFactor(0.72)
         }
-        .foregroundStyle(isSelected ? NoctoTheme.accent : NoctoTheme.textSecondary.opacity(0.64))
+        .foregroundStyle(isSelected ? NoctoTheme.accent : NoctoTheme.textTertiary)
         .frame(maxWidth: .infinity)
-        .padding(.vertical, 7)
-        .background {
-            if isSelected {
-                ZStack {
-                    RadialGradient(
-                        colors: [
-                            NoctoTheme.accent.opacity(0.24),
-                            NoctoTheme.ultraviolet.opacity(0.075),
-                            .clear
-                        ],
-                        center: .top,
-                        startRadius: 4,
-                        endRadius: 42
-                    )
-                    .frame(width: 62, height: 58)
-                    .offset(y: -13)
-                    .allowsHitTesting(false)
-
-                    LinearGradient(
-                        colors: [
-                            .clear,
-                            NoctoTheme.accent.opacity(0.20),
-                            .clear
-                        ],
-                        startPoint: .leading,
-                        endPoint: .trailing
-                    )
-                    .frame(width: 42, height: 1.6)
-                    .offset(y: -22)
-                    .blur(radius: 1.2)
-                    .allowsHitTesting(false)
-                }
-            }
-        }
+        .padding(.horizontal, 10 * scale)
+        .padding(.vertical, 4 * scale)
         .contentShape(Rectangle())
     }
 }
@@ -230,18 +209,14 @@ private struct NoctoInstrumentGlyph: View {
                     .frame(width: 5, height: 5)
 
             case .favorites:
-                NoctoSparkGlyph()
-                    .stroke(tint, style: StrokeStyle(lineWidth: 2.2, lineJoin: .round))
-                    .frame(width: 25, height: 25)
-
-            case .pulse:
-                HStack(alignment: .center, spacing: 3) {
-                    ForEach([10.0, 18.0, 24.0, 14.0], id: \.self) { height in
-                        Capsule()
-                            .fill(tint)
-                            .frame(width: 3.4, height: height)
+                BookmarkGlyph()
+                    .stroke(tint, style: StrokeStyle(lineWidth: isSelected ? 1.8 : 1.5, lineJoin: .round))
+                    .background {
+                        if isSelected {
+                            BookmarkGlyph()
+                                .fill(tint.opacity(0.10))
+                        }
                     }
-                }
 
             case .profile:
                 VStack(spacing: 4) {
@@ -262,6 +237,7 @@ private struct NoctoInstrumentGlyph: View {
                 )
             }
         }
+        .noctoSignalGlow(isSelected ? .active : .none)
     }
 }
 
@@ -282,6 +258,29 @@ private struct NoctoSparkGlyph: Shape {
         var path = Path()
         path.move(to: points[0])
         points.dropFirst().forEach { path.addLine(to: $0) }
+        path.closeSubpath()
+        return path
+    }
+}
+
+private struct BookmarkGlyph: Shape {
+    func path(in rect: CGRect) -> Path {
+        var path = Path()
+        path.move(to: CGPoint(x: rect.width * 0.79, y: rect.height * 0.88))
+        path.addLine(to: CGPoint(x: rect.width * 0.50, y: rect.height * 0.71))
+        path.addLine(to: CGPoint(x: rect.width * 0.21, y: rect.height * 0.88))
+        path.addLine(to: CGPoint(x: rect.width * 0.21, y: rect.height * 0.21))
+        path.addCurve(
+            to: CGPoint(x: rect.width * 0.29, y: rect.height * 0.13),
+            control1: CGPoint(x: rect.width * 0.21, y: rect.height * 0.17),
+            control2: CGPoint(x: rect.width * 0.25, y: rect.height * 0.13)
+        )
+        path.addLine(to: CGPoint(x: rect.width * 0.71, y: rect.height * 0.13))
+        path.addCurve(
+            to: CGPoint(x: rect.width * 0.79, y: rect.height * 0.21),
+            control1: CGPoint(x: rect.width * 0.75, y: rect.height * 0.13),
+            control2: CGPoint(x: rect.width * 0.79, y: rect.height * 0.17)
+        )
         path.closeSubpath()
         return path
     }

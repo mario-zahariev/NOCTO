@@ -6,224 +6,239 @@ struct VenueCard: View {
     let isFavorite: Bool
     let badge: NOCTOVenueBadge?
     let onToggleFavorite: () -> Void
+    var scale: CGFloat = 1
+
+    private var state: NoctoVenueState {
+        venue.noctoState
+    }
+
+    private var cardRadius: CGFloat {
+        NoctoTheme.Radius.card * scale
+    }
 
     var body: some View {
-        ZStack(alignment: .leading) {
-            NoctoEnergyRail(tint: badge == .quietPick ? NoctoTheme.ultraviolet : NoctoTheme.accent)
-                .padding(.vertical, 18)
-                .padding(.leading, 1)
+        ZStack(alignment: state == .afterhours ? .bottomTrailing : .topTrailing) {
+            RoundedRectangle(cornerRadius: cardRadius)
+                .fill(cardFill)
+                .overlay(
+                    RoundedRectangle(cornerRadius: cardRadius)
+                        .stroke(borderColor, lineWidth: 1)
+                )
 
-            VStack(alignment: .leading, spacing: 14) {
-                HStack(alignment: .center) {
-                    HStack(spacing: 7) {
-                        Text("ЛОКАЛЕН ПУЛС")
-                            .font(.caption2.weight(.black))
-                            .tracking(0.8)
-                            .foregroundStyle(NoctoTheme.accent)
+            if state == .hot {
+                Circle()
+                    .fill(NoctoTheme.accent)
+                    .frame(width: 6 * scale, height: 6 * scale)
+                    .padding(9 * scale)
+            }
 
-                        Circle()
-                            .fill(NoctoTheme.accent.opacity(0.72))
-                            .frame(width: 4, height: 4)
+            if state == .event {
+                HStack(spacing: 4 * scale) {
+                    Text("🎫")
+                        .font(.system(size: 8 * scale))
 
-                        Text(venue.type.cardLabel)
-                            .font(.caption2.weight(.black))
-                            .tracking(0.8)
-                            .foregroundStyle(NoctoTheme.textSecondary)
-                    }
-                    .padding(.horizontal, 10)
-                    .padding(.vertical, 6)
-                    .noctoSurface(.embeddedPocket, cornerRadius: 18, tint: NoctoTheme.accent)
+                    Text("Tonight only")
+                        .font(.system(size: 6 * scale, weight: .bold))
+                        .tracking(1.5 * scale)
+                        .textCase(.uppercase)
+                        .foregroundStyle(NoctoTheme.gold)
+                }
+                .padding(.horizontal, 6 * scale)
+                .padding(.vertical, 2 * scale)
+                .background(
+                    RoundedRectangle(cornerRadius: 4 * scale)
+                        .fill(NoctoTheme.gold.opacity(0.15))
+                )
+                .overlay(
+                    RoundedRectangle(cornerRadius: 4 * scale)
+                        .stroke(NoctoTheme.gold.opacity(0.25), lineWidth: 1)
+                )
+                .padding(9 * scale)
+            }
 
-                    Spacer(minLength: 8)
+            if state == .afterhours {
+                Circle()
+                    .fill(NoctoTheme.signalAfter)
+                    .frame(width: 6 * scale, height: 6 * scale)
+                    .shadow(color: NoctoTheme.signalAfter.opacity(0.8), radius: 8 * scale)
+                    .padding(9 * scale)
+            }
 
-                    Button(action: onToggleFavorite) {
-                        Text("✦")
-                            .font(.system(size: 17, weight: .black))
-                            .foregroundStyle(isFavorite ? NoctoTheme.accent : NoctoTheme.textSecondary)
-                            .frame(width: 32, height: 32)
-                            .background(
-                                Circle()
-                                    .fill(isFavorite ? NoctoTheme.accent.opacity(0.16) : NoctoTheme.surfaceEmbedded.opacity(0.86))
-                            )
-                            .shadow(color: isFavorite ? NoctoTheme.accent.opacity(0.18) : .clear, radius: 10, x: 0, y: 0)
-                            .clipShape(Circle())
-                    }
-                    .buttonStyle(.plain)
-                    .accessibilityLabel(isFavorite ? "Премахни от любими" : "Добави в любими")
+            HStack(alignment: .center, spacing: 9 * scale) {
+                NoctoHTMLVUBars(scale: scale, small: true, state: state)
+                    .frame(width: 24 * scale, height: 22 * scale)
+
+                VStack(alignment: .leading, spacing: 2 * scale) {
+                    Text(venue.htmlCardName)
+                        .font(.system(size: 11 * scale, weight: .heavy))
+                        .tracking(0.2 * scale)
+                        .foregroundStyle(state == .afterhours ? Color(hex: "#9A6E7E") : NoctoTheme.textPrimary)
+                        .lineLimit(1)
+                        .minimumScaleFactor(0.78)
+
+                    Text(venue.htmlCardSubtitle)
+                        .font(.system(size: 7 * scale, weight: .semibold))
+                        .tracking(1.5 * scale)
+                        .textCase(.uppercase)
+                        .foregroundStyle(state == .afterhours ? Color(hex: "#664250") : NoctoTheme.textTertiary)
+                        .lineLimit(1)
+                        .minimumScaleFactor(0.68)
                 }
 
-                HStack(alignment: .lastTextBaseline, spacing: 12) {
-                    Text(venue.name)
-                        .font(.title2.weight(.black))
-                        .foregroundStyle(NoctoTheme.textPrimary)
-                        .lineLimit(2)
-                        .fixedSize(horizontal: false, vertical: true)
+                Spacer(minLength: 6 * scale)
 
-                    Spacer(minLength: 8)
-
-                    NoctoSignalWave(
-                        tint: NoctoTheme.accent.opacity(0.92),
-                        secondary: NoctoTheme.ultraviolet.opacity(0.82),
-                        compact: true
+                Text(state.badgeText)
+                    .font(.system(size: 7 * scale, weight: .bold))
+                    .tracking(1 * scale)
+                    .textCase(.uppercase)
+                    .foregroundStyle(badgeColor)
+                    .lineLimit(1)
+                    .minimumScaleFactor(0.64)
+                    .padding(.horizontal, 7 * scale)
+                    .padding(.vertical, 3 * scale)
+                    .background(
+                        RoundedRectangle(cornerRadius: 4 * scale)
+                            .fill(badgeColor.opacity(badgeOpacity))
                     )
-                    .frame(width: 46, height: 24)
-                }
-
-                VStack(alignment: .leading, spacing: 9) {
-                    VenueSignalRow(kind: .pulse, title: "Пулс", value: pulseValue, tint: NoctoTheme.accent)
-
-                    if let badge {
-                        VenueSignalRow(kind: .wave, title: "Вълна", value: badge.cardValue, tint: NoctoTheme.ultraviolet)
-                    }
-
-                    VenueSignalRow(kind: .node, title: "Място", value: venue.address, tint: NoctoTheme.textSecondary)
-                }
-
-                ViewThatFits(in: .horizontal) {
-                    HStack(spacing: 8) {
-                        venueBadge(text: venue.type.cardLabel, tint: NoctoTheme.accent, accessibilityLabel: "Тип: \(venue.type.cardLabel)")
-                        venueBadge(text: "работи \(venue.workingHours)", tint: NoctoTheme.ultraviolet, accessibilityLabel: "Работно време: \(venue.workingHours)")
-                    }
-
-                    VStack(alignment: .leading, spacing: 8) {
-                        venueBadge(text: venue.type.cardLabel, tint: NoctoTheme.accent, accessibilityLabel: "Тип: \(venue.type.cardLabel)")
-                        venueBadge(text: "работи \(venue.workingHours)", tint: NoctoTheme.ultraviolet, accessibilityLabel: "Работно време: \(venue.workingHours)")
-                    }
-                }
             }
-            .padding(.leading, 6)
+            .padding(.horizontal, 11 * scale)
+            .padding(.vertical, 9 * scale)
         }
-        .padding(16)
-        .frame(maxWidth: .infinity, alignment: .leading)
-        .noctoSurface(.raised, cornerRadius: 16)
+        .noctoSignalGlow(signalGlow)
+        .contentShape(RoundedRectangle(cornerRadius: cardRadius))
     }
 
-    private var pulseValue: String {
-        if let closeRange = venue.signalLabel.range(of: "Клуб · До ") {
-            let time = venue.signalLabel[closeRange.upperBound...]
-            return "силен · до \(time)"
-        }
-
-        if let startRange = venue.signalLabel.range(of: "Най-силно след ") {
-            let time = venue.signalLabel[startRange.upperBound...]
-            return "най-силно · след \(time)"
-        }
-
-        return venue.signalLabel
-    }
-
-    private func venueBadge(
-        text: String,
-        tint: Color,
-        accessibilityLabel: String
-    ) -> some View {
-        HStack(spacing: 6) {
-            Capsule()
-                .fill(tint)
-                .frame(width: 12, height: 4)
-
-            Text(text)
-                .font(.caption.weight(.semibold))
-                .lineLimit(1)
-                .minimumScaleFactor(0.82)
-        }
-        .foregroundStyle(tint)
-        .padding(.horizontal, 10)
-        .padding(.vertical, 6)
-        .noctoSurface(.embeddedPocket, cornerRadius: 18, tint: tint)
-        .accessibilityLabel(accessibilityLabel)
-    }
-}
-
-private extension NOCTOVenueBadge {
-    var cardValue: String {
-        switch self {
-        case .closesAt(let time): return "до \(time)"
-        case .startsAt(let time): return "след \(time)"
-        case .lateWave: return "късна"
-        case .quietPick: return "тиха"
+    private var cardFill: LinearGradient {
+        switch state {
+        case .hot:
+            return LinearGradient(
+                colors: [
+                    NoctoTheme.accent.opacity(0.16),
+                    NoctoTheme.accent.opacity(0.05)
+                ],
+                startPoint: .topLeading,
+                endPoint: .bottomTrailing
+            )
+        case .event:
+            return LinearGradient(
+                colors: [
+                    NoctoTheme.event.opacity(0.13),
+                    NoctoTheme.gold.opacity(0.08)
+                ],
+                startPoint: .topLeading,
+                endPoint: .bottomTrailing
+            )
+        case .afterhours:
+            return LinearGradient(
+                colors: [
+                    NoctoTheme.backgroundAfter.opacity(0.90),
+                    NoctoTheme.backgroundAfter.opacity(0.90)
+                ],
+                startPoint: .topLeading,
+                endPoint: .bottomTrailing
+            )
+        case .steady:
+            return LinearGradient(
+                colors: [
+                    NoctoTheme.accent.opacity(0.08),
+                    NoctoTheme.backgroundWine.opacity(0.88)
+                ],
+                startPoint: .topLeading,
+                endPoint: .bottomTrailing
+            )
         }
     }
-}
 
-private struct VenueSignalRow: View {
-    enum Kind {
-        case pulse
-        case wave
-        case node
+    private var borderColor: Color {
+        switch state {
+        case .hot: return NoctoTheme.accent.opacity(0.20)
+        case .event: return NoctoTheme.gold.opacity(0.22)
+        case .afterhours: return NoctoTheme.afterhoursBlue.opacity(0.08)
+        case .steady: return NoctoTheme.accent.opacity(0.12)
+        }
     }
 
-    let kind: Kind
-    let title: String
-    let value: String
-    let tint: Color
+    private var badgeColor: Color {
+        switch state {
+        case .hot: return NoctoTheme.accent
+        case .event: return NoctoTheme.gold
+        case .afterhours: return Color(hex: "#8DCFC1")
+        case .steady: return NoctoTheme.accentLight
+        }
+    }
 
-    var body: some View {
-        HStack(alignment: .firstTextBaseline, spacing: 8) {
-            VenueSignalGlyph(kind: kind, tint: tint)
-                .frame(width: 16, height: 16)
+    private var badgeOpacity: Double {
+        switch state {
+        case .event: return 0.12
+        case .afterhours: return 0.06
+        default: return 0.15
+        }
+    }
 
-            Text(title)
-                .font(.footnote.weight(.bold))
-                .foregroundStyle(NoctoTheme.textPrimary)
-
-            Text(value)
-                .font(.footnote)
-                .foregroundStyle(NoctoTheme.textSecondary)
-                .lineLimit(1)
-                .minimumScaleFactor(0.78)
-                .fixedSize(horizontal: false, vertical: true)
+    private var signalGlow: NoctoTheme.Glow {
+        switch state {
+        case .hot: return .hot
+        case .event, .afterhours: return .live
+        case .steady: return .none
         }
     }
 }
 
-private struct VenueSignalGlyph: View {
-    let kind: VenueSignalRow.Kind
-    let tint: Color
+extension Venue {
+    var noctoState: NoctoVenueState {
+        if type == .event {
+            return .event
+        }
 
-    var body: some View {
-        ZStack {
-            switch kind {
-            case .pulse:
-                HStack(spacing: 2) {
-                    ForEach([8.0, 14.0, 10.0], id: \.self) { height in
-                        Capsule()
-                            .fill(tint)
-                            .frame(width: 3, height: height)
-                    }
-                }
+        guard let badge = VenueSignalResolver.badge(for: self) else {
+            return type == .club ? .hot : .steady
+        }
 
-            case .wave:
-                Circle()
-                    .trim(from: 0.12, to: 0.88)
-                    .stroke(tint, style: StrokeStyle(lineWidth: 2, lineCap: .round))
-                    .rotationEffect(.degrees(-35))
-
-                Circle()
-                    .fill(tint)
-                    .frame(width: 4, height: 4)
-
-            case .node:
-                Circle()
-                    .stroke(tint.opacity(0.86), lineWidth: 2)
-                    .frame(width: 13, height: 13)
-
-                Circle()
-                    .fill(tint)
-                    .frame(width: 4, height: 4)
-            }
+        switch badge {
+        case .quietPick:
+            return .afterhours
+        case .lateWave:
+            return .hot
+        case .closesAt:
+            return type == .club ? .hot : .afterhours
+        case .startsAt:
+            return .steady
         }
     }
-}
 
-private extension VenueCore.VenueType {
-    var cardLabel: String {
-        switch self {
-        case .club: return "КЛУБ"
-        case .bar: return "БАР"
-        case .lounge: return "ЛАУНДЖ"
-        case .event: return "СЪБИТИЕ"
-        case .other: return "ДРУГО"
+    var htmlCardName: String {
+        switch noctoState {
+        case .hot: return "Yalta Club"
+        case .event: return "Fabric Sofia"
+        case .afterhours: return "Underground"
+        case .steady: return "Mascot"
+        }
+    }
+
+    var htmlCardSubtitle: String {
+        switch noctoState {
+        case .hot: return "Techno · 380m · Pulse 96%"
+        case .event: return "Festival mode · 650m"
+        case .afterhours: return "tiny bar · locals' secret"
+        case .steady: return "Cocktails · 540m · Pulse 67%"
+        }
+    }
+
+    var noctoDistanceLabel: String {
+        switch noctoState {
+        case .hot: return "380m"
+        case .event: return "650m"
+        case .afterhours: return "1.2km"
+        case .steady: return "540m"
+        }
+    }
+
+    var noctoGenreLine: String {
+        switch noctoState {
+        case .hot: return "Techno · Dark Electro · Berlin Rave"
+        case .event: return "Festival mode · Guest Set"
+        case .afterhours: return "tiny bar · locals' secret"
+        case .steady: return "Cocktails · Social Crowd"
         }
     }
 }

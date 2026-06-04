@@ -23,12 +23,13 @@ struct VenueCatalogView: View {
     var body: some View {
         NavigationStack {
             ZStack {
-                catalogBackdrop
+                NoctoHTMLHomeBackground()
+                    .ignoresSafeArea()
 
                 content
             }
-            .background(NoctoTheme.background.ignoresSafeArea())
-            .navigationTitle("Каталог")
+            .toolbar(.hidden, for: .navigationBar)
+            .ignoresSafeArea()
             .task {
                 guard viewModel.loadState == .idle else { return }
                 await onInitialLoad()
@@ -47,200 +48,241 @@ struct VenueCatalogView: View {
         } else if viewModel.venues.isEmpty {
             VenueCatalogEmptyView()
         } else {
-            catalogList
-        }
-    }
-
-    private var catalogList: some View {
-        ScrollView {
-            LazyVStack(spacing: 14) {
-                VenueCatalogHeader(venues: viewModel.venues)
-                    .padding(.horizontal, 16)
-
-                if let errorMessage = viewModel.errorMessage {
-                    VenueCatalogStatusBanner(message: errorMessage)
-                        .padding(.horizontal, 16)
-                }
-
-                ForEach(viewModel.venues) { venue in
-                    VenueRowView(
-                        venue: venue,
-                        isFavorite: favorites.isFavorite(venue.id),
-                        onToggleFavorite: {
-                            favorites.toggle(venue.id)
-                            Haptics.tap()
-                        }
-                    )
-                    .padding(.horizontal, 16)
-                }
-            }
-            .padding(.vertical, 10)
-        }
-        .refreshable {
-            await onRefresh()
-        }
-    }
-
-    private var catalogBackdrop: some View {
-        ZStack {
-            RadialGradient(
-                colors: [
-                    NoctoTheme.accent.opacity(0.12),
-                    NoctoTheme.accent.opacity(0.03),
-                    .clear
-                ],
-                center: .topTrailing,
-                startRadius: 16,
-                endRadius: 420
-            )
-
-            RadialGradient(
-                colors: [
-                    NoctoTheme.ultraviolet.opacity(0.14),
-                    NoctoTheme.ultraviolet.opacity(0.04),
-                    .clear
-                ],
-                center: .bottomLeading,
-                startRadius: 40,
-                endRadius: 520
+            NoctoVenueFeedView(
+                venues: viewModel.venues,
+                favorites: favorites,
+                statusMessage: viewModel.errorMessage,
+                onRefresh: onRefresh
             )
         }
-        .ignoresSafeArea()
-        .allowsHitTesting(false)
     }
 }
 
-private struct VenueCatalogHeader: View {
+struct NoctoVenueFeedView: View {
     let venues: [Venue]
+    @ObservedObject var favorites: FavoritesManager
+    var statusMessage: String?
+    let onRefresh: () async -> Void
 
     var body: some View {
-        VStack(alignment: .leading, spacing: 18) {
-            HStack(alignment: .top) {
-                VStack(alignment: .leading, spacing: 8) {
-                    Text("НОЩЕН КАТАЛОГ")
-                        .font(.caption2.weight(.black))
-                        .tracking(1.7)
-                        .foregroundStyle(NoctoTheme.accent)
+        GeometryReader { proxy in
+            let scale = NoctoHTML.scale(for: proxy.size)
 
-                    Text("NOCTO")
-                        .font(.system(size: 42, weight: .black, design: .rounded))
-                        .foregroundStyle(NoctoTheme.textPrimary)
+            ZStack(alignment: .top) {
+                NoctoHTMLHomeBackground()
+                    .ignoresSafeArea()
 
-                    Text("Проверени локални сигнали за тази вечер")
-                        .font(.title3.weight(.semibold))
-                        .foregroundStyle(NoctoTheme.textSecondary)
-                        .fixedSize(horizontal: false, vertical: true)
+                NoctoHTMLStatusBar(scale: scale)
+
+                ScrollView(.vertical, showsIndicators: false) {
+                    VStack(alignment: .leading, spacing: 11 * scale) {
+                        NoctoTonightHeader(scale: scale)
+
+                        NoctoCityPulseMeter(scale: scale)
+
+                        if let statusMessage {
+                            VenueCatalogStatusBanner(message: statusMessage, scale: scale)
+                        }
+
+                        VStack(alignment: .leading, spacing: 6 * scale) {
+                            Text("Близо до теб")
+                                .font(.system(size: 7 * scale, weight: .bold))
+                                .tracking(3 * scale)
+                                .textCase(.uppercase)
+                                .foregroundStyle(NoctoTheme.textTertiary)
+                                .padding(.bottom, 2 * scale)
+
+                            ForEach(Array(htmlCardVenues.enumerated()), id: \.offset) { _, venue in
+                                NavigationLink {
+                                    VenueDetailView(venue: venue)
+                                } label: {
+                                    VenueCard(
+                                        venue: venue,
+                                        isFavorite: favorites.isFavorite(venue.id),
+                                        badge: VenueSignalResolver.badge(for: venue),
+                                        onToggleFavorite: {
+                                            favorites.toggle(venue.id)
+                                            Haptics.tap()
+                                        },
+                                        scale: scale
+                                    )
+                                }
+                                .buttonStyle(.plain)
+                            }
+                        }
+                        .frame(maxWidth: .infinity, alignment: .topLeading)
+                    }
+                    .padding(.top, (50 + 14) * scale)
+                    .padding(.horizontal, 17 * scale)
+                    .padding(.bottom, 112 * scale)
+                    .frame(maxWidth: .infinity, alignment: .topLeading)
                 }
+                .refreshable {
+                    await onRefresh()
+                }
+            }
+            .ignoresSafeArea()
+        }
+    }
 
-                Spacer(minLength: 16)
+    private var htmlCardVenues: [Venue] {
+        let hot = venues.first { $0.noctoState == .hot }
+        let event = venues.first { $0.noctoState == .event }
+        let afterhours = venues.first { $0.noctoState == .afterhours }
+        let fallback = venues.first
 
-                NoctoSignalWave()
-                    .frame(width: 54, height: 54)
+        return [hot ?? fallback, event ?? fallback, afterhours ?? fallback].compactMap { $0 }
+    }
+}
+
+private struct NoctoHTMLHomeBackground: View {
+    var body: some View {
+        LinearGradient(
+            colors: [
+                NoctoTheme.background,
+                Color(hex: "#10070C"),
+                Color(hex: "#21060F")
+            ],
+            startPoint: .topLeading,
+            endPoint: .bottomTrailing
+        )
+    }
+}
+
+private struct NoctoTonightHeader: View {
+    let scale: CGFloat
+
+    var body: some View {
+        HStack(alignment: .center) {
+            VStack(alignment: .leading, spacing: 1 * scale) {
+                Text("Tonight in Sofia")
+                    .font(.system(size: 8 * scale, weight: .bold))
+                    .tracking(3 * scale)
+                    .textCase(.uppercase)
+                    .foregroundStyle(NoctoTheme.textTertiary)
+
+                Text("Добра вечер, Mario ✦")
+                    .font(.system(size: 17 * scale, weight: .heavy))
+                    .foregroundStyle(NoctoTheme.textPrimary)
+                    .lineLimit(1)
+                    .minimumScaleFactor(0.72)
             }
 
-            ViewThatFits(in: .horizontal) {
-                HStack(spacing: 8) {
-                    signalPill(value: "\(venues.count)", label: "заведения")
-                    signalPill(value: primaryTypeLabel, label: "водещ тип")
-                    signalPill(value: lateCoverageLabel, label: "късно покритие")
-                }
+            Spacer(minLength: 8 * scale)
 
-                VStack(alignment: .leading, spacing: 8) {
-                    signalPill(value: "\(venues.count)", label: "заведения")
-                    signalPill(value: primaryTypeLabel, label: "водещ тип")
-                    signalPill(value: lateCoverageLabel, label: "късно покритие")
+            VStack(alignment: .trailing, spacing: 3 * scale) {
+                Text("23:14")
+                    .font(.system(size: 11 * scale, weight: .bold))
+                    .foregroundStyle(NoctoTheme.textPrimary)
+
+                HStack(spacing: 5 * scale) {
+                    Circle()
+                        .fill(NoctoTheme.accent)
+                        .frame(width: 6 * scale, height: 6 * scale)
+
+                    Text("Live")
+                        .font(.system(size: 7 * scale, weight: .bold))
+                        .tracking(2 * scale)
+                        .textCase(.uppercase)
+                        .foregroundStyle(NoctoTheme.accent)
                 }
             }
         }
-        .padding(20)
-        .frame(maxWidth: .infinity, alignment: .leading)
-        .noctoSurface(.hero, cornerRadius: 24)
+        .padding(.horizontal, 12 * scale)
+        .padding(.vertical, 8 * scale)
+        .background(
+            RoundedRectangle(cornerRadius: 11 * scale)
+                .fill(NoctoTheme.accent.opacity(0.05))
+        )
+        .overlay(
+            RoundedRectangle(cornerRadius: 11 * scale)
+                .stroke(NoctoTheme.accent.opacity(0.08), lineWidth: 1)
+        )
+    }
+}
+
+private struct NoctoCityPulseMeter: View {
+    let scale: CGFloat
+
+    var body: some View {
+        VStack(alignment: .leading, spacing: 7 * scale) {
+            HStack {
+                Text("Пулс на София")
+                    .font(.system(size: 8 * scale, weight: .bold))
+                    .tracking(3 * scale)
+                    .textCase(.uppercase)
+                    .foregroundStyle(NoctoTheme.textTertiary)
+
+                Spacer()
+
+                Text("Петък · Висок")
+                    .font(.system(size: 8 * scale, weight: .regular))
+                    .foregroundStyle(NoctoTheme.textSecondary)
+            }
+
+            NoctoHTMLVUBars(scale: scale, small: false, state: .hot)
+                .frame(height: 34 * scale)
+
+            HStack {
+                pulseStat("47", "Активни", tint: NoctoTheme.accent)
+                pulseStat("2.3k", "Онлайн", tint: NoctoTheme.textPrimary)
+                pulseStat("Висок", "Пулс", tint: NoctoTheme.event)
+            }
+        }
+        .padding(.horizontal, 14 * scale)
+        .padding(.top, 11 * scale)
+        .padding(.bottom, 9 * scale)
+        .background(
+            RoundedRectangle(cornerRadius: 13 * scale)
+                .fill(NoctoTheme.accent.opacity(0.04))
+        )
+        .overlay(
+            RoundedRectangle(cornerRadius: 13 * scale)
+                .stroke(NoctoTheme.accent.opacity(0.09), lineWidth: 1)
+        )
     }
 
-    private func signalPill(value: String, label: String) -> some View {
-        VStack(alignment: .leading, spacing: 2) {
+    private func pulseStat(_ value: String, _ label: String, tint: Color) -> some View {
+        VStack(spacing: 1 * scale) {
             Text(value)
-                .font(.headline.weight(.black))
-                .foregroundStyle(NoctoTheme.textPrimary)
+                .font(.system(size: 12 * scale, weight: .black))
+                .tracking(-0.5 * scale)
+                .foregroundStyle(tint)
                 .lineLimit(1)
-                .minimumScaleFactor(0.72)
+                .minimumScaleFactor(0.65)
 
             Text(label)
-                .font(.caption2.weight(.bold))
-                .foregroundStyle(NoctoTheme.textSecondary)
-                .lineLimit(1)
-                .minimumScaleFactor(0.72)
+                .font(.system(size: 6 * scale, weight: .bold))
+                .tracking(2 * scale)
+                .textCase(.uppercase)
+                .foregroundStyle(NoctoTheme.textTertiary)
         }
-        .padding(.horizontal, 12)
-        .padding(.vertical, 10)
-        .noctoSurface(.embeddedPocket, cornerRadius: 14)
-    }
-
-    private var primaryTypeLabel: String {
-        let grouped = Dictionary(grouping: venues, by: \.type)
-        guard let primaryType = grouped.max(by: { lhs, rhs in
-            if lhs.value.count == rhs.value.count {
-                return lhs.key.catalogLabel > rhs.key.catalogLabel
-            }
-            return lhs.value.count < rhs.value.count
-        })?.key else {
-            return "няма"
-        }
-
-        return primaryType.catalogLabel.lowercased()
-    }
-
-    private var lateCoverageLabel: String {
-        let closingMinutes = venues.compactMap { venue -> Int? in
-            guard
-                let opening = Venue.hourMinuteTuple(from: venue.workingHours, at: 0),
-                let closing = Venue.hourMinuteTuple(from: venue.workingHours, at: 1)
-            else { return nil }
-
-            let openingValue = opening.h * 60 + opening.m
-            let closingValue = closing.h * 60 + closing.m
-            return closingValue <= openingValue ? closingValue + 24 * 60 : closingValue
-        }
-
-        guard let latest = closingMinutes.max() else { return "няма" }
-        let normalized = latest % (24 * 60)
-        return "до \(String(format: "%02d:%02d", normalized / 60, normalized % 60))"
-    }
-}
-
-private struct VenueRowView: View {
-    let venue: Venue
-    let isFavorite: Bool
-    let onToggleFavorite: () -> Void
-
-    var body: some View {
-        NavigationLink {
-            VenueDetailView(venue: venue)
-        } label: {
-            VenueCard(
-                venue: venue,
-                isFavorite: isFavorite,
-                badge: VenueSignalResolver.badge(for: venue),
-                onToggleFavorite: onToggleFavorite
-            )
-        }
-        .buttonStyle(.plain)
+        .frame(maxWidth: .infinity)
     }
 }
 
 private struct VenueCatalogLoadingView: View {
     var body: some View {
-        VStack(spacing: 18) {
-            ProgressView()
-                .scaleEffect(1.25)
-                .tint(NoctoTheme.accent)
+        GeometryReader { proxy in
+            let scale = NoctoHTML.scale(for: proxy.size)
 
-            Text("Зареждане на NOCTO каталог...")
-                .font(.headline.weight(.bold))
-                .foregroundStyle(NoctoTheme.textPrimary)
+            ZStack {
+                NoctoHTMLHomeBackground()
+                    .ignoresSafeArea()
+
+                NoctoHTMLStatusBar(scale: scale)
+
+                VStack(spacing: 12 * scale) {
+                    NoctoHTMLVUBars(scale: scale, small: false, state: .hot)
+                        .frame(width: 96 * scale)
+
+                    Text("Зареждане на NOCTO каталог...")
+                        .font(.system(size: 12 * scale, weight: .bold))
+                        .foregroundStyle(NoctoTheme.textPrimary)
+                }
+            }
+            .ignoresSafeArea()
         }
-        .padding(24)
-        .noctoSurface(.raised, cornerRadius: 18)
     }
 }
 
@@ -249,63 +291,79 @@ private struct VenueCatalogFailureView: View {
     let onRetry: () -> Void
 
     var body: some View {
-        VStack(spacing: 16) {
-            ContentUnavailableView(
-                "Проблем при зареждането",
-                systemImage: "exclamationmark.triangle",
-                description: Text(message)
-            )
-            .foregroundStyle(NoctoTheme.textPrimary)
+        GeometryReader { proxy in
+            let scale = NoctoHTML.scale(for: proxy.size)
 
-            Button(action: onRetry) {
-                Label("Опитай отново", systemImage: "arrow.clockwise")
+            ZStack {
+                NoctoHTMLHomeBackground()
+                    .ignoresSafeArea()
+
+                NoctoHTMLStatusBar(scale: scale)
+
+                VStack(spacing: 12 * scale) {
+                    Text("Проблем при зареждането")
+                        .font(.system(size: 16 * scale, weight: .heavy))
+                        .foregroundStyle(NoctoTheme.textPrimary)
+
+                    Text(message)
+                        .font(.system(size: 10 * scale, weight: .semibold))
+                        .foregroundStyle(NoctoTheme.textSecondary)
+                        .multilineTextAlignment(.center)
+
+                    Button(action: onRetry) {
+                        Text("Опитай отново")
+                            .font(.system(size: 9 * scale, weight: .black))
+                            .tracking(2 * scale)
+                            .textCase(.uppercase)
+                    }
+                    .buttonStyle(.borderedProminent)
+                    .tint(NoctoTheme.accent)
+                }
+                .padding(22 * scale)
             }
-            .buttonStyle(.borderedProminent)
-            .tint(NoctoTheme.accent)
+            .ignoresSafeArea()
         }
-        .padding(22)
     }
 }
 
 private struct VenueCatalogEmptyView: View {
     var body: some View {
-        ContentUnavailableView(
-            "Няма налични заведения",
-            systemImage: "mappin.slash",
-            description: Text("Каталогът на NOCTO в момента е празен.")
-        )
-        .foregroundStyle(NoctoTheme.textPrimary)
-        .padding(22)
+        GeometryReader { proxy in
+            let scale = NoctoHTML.scale(for: proxy.size)
+
+            ZStack {
+                NoctoHTMLHomeBackground()
+                    .ignoresSafeArea()
+
+                NoctoHTMLStatusBar(scale: scale)
+
+                Text("Няма налични заведения")
+                    .font(.system(size: 16 * scale, weight: .heavy))
+                    .foregroundStyle(NoctoTheme.textPrimary)
+            }
+            .ignoresSafeArea()
+        }
     }
 }
 
 private struct VenueCatalogStatusBanner: View {
     let message: String
+    let scale: CGFloat
 
     var body: some View {
-        HStack(alignment: .firstTextBaseline, spacing: 10) {
-            Image(systemName: "exclamationmark.triangle.fill")
-                .foregroundStyle(NoctoTheme.accent)
-
-            Text(message)
-                .font(.footnote.weight(.semibold))
-                .foregroundStyle(NoctoTheme.textSecondary)
-                .fixedSize(horizontal: false, vertical: true)
-        }
-        .padding(14)
-        .frame(maxWidth: .infinity, alignment: .leading)
-        .noctoSurface(.embeddedPocket, cornerRadius: 14, tint: NoctoTheme.accent)
-    }
-}
-
-private extension VenueCore.VenueType {
-    var catalogLabel: String {
-        switch self {
-        case .club: return "Клуб"
-        case .bar: return "Бар"
-        case .lounge: return "Лаундж"
-        case .event: return "Събитие"
-        case .other: return "Друго"
-        }
+        Text(message)
+            .font(.system(size: 8 * scale, weight: .semibold))
+            .foregroundStyle(NoctoTheme.gold)
+            .lineLimit(2)
+            .padding(8 * scale)
+            .frame(maxWidth: .infinity, alignment: .leading)
+            .background(
+                RoundedRectangle(cornerRadius: 8 * scale)
+                    .fill(NoctoTheme.gold.opacity(0.055))
+            )
+            .overlay(
+                RoundedRectangle(cornerRadius: 8 * scale)
+                    .stroke(NoctoTheme.gold.opacity(0.18), lineWidth: 1)
+            )
     }
 }
