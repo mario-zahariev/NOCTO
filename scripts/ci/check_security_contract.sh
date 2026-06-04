@@ -67,6 +67,18 @@ if ! grep -q 'NOCTOUITests' .github/workflows/ci.yml; then
   fail=1
 fi
 
+checkout_count="$(grep -RInE 'uses:[[:space:]]*actions/checkout@' .github/workflows | wc -l | tr -d '[:space:]')"
+checkout_hardened_count="$(grep -RInE 'persist-credentials:[[:space:]]*false' .github/workflows | wc -l | tr -d '[:space:]')"
+if [[ "$checkout_count" != "$checkout_hardened_count" ]]; then
+  echo "error: every actions/checkout step must set persist-credentials: false."
+  fail=1
+fi
+
+if grep -RInE 'runs-on:[[:space:]]+.*-latest' .github/workflows; then
+  echo "error: workflows must not use mutable '*-latest' runner labels."
+  fail=1
+fi
+
 if [[ "$fail" -ne 0 ]]; then
   echo "error: security contract guard failed."
   exit 1

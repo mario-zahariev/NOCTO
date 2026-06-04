@@ -12,9 +12,12 @@ jobs:
   swift-package-tests:
     name: Architecture Guard & Unit Tests
     runs-on: macos-15
+    timeout-minutes: 15
     steps:
       - name: Checkout
         uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5
+        with:
+          persist-credentials: false
 
       - name: Guard required security contract
         run: bash scripts/ci/check_security_contract.sh
@@ -50,6 +53,8 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5
+        with:
+          persist-credentials: false
 
       - name: Select Xcode 26.x
         run: |

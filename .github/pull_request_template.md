@@ -13,6 +13,7 @@
 - [ ] `pre-commit run --all-files`
 - [ ] `bash scripts/ci/check_security_contract.sh`
 - [ ] `bash scripts/ci/check_github_actions_pinned.sh`
+- [ ] GitHub required checks are green
 - [ ] UI/snapshot check if UI changed
 
 ## Risk (select one)
@@ -29,6 +30,7 @@ Select one:
 - [ ] No Firebase runtime code added
 - [ ] No direct networking, Keychain, weak crypto, or ATS weakening outside approved boundaries
 - [ ] No unpinned GitHub Actions or mutable container images added
+- [ ] No mutable `*-latest` runners or persisted checkout credentials added
 - [ ] `Package.resolved` remains tracked
 
 ## UI / Snapshot Scope

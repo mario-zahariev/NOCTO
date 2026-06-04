@@ -27,19 +27,37 @@ The `main` branch must stay protected in GitHub.
 Required enforcement:
 
 - required status checks with strict branch currency;
-- `swift-package-tests`;
+- active repository ruleset on `main` with no bypass actors;
+- `Architecture Guard & Unit Tests`;
 - `iOS-build-smoke`;
 - `Gitleaks full-history scan`;
 - `semgrep-oss/scan`;
+- `CodeQL`;
+- `Analyze (actions)`;
+- `Analyze (python)`;
 - pull request review before merge;
 - Code Owner review before merge;
+- at least one approving review;
 - stale review dismissal after new commits;
 - last-push approval;
 - signed commits on `main`;
+- web commit signoff enabled;
 - linear history;
+- squash-only merges;
+- auto-merge disabled;
 - conversation resolution before merge;
 - force pushes disabled;
 - branch deletion disabled;
+- merged branches deleted automatically;
 - admin enforcement enabled.
 
-The CI security contract also guards that key security files, pinned GitHub Actions, Firebase detachment checks, Swift tests, and visual integrity gates are not silently removed.
+Workflow hardening:
+
+- repository workflow permissions stay minimal;
+- external GitHub Actions are pinned to full commit SHAs;
+- container images are pinned to SHA-256 digests;
+- mutable `*-latest` runner labels are not allowed;
+- `actions/checkout` must use `persist-credentials: false`;
+- security jobs have explicit timeouts.
+
+The CI security contract also guards that key security files, pinned GitHub Actions, hardened checkout settings, Firebase detachment checks, Swift tests, and visual integrity gates are not silently removed.
