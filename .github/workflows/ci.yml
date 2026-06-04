@@ -16,6 +16,12 @@ jobs:
       - name: Checkout
         uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5
 
+      - name: Guard required security contract
+        run: bash scripts/ci/check_security_contract.sh
+
+      - name: Guard pinned GitHub Actions
+        run: bash scripts/ci/check_github_actions_pinned.sh
+
       - name: Select Xcode 26.x
         run: |
           XCODE_APP=$(ls -d /Applications/Xcode_26*.app 2>/dev/null | sort -V | tail -n 1)
