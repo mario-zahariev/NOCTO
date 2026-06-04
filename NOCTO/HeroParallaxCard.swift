@@ -6,19 +6,6 @@ struct HeroParallaxCard: View, Equatable {
 
     var body: some View {
         ZStack(alignment: .bottomLeading) {
-            RoundedRectangle(cornerRadius: Self.cornerRadius)
-                .fill(
-                    LinearGradient(
-                        colors: [NoctoTheme.card, NoctoTheme.accent.opacity(0.3)],
-                        startPoint: .topLeading,
-                        endPoint: .bottomTrailing
-                    )
-                )
-                .overlay(
-                    RoundedRectangle(cornerRadius: Self.cornerRadius)
-                        .stroke(NoctoTheme.cardBorder, lineWidth: 1)
-                )
-
             VStack(alignment: .leading, spacing: 4) {
                 Text(title)
                     .font(.headline)
@@ -30,6 +17,8 @@ struct HeroParallaxCard: View, Equatable {
             .padding(16)
         }
         .frame(height: Self.height)
+        .frame(maxWidth: .infinity, alignment: .leading)
+        .noctoSurface(.hero, cornerRadius: Self.cornerRadius)
         .allowsHitTesting(false)
     }
 

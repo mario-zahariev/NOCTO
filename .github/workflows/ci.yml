@@ -10,10 +10,30 @@ permissions:
 
 jobs:
   swift-package-tests:
+    name: Architecture Guard & Unit Tests
     runs-on: macos-15
+    timeout-minutes: 15
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5
+        with:
+          persist-credentials: false
+
+      - name: Guard required security contract
+        run: bash scripts/ci/check_security_contract.sh
+
+      - name: Guard pinned GitHub Actions
+        run: bash scripts/ci/check_github_actions_pinned.sh
+
+      - name: Select Xcode 26.x
+        run: |
+          XCODE_APP=$(ls -d /Applications/Xcode_26*.app 2>/dev/null | sort -V | tail -n 1)
+          if [ -z "$XCODE_APP" ]; then
+            echo "Xcode 26.x not found on runner."
+            ls -1 /Applications/Xcode*.app || true
+            exit 1
+          fi
+          sudo xcode-select -s "$XCODE_APP/Contents/Developer"
 
       - name: Swift Version
         run: swift --version
@@ -29,9 +49,12 @@ jobs:
 
   iOS-build-smoke:
     runs-on: macos-15
+    timeout-minutes: 20
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5
+        with:
+          persist-credentials: false
 
       - name: Select Xcode 26.x
         run: |
@@ -56,21 +79,19 @@ jobs:
             build
 
       - name: Visual Integrity Gate
+        timeout-minutes: 12
         env:
           NOCTO_RECORD_SNAPSHOTS: "0"
+          TEST_RUNNER_NOCTO_RECORD_SNAPSHOTS: "0"
           NOCTO_SNAPSHOT_PIXEL_TOLERANCE: "0.03"
           TEST_RUNNER_NOCTO_SNAPSHOT_PIXEL_TOLERANCE: "0.03"
         run: |
-          run_visual_snapshot() {
-            xcodebuild \
-              -project NOCTO.xcodeproj \
-              -scheme NOCTO \
-              -destination 'platform=iOS Simulator,name=iPhone 17' \
-              -only-testing:"$1" \
-              test
-          }
-
-          run_visual_snapshot 'NOCTOUITests/LiveActivitySnapshotTests'
-          run_visual_snapshot 'NOCTOUITests/ScreenSnapshotTests/testHomeView_snapshot'
-          run_visual_snapshot 'NOCTOUITests/ScreenSnapshotTests/testNightPulseView_snapshot'
-          run_visual_snapshot 'NOCTOUITests/ScreenSnapshotTests/testProfileView_snapshot'
+          xcodebuild \
+            -project NOCTO.xcodeproj \
+            -scheme NOCTO \
+            -destination 'platform=iOS Simulator,name=iPhone 17' \
+            -only-testing:NOCTOUITests/LiveActivitySnapshotTests \
+            -only-testing:NOCTOUITests/ScreenSnapshotTests/testHomeView_snapshot \
+            -only-testing:NOCTOUITests/ScreenSnapshotTests/testNightPulseView_snapshot \
+            -only-testing:NOCTOUITests/ScreenSnapshotTests/testProfileView_snapshot \
+            test

@@ -1,6 +1,6 @@
 import Foundation
 
-public enum LocalVenueRepositoryError: LocalizedError, Equatable {
+public enum LocalVenueRepositoryError: LocalizedError, Equatable, Sendable {
     case missingResource
     case invalidData
     case decodingFailure
@@ -20,11 +20,11 @@ public enum LocalVenueRepositoryError: LocalizedError, Equatable {
     }
 }
 
-public protocol VenueRepositoryProtocol {
+public protocol VenueRepositoryProtocol: Sendable {
     func loadVenues() throws -> [Venue]
 }
 
-public struct LocalVenueRepository: VenueRepositoryProtocol {
+public struct LocalVenueRepository: VenueRepositoryProtocol, @unchecked Sendable {
     private let bundle: Bundle
     private let resourceName: String
     private let resourceExtension: String

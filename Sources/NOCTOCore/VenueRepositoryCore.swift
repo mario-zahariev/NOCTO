@@ -1,11 +1,11 @@
 import Foundation
 
-public enum VenueRepositoryCoreError: Error, Equatable {
+public enum VenueRepositoryCoreError: Error, Equatable, Sendable {
     case invalidJSON
     case noValidVenues
 }
 
-public struct VenueRepositoryCore {
+public struct VenueRepositoryCore: Sendable {
     public init() {}
 
     public func decode(from data: Data) throws -> [Venue] {

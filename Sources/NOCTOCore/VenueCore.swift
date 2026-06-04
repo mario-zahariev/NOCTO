@@ -1,8 +1,8 @@
 import Foundation
 import CoreLocation
 
-public struct VenueCore: Codable, Equatable, Identifiable {
-    public enum VenueType: String, Codable, CaseIterable {
+public struct VenueCore: Codable, Equatable, Identifiable, Sendable {
+    public enum VenueType: String, Codable, CaseIterable, Sendable {
         case club
         case bar
         case lounge

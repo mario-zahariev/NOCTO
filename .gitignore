@@ -6,9 +6,6 @@ DerivedData/
 *.xcodeproj/project.xcworkspace/xcuserdata/
 *.xcuserstate
 
-# SwiftPM
-Package.resolved
-
 # Secrets and local config
 .env
 .env.local
@@ -16,8 +13,17 @@ Package.resolved
 .env.test
 .env.production
 .env.*.local
+Secrets.plist
+Config.local.json
 NOCTO/GoogleService-Info.plist
 NOCTO/GoogleService-Info.local.plist
+google-services.json
+*.p8
+*.p12
+*.mobileprovision
+*.provisionprofile
+*.pem
+*.key
 
 # macOS
 .DS_Store

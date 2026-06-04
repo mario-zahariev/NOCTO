@@ -1,0 +1,17 @@
+# Repository-wide ownership guard.
+# GitHub enforces this only when branch protection requires Code Owner review.
+* @mario-zahariev
+
+.github/ @mario-zahariev
+scripts/ci/ @mario-zahariev
+
+.gitleaks.toml @mario-zahariev
+.semgrep.yml @mario-zahariev
+.pre-commit-config.yaml @mario-zahariev
+Package.resolved @mario-zahariev
+SECURITY.md @mario-zahariev
+
+NOCTO/ @mario-zahariev
+Sources/ @mario-zahariev
+Tests/ @mario-zahariev
+NOCTOUITests/ @mario-zahariev

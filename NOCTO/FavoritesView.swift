@@ -13,11 +13,7 @@ struct FavoritesView: View {
         NavigationStack {
             Group {
                 if favoriteVenues.isEmpty {
-                    ContentUnavailableView(
-                        "Няма запазени места",
-                        systemImage: "heart.slash",
-                        description: Text("Запазвай места от Начало или Карта и ги дръж тук за вечерта.")
-                    )
+                    EmptyFavoritesSignalView()
                 } else {
                     ScrollView {
                         LazyVStack(spacing: 14) {
@@ -48,5 +44,38 @@ struct FavoritesView: View {
             .background(NoctoTheme.background.ignoresSafeArea())
             .navigationTitle("Любими")
         }
+    }
+}
+
+private struct EmptyFavoritesSignalView: View {
+    var body: some View {
+        VStack(spacing: 18) {
+            ZStack {
+                Circle()
+                    .fill(NoctoTheme.accent.opacity(0.14))
+                    .frame(width: 76, height: 76)
+
+                Text("✦")
+                    .font(.system(size: 36, weight: .black))
+                    .foregroundStyle(NoctoTheme.accent)
+            }
+
+            VStack(spacing: 8) {
+                Text("Още нямаш избрани сигнали")
+                    .font(.title3.weight(.black))
+                    .foregroundStyle(NoctoTheme.textPrimary)
+                    .multilineTextAlignment(.center)
+
+                Text("Запази място със Spark, за да го държиш под ръка тази вечер.")
+                    .font(.subheadline)
+                    .foregroundStyle(NoctoTheme.textSecondary)
+                    .multilineTextAlignment(.center)
+                    .fixedSize(horizontal: false, vertical: true)
+            }
+        }
+        .padding(24)
+        .frame(maxWidth: .infinity)
+        .noctoSurface(.raised, cornerRadius: 24)
+        .padding(.horizontal, 18)
     }
 }
