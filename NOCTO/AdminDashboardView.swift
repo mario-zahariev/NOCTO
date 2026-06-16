@@ -1,3 +1,4 @@
+#if DEBUG
 import SwiftUI
 import NOCTOCore
 
@@ -51,3 +52,4 @@ struct AdminDashboardView: View {
         }
     }
 }
+#endif
