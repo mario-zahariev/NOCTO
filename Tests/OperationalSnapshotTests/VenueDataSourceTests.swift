@@ -17,6 +17,14 @@ final class VenueDataSourceTests: XCTestCase {
         XCTAssertEqual(venues, expected)
     }
 
+    func testLocalSourceMapsRepositoryError() async {
+        let sut = LocalVenueDataSource(repository: StubLocalRepository(result: .failure(.missingResource)))
+
+        await assertVenueDataSourceError(.local(.missingResource)) {
+            _ = try await sut.loadVenues()
+        }
+    }
+
     @MainActor
     func testLocalSourceLoadsInjectedRepositoryOffMainThread() async throws {
         let repository = ThreadCapturingLocalRepository(result: .success([makeVenue(name: "Background Club")]))
@@ -38,17 +46,16 @@ final class VenueDataSourceTests: XCTestCase {
     }
 
     func testRemoteSourceDecodesValidVenueJSON() async throws {
-        let sut = RemoteVenueDataSource(
-            url: remoteURL,
-            networkClient: StubNetworkClient(
-                result: .success((validVenueData(name: "Remote Club"), try makeHTTPResponse(statusCode: 200)))
-            )
+        let networkClient = StubNetworkClient(
+            result: .success((validVenueData(name: "Remote Club"), try makeHTTPResponse(statusCode: 200)))
         )
+        let sut = RemoteVenueDataSource(url: remoteURL, networkClient: networkClient)
 
         let venues = try await sut.loadVenues()
 
         XCTAssertEqual(venues.count, 1)
         XCTAssertEqual(venues.first?.name, "Remote Club")
+        XCTAssertEqual(networkClient.requestedURLs, [remoteURL])
     }
 
     func testRemoteSourceFiltersInvalidVenuesThroughCoreDecoder() async throws {
@@ -288,10 +295,16 @@ private final class StubVenueDataSource: VenueDataSource {
     }
 }
 
-private struct StubNetworkClient: VenueNetworkClient {
+private final class StubNetworkClient: VenueNetworkClient {
     let result: Result<(Data, URLResponse), Error>
+    private(set) var requestedURLs: [URL] = []
+
+    init(result: Result<(Data, URLResponse), Error>) {
+        self.result = result
+    }
 
     func data(from url: URL) async throws -> (Data, URLResponse) {
-        try result.get()
+        requestedURLs.append(url)
+        return try result.get()
     }
 }
