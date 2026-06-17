@@ -10,10 +10,10 @@ permissions:
 
 jobs:
   swift-package-tests:
-    runs-on: macos-15
+    runs-on: macos-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@93cb6efe18208431cddfb8368fd83d5badbf9bfd
 
       - name: Swift Version
         run: swift --version
@@ -28,10 +28,10 @@ jobs:
         run: swift test
 
   iOS-build-smoke:
-    runs-on: macos-15
+    runs-on: macos-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@93cb6efe18208431cddfb8368fd83d5badbf9bfd
 
       - name: Select Xcode 26.x
         run: |
