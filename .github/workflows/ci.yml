@@ -9,7 +9,8 @@ permissions:
   contents: read
 
 jobs:
-  swift-package-tests:
+  architecture-guard-unit-tests:
+    name: Architecture Guard & Unit Tests
     runs-on: macos-latest
     steps:
       - name: Checkout
@@ -28,6 +29,49 @@ jobs:
 
       - name: Run Unit Tests
         run: swift test
+
+  gitleaks-full-history-scan:
+    name: Gitleaks full-history scan
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@93cb6efe18208431cddfb8368fd83d5badbf9bfd
+        with:
+          persist-credentials: false
+          fetch-depth: 0
+
+      - name: Install Gitleaks
+        env:
+          GITLEAKS_VERSION: "8.28.0"
+        run: |
+          curl -sSfL -o gitleaks.tar.gz \
+            "https://github.com/gitleaks/gitleaks/releases/download/v${GITLEAKS_VERSION}/gitleaks_${GITLEAKS_VERSION}_linux_x64.tar.gz"
+          curl -sSfL -o gitleaks_checksums.txt \
+            "https://github.com/gitleaks/gitleaks/releases/download/v${GITLEAKS_VERSION}/gitleaks_${GITLEAKS_VERSION}_checksums.txt"
+          grep "gitleaks_${GITLEAKS_VERSION}_linux_x64.tar.gz" gitleaks_checksums.txt | sha256sum -c -
+          tar -xzf gitleaks.tar.gz gitleaks
+          sudo mv gitleaks /usr/local/bin/gitleaks
+          gitleaks version
+
+      - name: Run Gitleaks
+        run: gitleaks detect --source . --redact --no-banner --verbose
+
+  semgrep-oss-scan:
+    name: semgrep-oss/scan
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@93cb6efe18208431cddfb8368fd83d5badbf9bfd
+        with:
+          persist-credentials: false
+
+      - name: Install Semgrep
+        run: python3 -m pip install --no-cache-dir semgrep==1.167.0
+
+      - name: Run Semgrep OSS scan
+        env:
+          SEMGREP_SEND_METRICS: "off"
+        run: semgrep scan --config=p/ci --error --metrics=off .
 
   iOS-build-smoke:
     runs-on: macos-latest
