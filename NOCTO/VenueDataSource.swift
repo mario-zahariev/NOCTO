@@ -12,17 +12,26 @@ enum VenueDataSourceError: LocalizedError, Equatable {
     var errorDescription: String? {
         switch self {
         case .local(let error):
-            return error.errorDescription
+            switch error {
+            case .missingResource:
+                return "Локалният файл venues.json не е намерен."
+            case .invalidData:
+                return "Локалният venues.json е празен или невалиден."
+            case .decodingFailure:
+                return "Данните за местата не могат да бъдат прочетени."
+            case .noValidVenues:
+                return "Не са намерени валидни места след проверка."
+            }
         case .invalidResponse:
-            return "Remote venue data returned an invalid response."
+            return "Отдалеченият източник върна невалиден отговор."
         case .nonSuccessStatus(let statusCode):
-            return "Remote venue data returned HTTP \(statusCode)."
+            return "Отдалеченият източник върна HTTP \(statusCode)."
         case .emptyData:
-            return "Remote venue data was empty."
+            return "Отдалеченият източник върна празни данни."
         case .decodingFailure:
-            return "Unable to decode remote venue data."
+            return "Отдалечените данни за местата не могат да бъдат прочетени."
         case .networkFailure(let reason):
-            return "Remote venue data request failed: \(reason)"
+            return "Заявката към отдалечения източник не успя: \(reason)"
         }
     }
 }
@@ -45,10 +54,19 @@ struct LocalVenueDataSource: VenueDataSource {
     }
 
     func loadVenues() async throws -> [Venue] {
-        do {
-            return try repository.loadVenues()
-        } catch let error as LocalVenueRepositoryError {
-            throw VenueDataSourceError.local(error)
+        let repository = repository
+        let task = Task.detached(priority: .userInitiated) {
+            do {
+                return try repository.loadVenues()
+            } catch let error as LocalVenueRepositoryError {
+                throw VenueDataSourceError.local(error)
+            }
+        }
+
+        return try await withTaskCancellationHandler {
+            try await task.value
+        } onCancel: {
+            task.cancel()
         }
     }
 }
@@ -74,6 +92,8 @@ struct RemoteVenueDataSource: VenueDataSource {
 
         do {
             (data, response) = try await networkClient.data(from: url)
+        } catch let error as CancellationError {
+            throw error
         } catch {
             throw VenueDataSourceError.networkFailure(error.localizedDescription)
         }

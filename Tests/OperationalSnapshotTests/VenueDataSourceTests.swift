@@ -17,6 +17,16 @@ final class VenueDataSourceTests: XCTestCase {
         XCTAssertEqual(venues, expected)
     }
 
+    @MainActor
+    func testLocalSourceLoadsInjectedRepositoryOffMainThread() async throws {
+        let repository = ThreadCapturingLocalRepository(result: .success([makeVenue(name: "Background Club")]))
+        let sut = LocalVenueDataSource(repository: repository)
+
+        _ = try await sut.loadVenues()
+
+        XCTAssertEqual(repository.didLoadOnMainThread, false)
+    }
+
     func testRepositoryDelegatesToAsyncSource() async throws {
         let source = StubVenueDataSource(result: .success([makeVenue(name: "Delegated Club")]))
         let sut = VenueRepository(dataSource: source)
@@ -143,6 +153,49 @@ final class VenueDataSourceTests: XCTestCase {
         }
     }
 
+    func testRemoteSourceRethrowsCancellation() async {
+        let sut = RemoteVenueDataSource(
+            url: remoteURL,
+            networkClient: StubNetworkClient(result: .failure(CancellationError()))
+        )
+
+        do {
+            _ = try await sut.loadVenues()
+            XCTFail("Expected cancellation.")
+        } catch is CancellationError {
+            return
+        } catch {
+            XCTFail("Expected CancellationError, got \(error).")
+        }
+    }
+
+    func testVenueDataSourceErrorDescriptionsAreLocalizedForUserDisplay() {
+        XCTAssertEqual(
+            VenueDataSourceError.local(.missingResource).errorDescription,
+            "Локалният файл venues.json не е намерен."
+        )
+        XCTAssertEqual(
+            VenueDataSourceError.invalidResponse.errorDescription,
+            "Отдалеченият източник върна невалиден отговор."
+        )
+        XCTAssertEqual(
+            VenueDataSourceError.nonSuccessStatus(503).errorDescription,
+            "Отдалеченият източник върна HTTP 503."
+        )
+        XCTAssertEqual(
+            VenueDataSourceError.emptyData.errorDescription,
+            "Отдалеченият източник върна празни данни."
+        )
+        XCTAssertEqual(
+            VenueDataSourceError.decodingFailure.errorDescription,
+            "Отдалечените данни за местата не могат да бъдат прочетени."
+        )
+        XCTAssertEqual(
+            VenueDataSourceError.networkFailure("offline").errorDescription,
+            "Заявката към отдалечения източник не успя: offline"
+        )
+    }
+
     private func assertVenueDataSourceError(
         _ expected: VenueDataSourceError,
         operation: () async throws -> Void,
@@ -204,6 +257,20 @@ private struct StubLocalRepository: VenueRepositoryProtocol {
 
     func loadVenues() throws -> [Venue] {
         try result.get()
+    }
+}
+
+private final class ThreadCapturingLocalRepository: VenueRepositoryProtocol {
+    private let result: Result<[Venue], LocalVenueRepositoryError>
+    private(set) var didLoadOnMainThread: Bool?
+
+    init(result: Result<[Venue], LocalVenueRepositoryError>) {
+        self.result = result
+    }
+
+    func loadVenues() throws -> [Venue] {
+        didLoadOnMainThread = Thread.isMainThread
+        return try result.get()
     }
 }
 
