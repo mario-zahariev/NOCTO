@@ -22,7 +22,8 @@
 - Include problem statement and test notes.
 - Add screenshots for UI changes.
 - Ensure CI is green before merge.
-- Expect CODEOWNERS to request `@mario-zahariev` review for all PRs.
+- Expect CODEOWNERS to request `@mario-zahariev` review for code, CI,
+  package, data, script, and test changes.
 - Do not force-merge or use admin override for normal work.
 
 ## Workflow Labels
@@ -62,3 +63,13 @@ including:
 
 If a PR appears green but cannot merge, compare the PR checks with the required
 contexts configured for `main` branch protection.
+
+## Documentation and Coverage
+
+The `Docs and Coverage` workflow can generate:
+
+- a Swift coverage JSON artifact for the package tests
+- a DocC archive artifact for `NOCTOCore`
+
+It runs automatically when package sources, tests, `Package.swift`, or the
+workflow itself change, and can also be started manually from GitHub Actions.

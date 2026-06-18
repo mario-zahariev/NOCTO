@@ -1,1 +1,9 @@
-* @mario-zahariev
+# Ownership by area.
+/.github/** @mario-zahariev
+/NOCTO/** @mario-zahariev
+/Sources/** @mario-zahariev
+/Tests/** @mario-zahariev
+/NOCTOUITests/** @mario-zahariev
+/scripts/** @mario-zahariev
+/Package.swift @mario-zahariev
+/venues.json @mario-zahariev

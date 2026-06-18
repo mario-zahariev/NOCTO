@@ -224,6 +224,17 @@ xcodebuild -project NOCTO.xcodeproj \
 
 Dependabot keeps GitHub Actions runners and the Swift package graph current on a weekly cadence.
 
+### Documentation and Coverage Artifacts
+
+The `Docs and Coverage` workflow generates review artifacts when package sources,
+tests, `Package.swift`, or the workflow itself change:
+
+- Swift package coverage JSON
+- `NOCTOCore` DocC archive
+
+It can also be started manually from GitHub Actions when documentation or
+coverage evidence is needed outside a pull request.
+
 ---
 
 ## Linting
