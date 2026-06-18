@@ -7,6 +7,63 @@ struct VenueTypeSignal: Identifiable {
     let count: Int
 }
 
+enum NOCTOVenueBadge: Equatable {
+    case closesAt(String)
+    case startsAt(String)
+    case lateWave
+    case quietPick
+
+    var label: String {
+        switch self {
+        case .closesAt(let time): return "До \(time)"
+        case .startsAt(let time): return "След \(time)"
+        case .lateWave: return "Късна вълна"
+        case .quietPick: return "Тих избор"
+        }
+    }
+
+    var systemImage: String {
+        switch self {
+        case .closesAt: return "moon.stars"
+        case .startsAt: return "clock.badge"
+        case .lateWave: return "waveform.path.ecg"
+        case .quietPick: return "sparkles"
+        }
+    }
+}
+
+enum VenueSignalResolver {
+    static func badge(for venue: Venue) -> NOCTOVenueBadge? {
+        guard
+            let opening = Venue.hourMinuteTuple(from: venue.workingHours, at: 0),
+            let closing = Venue.hourMinuteTuple(from: venue.workingHours, at: 1)
+        else {
+            return nil
+        }
+
+        let openingMinutes = opening.h * 60 + opening.m
+        let closingMinutes = closing.h * 60 + closing.m
+
+        if closingMinutes < 3 * 60 {
+            return .quietPick
+        }
+
+        if venue.type == .club {
+            return .lateWave
+        }
+
+        if closingMinutes <= openingMinutes {
+            return .closesAt(Self.formatted(closing))
+        }
+
+        return .startsAt(Self.formatted(opening))
+    }
+
+    private static func formatted(_ tuple: (h: Int, m: Int)) -> String {
+        String(format: "%02d:%02d", tuple.h, tuple.m)
+    }
+}
+
 enum ConfidenceSource: Equatable {
     case hardData
     case mixedData
@@ -148,8 +205,8 @@ struct OperationalSnapshot {
         var openingHourCounts: [Int: Int] = [:]
 
         for venue in venues {
-            guard let opening = Self.hourAndMinute(from: venue.workingHours, at: 0) else { continue }
-            openingHourCounts[opening.hour, default: 0] += 1
+            guard let opening = Venue.hourMinuteTuple(from: venue.workingHours, at: 0) else { continue }
+            openingHourCounts[opening.h, default: 0] += 1
         }
 
         guard
@@ -163,7 +220,7 @@ struct OperationalSnapshot {
             return "—"
         }
 
-        return "After \(String(format: "%02d", modalOpeningHour)):00"
+        return "след \(String(format: "%02d", modalOpeningHour)):00"
     }
 
     private var mixedConfidenceScore: Int {
@@ -294,29 +351,29 @@ struct OperationalSnapshot {
 
     nonisolated private static func isLateNightVenue(_ venue: Venue) -> Bool {
         guard
-            let opening = hourAndMinute(from: venue.workingHours, at: 0),
-            let closing = hourAndMinute(from: venue.workingHours, at: 1)
+            let opening = Venue.hourMinuteTuple(from: venue.workingHours, at: 0),
+            let closing = Venue.hourMinuteTuple(from: venue.workingHours, at: 1)
         else {
             return false
         }
 
-        let closesNextDay = closing.hour < opening.hour ||
-            (closing.hour == opening.hour && closing.minute <= opening.minute)
-        let closingMinuteOfDay = closing.hour * 60 + closing.minute
+        let closesNextDay = closing.h < opening.h ||
+            (closing.h == opening.h && closing.m <= opening.m)
+        let closingMinuteOfDay = closing.h * 60 + closing.m
         return closesNextDay && (180..<720).contains(closingMinuteOfDay)
     }
 
     nonisolated private static func lateNightCoverageHours(for venue: Venue) -> Int? {
         guard
             isLateNightVenue(venue),
-            let opening = hourAndMinute(from: venue.workingHours, at: 0),
-            let closing = hourAndMinute(from: venue.workingHours, at: 1)
+            let opening = Venue.hourMinuteTuple(from: venue.workingHours, at: 0),
+            let closing = Venue.hourMinuteTuple(from: venue.workingHours, at: 1)
         else {
             return nil
         }
 
-        let openingMinutes = opening.hour * 60 + opening.minute
-        var closingMinutes = closing.hour * 60 + closing.minute
+        let openingMinutes = opening.h * 60 + opening.m
+        var closingMinutes = closing.h * 60 + closing.m
 
         if closingMinutes <= openingMinutes {
             closingMinutes += 24 * 60
@@ -325,25 +382,5 @@ struct OperationalSnapshot {
         let durationMinutes = closingMinutes - openingMinutes
         guard durationMinutes > 0 else { return nil }
         return Int(ceil(Double(durationMinutes) / 60.0))
-    }
-
-    nonisolated private static func hourAndMinute(from workingHours: String, at index: Int) -> (hour: Int, minute: Int)? {
-        let parts = workingHours.split(separator: "-")
-        guard parts.indices.contains(index) else { return nil }
-
-        let timeParts = parts[index]
-            .trimmingCharacters(in: .whitespacesAndNewlines)
-            .split(separator: ":")
-        guard
-            timeParts.count == 2,
-            let hour = Int(timeParts[0].trimmingCharacters(in: .whitespacesAndNewlines)),
-            let minute = Int(timeParts[1].trimmingCharacters(in: .whitespacesAndNewlines)),
-            (0...23).contains(hour),
-            (0...59).contains(minute)
-        else {
-            return nil
-        }
-
-        return (hour, minute)
     }
 }

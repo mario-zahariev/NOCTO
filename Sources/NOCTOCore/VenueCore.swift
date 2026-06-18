@@ -104,7 +104,7 @@ public struct VenueCore: Codable, Equatable, Identifiable {
         return String(label.prefix(30))
     }
 
-    private static func normalizedTime(from workingHours: String, at index: Int) -> String? {
+    public static func hourMinuteTuple(from workingHours: String, at index: Int) -> (h: Int, m: Int)? {
         let parts = workingHours.split(separator: "-")
         guard parts.indices.contains(index) else { return nil }
 
@@ -122,7 +122,12 @@ public struct VenueCore: Codable, Equatable, Identifiable {
             return nil
         }
 
-        return String(format: "%02d:%02d", hour, minute)
+        return (h: hour, m: minute)
+    }
+
+    private static func normalizedTime(from workingHours: String, at index: Int) -> String? {
+        guard let tuple = hourMinuteTuple(from: workingHours, at: index) else { return nil }
+        return String(format: "%02d:%02d", tuple.h, tuple.m)
     }
 }
 

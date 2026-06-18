@@ -17,7 +17,7 @@ struct LockScreenSignalView: View {
     var body: some View {
         VStack(alignment: .leading, spacing: 10) {
             if state.integrityState == .offlineLowConfidence {
-                Text("OFFLINE - LOW CONFIDENCE")
+                Text(state.integrityState.bannerLabel)
                     .font(.headline.weight(.semibold))
                     .foregroundStyle(PulseActivityPalette.neutral)
             } else {
@@ -31,7 +31,7 @@ struct LockScreenSignalView: View {
                 }
 
                 SignalProgressBar(value: state.confidenceScore, active: true)
-                Text("Валидация: \(state.sourceLabel)")
+                Text("Източник: \(state.sourceLabel)")
                     .font(.caption.weight(.semibold))
                     .foregroundStyle(PulseActivityPalette.textSecondary)
             }
@@ -48,7 +48,7 @@ struct ExpandedSignalHubView: View {
     var body: some View {
         VStack(alignment: .leading, spacing: 10) {
             if state.integrityState == .offlineLowConfidence {
-                Text("OFFLINE - LOW CONFIDENCE")
+                Text(state.integrityState.bannerLabel)
                     .font(.headline.weight(.semibold))
                     .foregroundStyle(PulseActivityPalette.neutral)
             } else {
@@ -61,7 +61,7 @@ struct ExpandedSignalHubView: View {
                         .font(.subheadline.weight(.semibold))
                         .foregroundStyle(PulseActivityPalette.textSecondary)
                 }
-                Text("Валидация: \(state.sourceLabel)")
+                Text("Източник: \(state.sourceLabel)")
                     .font(.caption.weight(.semibold))
                     .foregroundStyle(PulseActivityPalette.textSecondary)
             }

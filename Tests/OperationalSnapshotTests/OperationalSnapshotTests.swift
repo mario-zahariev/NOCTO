@@ -38,7 +38,7 @@ final class OperationalSnapshotTests: XCTestCase {
             venues: venues
         )
 
-        XCTAssertEqual(snapshot.bestAfterTime, "After 23:00")
+        XCTAssertEqual(snapshot.bestAfterTime, "след 23:00")
     }
 
     func testConfidenceScoreIsHardWhenValidationIsFull() {
@@ -78,7 +78,7 @@ final class OperationalSnapshotTests: XCTestCase {
         )
 
         XCTAssertEqual(snapshot.confidenceSource, .mixedData)
-        XCTAssertTrue((70...90).contains(snapshot.confidenceScore))
+        XCTAssertEqual(snapshot.confidenceScore, 85)
     }
 
     func testConfidenceScoreStaysBelowSixtyForSoftData() {
@@ -92,6 +92,207 @@ final class OperationalSnapshotTests: XCTestCase {
         XCTAssertEqual(snapshot.confidenceSource, .softData)
         XCTAssertTrue(snapshot.confidenceScore < 60)
         XCTAssertEqual(snapshot.signalConfidenceLabel, "Ниска")
+    }
+
+    func testBestAfterTimeReturnsDashWhenWorkingHoursAreInvalid() {
+        let venues: [Venue] = [
+            Venue(
+                id: UUID(),
+                name: "Invalid A",
+                type: .club,
+                latitude: 42.6977,
+                longitude: 23.3219,
+                workingHours: "N/A"
+            ),
+            Venue(
+                id: UUID(),
+                name: "Invalid B",
+                type: .bar,
+                latitude: 42.6977,
+                longitude: 23.3219,
+                workingHours: "xx:yy-04:00"
+            )
+        ]
+
+        let snapshot = OperationalSnapshot(
+            loadLatencyMs: 50,
+            didLoadSucceed: true,
+            lastErrorMessage: nil,
+            venues: venues
+        )
+
+        XCTAssertEqual(snapshot.bestAfterTime, "—")
+    }
+
+    func testBestAfterTimeUsesEarlierHourWhenModalCountsTie() {
+        let venues: [Venue] = [
+            Venue(
+                id: UUID(),
+                name: "Club A",
+                type: .club,
+                latitude: 42.6977,
+                longitude: 23.3219,
+                workingHours: "22:00-03:00"
+            ),
+            Venue(
+                id: UUID(),
+                name: "Club B",
+                type: .club,
+                latitude: 42.6977,
+                longitude: 23.3219,
+                workingHours: "22:30-04:00"
+            ),
+            Venue(
+                id: UUID(),
+                name: "Bar C",
+                type: .bar,
+                latitude: 42.6977,
+                longitude: 23.3219,
+                workingHours: "23:00-05:00"
+            ),
+            Venue(
+                id: UUID(),
+                name: "Bar D",
+                type: .bar,
+                latitude: 42.6977,
+                longitude: 23.3219,
+                workingHours: "23:30-04:00"
+            )
+        ]
+
+        let snapshot = OperationalSnapshot(
+            loadLatencyMs: 80,
+            didLoadSucceed: true,
+            lastErrorMessage: nil,
+            venues: venues
+        )
+
+        XCTAssertEqual(snapshot.bestAfterTime, "след 22:00")
+    }
+
+    func testLateNightCoverageHoursUsesMaxValidDurationOnly() {
+        let venues: [Venue] = [
+            Venue(
+                id: UUID(),
+                name: "Club A",
+                type: .club,
+                latitude: 42.6977,
+                longitude: 23.3219,
+                workingHours: "23:00-03:00"
+            ),
+            Venue(
+                id: UUID(),
+                name: "Club B",
+                type: .club,
+                latitude: 42.6977,
+                longitude: 23.3219,
+                workingHours: "22:00-05:30"
+            ),
+            Venue(
+                id: UUID(),
+                name: "Bar C",
+                type: .bar,
+                latitude: 42.6977,
+                longitude: 23.3219,
+                workingHours: "20:00-00:30"
+            ),
+            Venue(
+                id: UUID(),
+                name: "Invalid",
+                type: .other,
+                latitude: 42.6977,
+                longitude: 23.3219,
+                workingHours: "n/a"
+            )
+        ]
+
+        let snapshot = OperationalSnapshot(
+            loadLatencyMs: 70,
+            didLoadSucceed: true,
+            lastErrorMessage: nil,
+            venues: venues
+        )
+
+        XCTAssertEqual(snapshot.lateNightVenueCount, 2)
+        XCTAssertEqual(snapshot.lateNightCoverageHours, 8)
+    }
+
+    func testVenueSignalResolverReturnsLateWaveForClubWithoutDuplicatingCloseTime() {
+        let venue = Venue(
+            id: UUID(),
+            name: "Club X",
+            type: .club,
+            latitude: 42.6977,
+            longitude: 23.3219,
+            workingHours: "23:00-06:00"
+        )
+
+        XCTAssertEqual(VenueSignalResolver.badge(for: venue), .lateWave)
+    }
+
+    func testVenueSignalResolverReturnsQuietPickForEarlyClosingBar() {
+        let venue = Venue(
+            id: UUID(),
+            name: "Bar Friday",
+            type: .bar,
+            latitude: 42.6977,
+            longitude: 23.3219,
+            workingHours: "18:00-02:00"
+        )
+
+        XCTAssertEqual(VenueSignalResolver.badge(for: venue), .quietPick)
+    }
+
+    func testVenueSignalResolverDoesNotReturnQuietPickAtExactlyThreeAM() {
+        let venue = Venue(
+            id: UUID(),
+            name: "Bar Boundary",
+            type: .bar,
+            latitude: 42.6977,
+            longitude: 23.3219,
+            workingHours: "18:00-03:00"
+        )
+
+        XCTAssertEqual(VenueSignalResolver.badge(for: venue), .closesAt("03:00"))
+    }
+
+    func testVenueSignalResolverReturnsClosingBadgeForNonClubLateClose() {
+        let venue = Venue(
+            id: UUID(),
+            name: "Terminal 1",
+            type: .event,
+            latitude: 42.6977,
+            longitude: 23.3219,
+            workingHours: "21:00-04:00"
+        )
+
+        XCTAssertEqual(VenueSignalResolver.badge(for: venue), .closesAt("04:00"))
+    }
+
+    func testVenueSignalResolverFallsBackToStartTimeForSameDayVenue() {
+        let venue = Venue(
+            id: UUID(),
+            name: "Early Lounge",
+            type: .lounge,
+            latitude: 42.6977,
+            longitude: 23.3219,
+            workingHours: "17:00-23:00"
+        )
+
+        XCTAssertEqual(VenueSignalResolver.badge(for: venue), .startsAt("17:00"))
+    }
+
+    func testVenueSignalResolverReturnsNilForInvalidWorkingHours() {
+        let venue = Venue(
+            id: UUID(),
+            name: "Invalid",
+            type: .bar,
+            latitude: 42.6977,
+            longitude: 23.3219,
+            workingHours: "n/a"
+        )
+
+        XCTAssertNil(VenueSignalResolver.badge(for: venue))
     }
 
     private func makeVenues(

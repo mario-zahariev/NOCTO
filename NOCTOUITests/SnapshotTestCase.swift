@@ -20,16 +20,37 @@ class SnapshotTestCase: XCTestCase {
             environment["TEST_RUNNER_NOCTO_RECORD_SNAPSHOTS"] == "1" ||
             ProcessInfo.processInfo.arguments.contains("--record-snapshots")
     }
+
+    private var defaultPixelTolerance: Double {
+        let environment = ProcessInfo.processInfo.environment
+        if let parsed = parsePixelTolerance(environment["NOCTO_SNAPSHOT_PIXEL_TOLERANCE"]) {
+            return parsed
+        }
+        if let parsed = parsePixelTolerance(environment["TEST_RUNNER_NOCTO_SNAPSHOT_PIXEL_TOLERANCE"]) {
+            return parsed
+        }
+        return 0.01
+    }
+
     private let mismatchThresholdPerChannel = 2
+
+    private func parsePixelTolerance(_ rawValue: String?) -> Double? {
+        guard let rawValue else { return nil }
+        guard let parsed = Double(rawValue), parsed >= 0, parsed <= 1 else {
+            return nil
+        }
+        return parsed
+    }
 
     func assertSnapshot<V: View>(
         of view: V,
         named name: String,
         viewport: SnapshotViewport,
-        pixelTolerance: Double = 0.01,
+        pixelTolerance: Double? = nil,
         file: StaticString = #filePath,
         line: UInt = #line
     ) {
+        let effectivePixelTolerance = pixelTolerance ?? defaultPixelTolerance
         let image = render(view: view, viewport: viewport)
         let referenceURL = snapshotsDirectory(for: file).appendingPathComponent("\(name).png")
 
@@ -57,7 +78,7 @@ class SnapshotTestCase: XCTestCase {
         }
 
         let mismatch = pixelMismatchRatio(lhs: image, rhs: referenceImage, file: file, line: line)
-        if mismatch > pixelTolerance {
+        if mismatch > effectivePixelTolerance {
             let renderedAttachment = XCTAttachment(image: image)
             renderedAttachment.name = "rendered-\(name)"
             renderedAttachment.lifetime = .keepAlways
@@ -73,7 +94,7 @@ class SnapshotTestCase: XCTestCase {
                     format: "Visual regression in %@. Mismatch %.3f%% > %.3f%%",
                     name,
                     mismatch * 100,
-                    pixelTolerance * 100
+                    effectivePixelTolerance * 100
                 ),
                 file: file,
                 line: line

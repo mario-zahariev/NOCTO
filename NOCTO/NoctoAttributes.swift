@@ -7,6 +7,15 @@ struct NoctoAttributes: ActivityAttributes {
         enum IntegrityState: String, Codable, Hashable {
             case live = "LIVE"
             case offlineLowConfidence = "OFFLINE - LOW CONFIDENCE"
+
+            var bannerLabel: String {
+                switch self {
+                case .live:
+                    return "ЛОКАЛЕН СИГНАЛ"
+                case .offlineLowConfidence:
+                    return "ОФЛАЙН · НИСКА УВЕРЕНОСТ"
+                }
+            }
         }
 
         let confidenceScore: Int

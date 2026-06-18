@@ -15,7 +15,6 @@ struct AdminDashboardView: View {
                     statRow("Късни места", value: "\(snapshot.lateNightVenueCount)")
                     statRow("Пълнота на данните", value: "\(snapshot.dataCompletenessPercent)%")
                     statRow("Време за зареждане", value: "\(snapshot.loadLatencyMs) ms")
-                    statRow("Документация", value: "Активна")
                 }
 
                 Section("Състояние") {
