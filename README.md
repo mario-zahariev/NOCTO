@@ -287,7 +287,7 @@ cp NOCTO/GoogleService-Info.plist.example NOCTO/GoogleService-Info.plist
 
 <div align="center">
 
-[Contributing](CONTRIBUTING.md) &nbsp;·&nbsp; [Code of Conduct](CODE_OF_CONDUCT.md) &nbsp;·&nbsp; [Security](SECURITY.md) &nbsp;·&nbsp; [License](LICENSE) &nbsp;·&nbsp; [Architecture](docs/ARCHITECTURE.md) &nbsp;·&nbsp; [Product Bible](docs/NOCTO_BRAND_PRODUCT_BIBLE_v1.md)
+[Contributing](CONTRIBUTING.md) &nbsp;·&nbsp; [Code of Conduct](CODE_OF_CONDUCT.md) &nbsp;·&nbsp; [Security](SECURITY.md) &nbsp;·&nbsp; [License](LICENSE) &nbsp;·&nbsp; [Architecture](docs/ARCHITECTURE.md) &nbsp;·&nbsp; [Product Bible](docs/PRODUCT_BIBLE.md)
 
 <br>
 
