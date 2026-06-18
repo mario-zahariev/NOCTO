@@ -73,6 +73,7 @@ jobs:
 
       - name: Build DocC archive
         run: |
+          mkdir -p .build/docc
           xcrun docc convert Sources/NOCTOCore/NOCTOCore.docc \
             --additional-symbol-graph-dir .build/symbol-graphs \
             --fallback-display-name NOCTOCore \
