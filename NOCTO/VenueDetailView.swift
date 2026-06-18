@@ -284,7 +284,10 @@ private extension Venue {
             return type.rhythmFallback
         }
 
-        if closing.h < 3 || closing.h >= 5 {
+        let closesNextDay = closing.h < opening.h ||
+            (closing.h == opening.h && closing.m <= opening.m)
+
+        if closing.h < 3 || (closesNextDay && closing.h >= 5) {
             return "Късен прозорец"
         }
 
