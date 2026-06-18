@@ -80,10 +80,13 @@ jobs:
             --fallback-bundle-identifier com.mario.NOCTO.NOCTOCore \
             --fallback-bundle-version 1 \
             --output-path .build/docc/NOCTOCore.doccarchive
+          tar -czf .build/docc/NOCTOCore.doccarchive.tar.gz \
+            -C .build/docc \
+            NOCTOCore.doccarchive
 
       - name: Upload DocC artifact
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
         with:
           name: noctocore-doccarchive
-          path: .build/docc/NOCTOCore.doccarchive
+          path: .build/docc/NOCTOCore.doccarchive.tar.gz
           if-no-files-found: error
