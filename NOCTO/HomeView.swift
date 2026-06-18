@@ -23,7 +23,7 @@ struct HomeView: View {
 
                     ForEach(venues) { venue in
                         NavigationLink {
-                            VenueDetailView(venue: venue)
+                            VenueDetailView(venue: venue, favorites: favorites)
                         } label: {
                             VenueCard(
                                 venue: venue,
