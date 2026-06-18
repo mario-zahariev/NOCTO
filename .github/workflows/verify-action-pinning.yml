@@ -26,7 +26,7 @@ jobs:
           python3 - <<'PY'
           import re, glob, sys
           ok = True
-          pattern = re.compile(r'^\s*uses:\s*([^\s]+)@([^\s]+)', re.MULTILINE)
+          pattern = re.compile(r'^\s*(?:-\s*)?uses:\s*([^\s]+)@([^\s]+)', re.MULTILINE)
           for path in sorted(glob.glob('.github/workflows/*.yml') + glob.glob('.github/workflows/*.yaml')):
               txt = open(path, 'r', encoding='utf-8').read()
               for m in pattern.finditer(txt):
