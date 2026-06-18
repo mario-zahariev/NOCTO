@@ -27,7 +27,7 @@ jobs:
           import re, glob, sys
           ok = True
           pattern = re.compile(r'^\s*uses:\s*([^\s]+)@([^\s]+)', re.MULTILINE)
-          for path in glob.glob('.github/workflows/*.yml'):
+          for path in sorted(glob.glob('.github/workflows/*.yml') + glob.glob('.github/workflows/*.yaml')):
               txt = open(path, 'r', encoding='utf-8').read()
               for m in pattern.finditer(txt):
                   owner_repo, ref = m.group(1), m.group(2)
