@@ -26,15 +26,26 @@ jobs:
           python3 - <<'PY'
           import re, glob, sys
           ok = True
-          pattern = re.compile(r'^\s*(?:-\s*)?uses:\s*([^\s]+)@([^\s]+)', re.MULTILINE)
+          pattern = re.compile(r'^\s*(?:-\s*)?uses:\s*([^\s#]+)', re.MULTILINE)
           for path in sorted(glob.glob('.github/workflows/*.yml') + glob.glob('.github/workflows/*.yaml')):
               txt = open(path, 'r', encoding='utf-8').read()
               for m in pattern.finditer(txt):
-                  owner_repo, ref = m.group(1), m.group(2)
-                  # allow exact commit SHA (40 hex chars)
+                  uses_ref = m.group(1)
+                  if uses_ref.startswith('./'):
+                      continue
+                  if uses_ref.startswith('docker://'):
+                      if re.search(r'@sha256:[0-9a-fA-F]{64}$', uses_ref):
+                          continue
+                      print(f"Unpinned docker action in {path}: {uses_ref}")
+                      ok = False
+                      continue
+                  if '@' not in uses_ref:
+                      print(f"Unpinned action in {path}: {uses_ref}")
+                      ok = False
+                      continue
+                  owner_repo, ref = uses_ref.rsplit('@', 1)
                   if re.fullmatch(r'[0-9a-f]{40}', ref):
                       continue
-                  # reject branch names, tags, and shortened SHAs
                   print(f"Unpinned action in {path}: {owner_repo}@{ref}")
                   ok = False
           if not ok:
