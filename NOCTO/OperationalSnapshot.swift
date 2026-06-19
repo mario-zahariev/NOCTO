@@ -4,7 +4,7 @@ import NOCTOCore
 struct VenueTypeSignal: Identifiable {
     let id: String
     let label: String
-    let count: Int
+    let venueCount: Int
 }
 
 enum NOCTOVenueBadge: Equatable {
@@ -108,13 +108,13 @@ struct OperationalSnapshot {
             VenueTypeSignal(
                 id: type.rawValue,
                 label: Self.label(for: type),
-                count: grouped[type, default: []].count
+                venueCount: grouped[type, default: []].count
             )
         }
-        .filter { $0.count > 0 }
+        .filter { $0.venueCount > 0 }
         .sorted { lhs, rhs in
-            if lhs.count == rhs.count { return lhs.label < rhs.label }
-            return lhs.count > rhs.count
+            if lhs.venueCount == rhs.venueCount { return lhs.label < rhs.label }
+            return lhs.venueCount > rhs.venueCount
         }
 
         self.typeSignals = sortedTypes
