@@ -63,7 +63,11 @@ struct NightPulseView: View {
             sectionLabel("Сигнали")
             confidenceStrip
             signalRow("Основен формат", value: snapshot.primaryVenueTypeLabel, systemImage: "music.note.house")
-            signalRow("Късно покритие", value: "\(snapshot.lateNightVenueCount) места · до \(snapshot.lateNightCoverageHours) ч", systemImage: "moon.stars")
+            signalRow(
+                "Късно покритие",
+                value: "\(snapshot.lateNightVenueCount) места · до \(snapshot.lateNightCoverageHours) ч",
+                systemImage: "moon.stars"
+            )
             signalRow("Най-добре след", value: snapshot.bestAfterTime, systemImage: "clock.badge")
             signalRow("Зареждане", value: "\(snapshot.loadLatencyMs) ms · \(snapshot.latencyBandLabel)", systemImage: "speedometer")
             signalRow("Валидация", value: snapshot.confidenceValidationLabel, systemImage: "checkmark.seal")
@@ -161,13 +165,13 @@ struct NightPulseView: View {
                     .font(.subheadline.weight(.semibold))
                     .foregroundStyle(NoctoTheme.textPrimary)
                 Spacer()
-                Text("\(signal.count)")
+                Text("\(signal.venueCount)")
                     .font(.caption.weight(.semibold))
                     .foregroundStyle(NoctoTheme.textSecondary)
             }
 
             pulseProgressBar(
-                value: signal.count,
+                value: signal.venueCount,
                 total: max(snapshot.venuesCount, 1),
                 tint: NoctoTheme.accent,
                 accessibilityLabel: signal.label
