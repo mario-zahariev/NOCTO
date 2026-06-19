@@ -1,0 +1,54 @@
+name: Verify action pinning
+
+on:
+  push:
+    branches: ["main"]
+  pull_request:
+    types: [opened, synchronize, reopened]
+
+permissions:
+  contents: read
+
+jobs:
+  check-pinned-actions:
+    name: Check for pinned action refs
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout workflows
+        uses: actions/checkout@93cb6efe18208431cddfb8368fd83d5badbf9bfd # v5.0.1
+        with:
+          persist-credentials: false
+
+      - name: Find unpinned actions
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          import re, glob, sys
+          ok = True
+          pattern = re.compile(r'^\s*(?:-\s*)?uses:\s*([^\s#]+)', re.MULTILINE)
+          for path in sorted(glob.glob('.github/workflows/*.yml') + glob.glob('.github/workflows/*.yaml')):
+              txt = open(path, 'r', encoding='utf-8').read()
+              for m in pattern.finditer(txt):
+                  uses_ref = m.group(1)
+                  if uses_ref.startswith('./'):
+                      continue
+                  if uses_ref.startswith('docker://'):
+                      if re.search(r'@sha256:[0-9a-fA-F]{64}$', uses_ref):
+                          continue
+                      print(f"Unpinned docker action in {path}: {uses_ref}")
+                      ok = False
+                      continue
+                  if '@' not in uses_ref:
+                      print(f"Unpinned action in {path}: {uses_ref}")
+                      ok = False
+                      continue
+                  owner_repo, ref = uses_ref.rsplit('@', 1)
+                  if re.fullmatch(r'[0-9a-f]{40}', ref):
+                      continue
+                  print(f"Unpinned action in {path}: {owner_repo}@{ref}")
+                  ok = False
+          if not ok:
+              sys.exit(1)
+          print("All actions pinned to immutable SHAs.")
+          PY
