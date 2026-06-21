@@ -120,7 +120,9 @@ struct OperationalSnapshot {
         self.typeSignals = sortedTypes
         self.primaryVenueTypeLabel = sortedTypes.first?.label ?? "Няма данни"
     }
+}
 
+extension OperationalSnapshot {
     var decodeHealthLabel: String {
         didLoadSucceed ? "Изряден" : "Проблем"
     }
