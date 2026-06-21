@@ -1,3 +1,5 @@
+#if DEBUG
+// Internal operational dashboard is intentionally excluded from Release builds.
 import SwiftUI
 import NOCTOCore
 
@@ -51,3 +53,4 @@ struct AdminDashboardView: View {
         }
     }
 }
+#endif
