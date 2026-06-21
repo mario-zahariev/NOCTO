@@ -10,7 +10,7 @@ struct VenueRepository {
         self.dataSource = dataSource
     }
 
-    func loadVenues() throws -> [Venue] {
-        try dataSource.loadVenues()
+    func loadVenues() async throws -> [Venue] {
+        try await dataSource.loadVenues()
     }
 }
