@@ -77,16 +77,16 @@ public struct VenueCore: Codable, Equatable, Identifiable {
     }
 
     public init(from decoder: Decoder) throws {
-        let c = try decoder.container(keyedBy: CodingKeys.self)
-        id = try c.decode(UUID.self, forKey: .id)
-        name = try c.decode(String.self, forKey: .name)
-        imageName = try c.decodeIfPresent(String.self, forKey: .imageName) ?? ""
-        type = try c.decode(VenueType.self, forKey: .type)
-        description = try c.decodeIfPresent(String.self, forKey: .description) ?? ""
-        latitude = try c.decode(Double.self, forKey: .latitude)
-        longitude = try c.decode(Double.self, forKey: .longitude)
-        address = try c.decodeIfPresent(String.self, forKey: .address) ?? ""
-        workingHours = try c.decodeIfPresent(String.self, forKey: .workingHours) ?? ""
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        id = try container.decode(UUID.self, forKey: .id)
+        name = try container.decode(String.self, forKey: .name)
+        imageName = try container.decodeIfPresent(String.self, forKey: .imageName) ?? ""
+        type = try container.decode(VenueType.self, forKey: .type)
+        description = try container.decodeIfPresent(String.self, forKey: .description) ?? ""
+        latitude = try container.decode(Double.self, forKey: .latitude)
+        longitude = try container.decode(Double.self, forKey: .longitude)
+        address = try container.decodeIfPresent(String.self, forKey: .address) ?? ""
+        workingHours = try container.decodeIfPresent(String.self, forKey: .workingHours) ?? ""
     }
 
     private static func fallbackLabel(for type: VenueType) -> String {

@@ -2,6 +2,17 @@
 
 <img src="docs/svg/hero-nocto-dark.svg" alt="Mario Zahariev — Night Intelligence for Sofia" />
 
+<br><br>
+
+[![CI](https://github.com/mario-zahariev/NOCTO/actions/workflows/ci.yml/badge.svg)](https://github.com/mario-zahariev/NOCTO/actions/workflows/ci.yml)
+[![Platform](https://img.shields.io/badge/platform-iOS%2017%2B-black?logo=apple&logoColor=white)](https://developer.apple.com/ios/)
+[![Swift](https://img.shields.io/badge/Swift-5.10-FD5B8A?logo=swift&logoColor=white)](https://www.swift.org)
+[![Xcode](https://img.shields.io/badge/Xcode-26.1%2B-147EFB?logo=xcode&logoColor=white)](https://developer.apple.com/xcode/)
+[![SwiftUI](https://img.shields.io/badge/UI-SwiftUI-0D96F6?logo=swift&logoColor=white)](https://developer.apple.com/xcode/swiftui/)
+[![MapKit](https://img.shields.io/badge/maps-MapKit-1C5D99?logo=apple&logoColor=white)](#capabilities)
+[![License](https://img.shields.io/github/license/mario-zahariev/NOCTO?color=FD5B8A)](LICENSE)
+[![Last Commit](https://img.shields.io/github/last-commit/mario-zahariev/NOCTO?color=333)](https://github.com/mario-zahariev/NOCTO/commits/main)
+
 </div>
 
 ---
@@ -224,6 +235,17 @@ xcodebuild -project NOCTO.xcodeproj \
 
 Dependabot keeps GitHub Actions runners and the Swift package graph current on a weekly cadence.
 
+### Documentation and Coverage Artifacts
+
+The `Docs and Coverage` workflow generates review artifacts when package sources,
+tests, `Package.swift`, or the workflow itself change:
+
+- Swift package coverage JSON
+- `NOCTOCore` DocC archive
+
+It can also be started manually from GitHub Actions when documentation or
+coverage evidence is needed outside a pull request.
+
 ---
 
 ## Linting
@@ -276,7 +298,7 @@ cp NOCTO/GoogleService-Info.plist.example NOCTO/GoogleService-Info.plist
 
 <div align="center">
 
-[Contributing](CONTRIBUTING.md) &nbsp;·&nbsp; [Code of Conduct](CODE_OF_CONDUCT.md) &nbsp;·&nbsp; [Security](SECURITY.md) &nbsp;·&nbsp; [License](LICENSE) &nbsp;·&nbsp; [Architecture](docs/ARCHITECTURE.md) &nbsp;·&nbsp; [Product Bible](docs/NOCTO_BRAND_PRODUCT_BIBLE_v1.md)
+[Contributing](CONTRIBUTING.md) &nbsp;·&nbsp; [Code of Conduct](CODE_OF_CONDUCT.md) &nbsp;·&nbsp; [Security](SECURITY.md) &nbsp;·&nbsp; [License](LICENSE) &nbsp;·&nbsp; [Architecture](docs/ARCHITECTURE.md) &nbsp;·&nbsp; [Product Bible](docs/PRODUCT_BIBLE.md)
 
 <br>
 

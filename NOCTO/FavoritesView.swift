@@ -23,7 +23,7 @@ struct FavoritesView: View {
                         LazyVStack(spacing: 14) {
                             ForEach(favoriteVenues) { venue in
                                 NavigationLink {
-                                    VenueDetailView(venue: venue)
+                                    VenueDetailView(venue: venue, favorites: favorites)
                                 } label: {
                                     VenueCard(
                                         venue: venue,
