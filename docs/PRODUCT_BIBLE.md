@@ -1,4 +1,4 @@
-# NOCTO Brand/Product Bible v1
+# NOCTO Product Bible
 
 Дата: 2026-05-05
 Статус: активен продуктово-брандов source of truth
@@ -123,68 +123,7 @@ NOCTO не трябва да започва като безкраен списъ
 - работно време
 - дистанция/локационен контекст
 
-## 6. Текуща техническа реалност
-
-Активен source of truth:
-
-`NOCTO_SAFE`
-
-Текущо състояние:
-
-- SwiftUI iOS app
-- local-first venue data
-- Firebase detached
-- `NOCTOCore` валидира и decode-ва venue данните
-- `VenueRepository` зарежда през `VenueDataSource`
-- текущият adapter е `LocalVenueDataSource`
-- `venues.json` е активният локален data source
-- `FavoritesManager` пази любимите локално през `UserDefaults`
-- `OperationalSnapshot` изчислява локални сигнали за `Пулс` и `Админ`
-
-Текущ data flow:
-
-1. `ContentView` иска venues през `VenueRepository`.
-2. `VenueRepository` делегира към `VenueDataSource`.
-3. `LocalVenueDataSource` зарежда и валидира `venues.json` през `NOCTOCore`.
-4. Views получават чисти `Venue` модели.
-5. `FavoritesManager` управлява локално favorite state.
-6. `OperationalSnapshot` извежда локални operational сигнали.
-
-Архитектурно правило:
-
-> UI може да е изразителен. Data boundary трябва да е скучен, ясен и стабилен.
-
-## 7. Firebase Posture
-
-Firebase е detached и остава detached, докато няма реална remote data стойност.
-
-Активно решение:
-
-- няма Firebase runtime initialization
-- няма Firebase target linkage
-- няма tracked реален `GoogleService-Info.plist`
-- CI guard пази от случайно Firebase re-link-ване
-
-Всичко в старите chat/brief материали, което говори за Firebase Firestore repository като текуща архитектура, е:
-
-> DEPRECATED / Historical context.
-
-Това значи:
-
-- може да се ползва за контекст
-- не е активна implementation посока
-- не е причина да върнем Firebase
-
-Firebase може да се върне само ако има:
-
-- remote `VenueDataSource` adapter
-- ясен backend data contract
-- telemetry/health model
-- fallback strategy
-- security rules и secrets hygiene
-- доказана продуктова стойност в PR
-
-## 8. Навигационна стратегия
+## 6. Навигационна стратегия
 
 Текущи публични tabs:
 
@@ -219,7 +158,7 @@ Naming правило:
 - В продуктова концепция може да го мислим като `Nightlist`.
 - В кода `FavoritesManager` остава валидно име, докато rename не носи реална архитектурна стойност.
 
-## 9. Core Screens
+## 7. Core Screens
 
 ### Начало
 
@@ -315,7 +254,7 @@ Naming правило:
 - публичен по default
 - част от final consumer navigation
 
-## 10. UI Direction
+## 8. UI Direction
 
 NOCTO използва quiet luxury за production UI.
 
@@ -335,7 +274,7 @@ Icon/brand boards могат да имат повече glow и драматич
 
 > Neon е акцент, не интерфейс.
 
-## 11. Color System
+## 9. Color System
 
 Core colors:
 
@@ -359,7 +298,7 @@ Core colors:
 - Ember носи heat, active hotspots и live moments.
 - Pink се ползва внимателно, защото лесно мести продукта към dating-app/generic GenZ зона.
 
-## 12. Typography
+## 10. Typography
 
 Предпочитан system:
 
@@ -371,7 +310,7 @@ Core colors:
 
 Brand boards могат да използват spaced wordmark. Production UI приоритизира четимост.
 
-## 13. Components
+## 11. Components
 
 Core components:
 
@@ -393,7 +332,7 @@ Core components:
 - Status indicators трябва да представят данни, не декорация.
 - Повтарящи се компоненти ползват shared patterns преди нова визуална измислица.
 
-## 14. Motion And Haptics
+## 12. Motion And Haptics
 
 Motion философия:
 
@@ -418,7 +357,7 @@ Haptics hierarchy:
 
 Haptics трябва да са редки, за да останат premium.
 
-## 15. App Icon Direction
+## 13. App Icon Direction
 
 Финална icon посока:
 
@@ -453,7 +392,7 @@ Reference direction:
 - micro details, които се губят
 - generic AI luxury marks
 
-## 16. Sofia Coding
+## 14. Sofia Coding
 
 София трябва да присъства, но не туристически.
 
@@ -473,7 +412,7 @@ Reference direction:
 
 NOCTO трябва да се усеща направено за София, не украсено със София.
 
-## 17. Copy Tone
+## 15. Copy Tone
 
 Copy-то трябва да е:
 
@@ -500,7 +439,7 @@ Copy-то трябва да е:
 - fake hype
 - шумни nightlife клишета
 
-## 18. Data And Signal Model
+## 16. Data And Signal Model
 
 NOCTO има нужда от реални сигнали, дори докато е local-first.
 
@@ -526,43 +465,7 @@ NOCTO има нужда от реални сигнали, дори докато 
 
 Сигналите трябва да са честни. Ако нещо е estimate, трябва да е моделирано като estimate, не като live truth.
 
-## 19. Implementation Guardrails
-
-Всеки PR трябва да отговори:
-
-- Кое продуктово решение подкрепя?
-- Коя surface променя?
-- Пази ли local-first architecture?
-- Пази ли Firebase detachment?
-- Подобрява ли signal quality, clarity или polish?
-- UI-то по-ясно, по-тихо или по-полезно ли става?
-
-Да се избягва:
-
-- random rebuilds
-- нови abstractions без payoff
-- декоративен UI без signal
-- unverified asset churn
-- generated archives в git
-- случайно връщане на Firebase
-- превръщане на `Админ` в consumer UX
-
-## 20. Acceptance Checklist For Future UI PRs
-
-Преди merge:
-
-- JSON validator passes
-- Firebase detachment guard passes
-- Swift tests pass
-- simulator build passes, ако промяната засяга app UI
-- публичните UI labels са на български
-- няма black-on-black unreadable text
-- няма clipped български labels
-- няма public Admin regression без изрично решение
-- няма unreviewed `.xcodeproj` churn
-- няма real secrets или production plists
-
-## 21. Roadmap Alignment
+## 17. Roadmap Alignment
 
 Near-term:
 
@@ -586,7 +489,7 @@ Long-term:
 3. Premium Night Pass identity.
 4. Sofia nightlife network с curated operational confidence.
 
-## 22. Final Operating Line
+## 18. Final Operating Line
 
 NOCTO не е списък със заведения.
 

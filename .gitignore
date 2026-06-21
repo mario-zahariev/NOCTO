@@ -9,6 +9,11 @@ DerivedData/
 # SwiftPM
 Package.resolved
 
+# Runtime build outputs and logs
+build/
+outputs/
+*.log
+
 # Secrets and local config
 .env
 .env.local

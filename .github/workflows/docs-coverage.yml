@@ -1,0 +1,92 @@
+name: Docs and Coverage
+
+on:
+  workflow_dispatch:
+  pull_request:
+    paths:
+      - ".github/workflows/docs-coverage.yml"
+      - "Package.swift"
+      - "Sources/**"
+      - "Tests/**"
+  push:
+    branches: ["main"]
+    paths:
+      - ".github/workflows/docs-coverage.yml"
+      - "Package.swift"
+      - "Sources/**"
+      - "Tests/**"
+
+permissions:
+  contents: read
+
+jobs:
+  swift-coverage:
+    name: Swift Coverage
+    runs-on: macos-latest
+    timeout-minutes: 15
+    steps:
+      - name: Checkout
+        uses: actions/checkout@93cb6efe18208431cddfb8368fd83d5badbf9bfd # v5.0.1
+        with:
+          persist-credentials: false
+
+      - name: Swift Version
+        run: swift --version
+
+      - name: Run tests with coverage
+        run: swift test --enable-code-coverage
+
+      - name: Collect coverage JSON
+        run: |
+          COVERAGE_JSON="$(swift test --show-code-coverage-path)"
+          mkdir -p .build/coverage
+          cp "$COVERAGE_JSON" .build/coverage/noctocore-coverage.json
+
+      - name: Upload coverage artifact
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+        with:
+          name: noctocore-coverage
+          path: .build/coverage/noctocore-coverage.json
+          if-no-files-found: error
+
+  docc-archive:
+    name: DocC Archive
+    runs-on: macos-latest
+    timeout-minutes: 15
+    steps:
+      - name: Checkout
+        uses: actions/checkout@93cb6efe18208431cddfb8368fd83d5badbf9bfd # v5.0.1
+        with:
+          persist-credentials: false
+
+      - name: Swift Version
+        run: swift --version
+
+      - name: Build symbol graph
+        run: |
+          mkdir -p .build/symbol-graphs
+          swift build \
+            --target NOCTOCore \
+            -Xswiftc -emit-symbol-graph \
+            -Xswiftc -emit-symbol-graph-dir \
+            -Xswiftc .build/symbol-graphs
+
+      - name: Build DocC archive
+        run: |
+          mkdir -p .build/docc
+          xcrun docc convert Sources/NOCTOCore/NOCTOCore.docc \
+            --additional-symbol-graph-dir .build/symbol-graphs \
+            --fallback-display-name NOCTOCore \
+            --fallback-bundle-identifier com.mario.NOCTO.NOCTOCore \
+            --fallback-bundle-version 1 \
+            --output-path .build/docc/NOCTOCore.doccarchive
+          tar -czf .build/docc/NOCTOCore.doccarchive.tar.gz \
+            -C .build/docc \
+            NOCTOCore.doccarchive
+
+      - name: Upload DocC artifact
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+        with:
+          name: noctocore-doccarchive
+          path: .build/docc/NOCTOCore.doccarchive.tar.gz
+          if-no-files-found: error
