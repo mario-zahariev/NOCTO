@@ -76,7 +76,7 @@ enum VisualFixtures {
     @available(iOS 16.1, *)
     static func liveActivityState(score: Int) -> NoctoAttributes.ContentState {
         let clampedScore = max(0, min(score, 100))
-        let integrityState: NoctoAttributes.ContentState.IntegrityState = clampedScore < 60 ? .offlineLowConfidence : .live
+        let integrityState: NoctoIntegrityState = clampedScore < 60 ? .offlineLowConfidence : .live
 
         return NoctoAttributes.ContentState(
             confidenceScore: clampedScore,
