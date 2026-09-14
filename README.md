@@ -1,6 +1,6 @@
 <div align="center">
 
-<img src="docs/svg/hero-nocto-dark.svg" alt="Mario Zahariev — Night Intelligence for Sofia" />
+<img src="docs/svg/hero-nocto-dark.svg" alt="NOCTO — Know the night. Choose the vibe." />
 
 </div>
 
