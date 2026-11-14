@@ -316,7 +316,7 @@ The CI job summary shows the percentage and retains the JSON and profiling data.
 Hosted DocC publication still requires a configured Pages destination.
 
 Snapshot baselines use Xcode 26.6 / iOS 26.5, English system locale, Sofia time,
-large Dynamic Type and a fixed viewport. The manual **Record snapshot baselines
+large Dynamic Type, disabled animations and a fixed viewport. The manual **Record snapshot baselines
 for review** workflow produces candidate PNGs from the selected branch. Review
 the images and commit them through a normal PR; the workflow has no write access
 and never replaces approved baselines automatically. Missing baselines fail CI.

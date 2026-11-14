@@ -97,7 +97,7 @@ class SnapshotTestCase: XCTestCase {
             .environment(\.locale, Locale(identifier: "en_US"))
             .environment(\.timeZone, TimeZone(identifier: "Europe/Sofia") ?? .current)
             .environment(\.sizeCategory, .large)
-            .environment(\.accessibilityReduceMotion, true))
+            .transaction { $0.disablesAnimations = true })
 
         let window = UIWindow(frame: CGRect(origin: .zero, size: size))
         window.overrideUserInterfaceStyle = .dark
