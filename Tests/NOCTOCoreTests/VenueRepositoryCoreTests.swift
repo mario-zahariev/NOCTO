@@ -58,3 +58,13 @@ final class VenueRepositoryCoreTests: XCTestCase {
         }
     }
 }
+
+extension VenueRepositoryCoreTests {
+    func testDuplicateIDsAreRejectedInsteadOfReachingSwiftUI() throws {
+        let venue = Venue(id: UUID(), name: "Duplicate", type: .bar, latitude: 42, longitude: 23)
+        let data = try JSONEncoder().encode([venue, venue])
+        XCTAssertThrowsError(try VenueRepositoryCore().decode(from: data)) { error in
+            XCTAssertEqual(error as? VenueRepositoryCoreError, .invalidJSON)
+        }
+    }
+}

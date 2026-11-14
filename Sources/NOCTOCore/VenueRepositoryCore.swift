@@ -18,6 +18,8 @@ public struct VenueRepositoryCore {
 
         let valid = venues.filter(\.isValid)
         guard !valid.isEmpty else { throw VenueRepositoryCoreError.noValidVenues }
+        // Duplicate identities are unsafe for SwiftUI ForEach and persisted favorites.
+        guard Set(valid.map(\.id)).count == valid.count else { throw VenueRepositoryCoreError.invalidJSON }
         return valid
     }
 }
