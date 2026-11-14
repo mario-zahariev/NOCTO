@@ -1,0 +1,32 @@
+name: Architecture atlas browser tests
+
+on:
+  pull_request:
+    paths:
+      - docs/nocto-architecture-atlas.html
+      - scripts/test_architecture_atlas.py
+      - .github/workflows/architecture-atlas.yml
+  push:
+    branches: [main]
+    paths:
+      - docs/nocto-architecture-atlas.html
+      - scripts/test_architecture_atlas.py
+      - .github/workflows/architecture-atlas.yml
+
+permissions:
+  contents: read
+
+jobs:
+  browser-tests:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
+        with:
+          persist-credentials: false
+      - name: Install pinned browser tooling
+        run: |
+          python3 -m pip install playwright==1.62.0
+          python3 -m playwright install --with-deps chromium
+      - name: Verify standalone atlas interactions
+        run: python3 scripts/test_architecture_atlas.py
