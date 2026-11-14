@@ -2,6 +2,17 @@
 
 <img src="docs/svg/hero-nocto-dark.svg" alt="Mario Zahariev — Night Intelligence for Sofia" />
 
+<br><br>
+
+[![CI](https://github.com/mario-zahariev/NOCTO/actions/workflows/ci.yml/badge.svg)](https://github.com/mario-zahariev/NOCTO/actions/workflows/ci.yml)
+[![Platform](https://img.shields.io/badge/platform-iOS%2017%2B-black?logo=apple&logoColor=white)](https://developer.apple.com/ios/)
+[![Swift](https://img.shields.io/badge/Swift-5.10-FD5B8A?logo=swift&logoColor=white)](https://www.swift.org)
+[![Xcode](https://img.shields.io/badge/Xcode-26.1%2B-147EFB?logo=xcode&logoColor=white)](https://developer.apple.com/xcode/)
+[![SwiftUI](https://img.shields.io/badge/UI-SwiftUI-0D96F6?logo=swift&logoColor=white)](https://developer.apple.com/xcode/swiftui/)
+[![MapKit](https://img.shields.io/badge/maps-MapKit-1C5D99?logo=apple&logoColor=white)](#capabilities)
+[![License](https://img.shields.io/github/license/mario-zahariev/NOCTO?color=FD5B8A)](LICENSE)
+[![Last Commit](https://img.shields.io/github/last-commit/mario-zahariev/NOCTO?color=333)](https://github.com/mario-zahariev/NOCTO/commits/main)
+
 </div>
 
 ---
