@@ -8,6 +8,8 @@ on:
       - "Package.swift"
       - "Sources/**"
       - "Tests/**"
+      - "NOCTO/**"
+      - "scripts/ci/report_coverage.py"
   push:
     branches: ["main"]
     paths:
@@ -15,6 +17,8 @@ on:
       - "Package.swift"
       - "Sources/**"
       - "Tests/**"
+      - "NOCTO/**"
+      - "scripts/ci/report_coverage.py"
 
 permissions:
   contents: read
@@ -34,7 +38,7 @@ jobs:
         run: swift --version
 
       - name: Run tests with coverage
-        run: swift test --enable-code-coverage
+        run: swift test --disable-automatic-resolution --enable-code-coverage
 
       - name: Collect coverage JSON
         run: |
@@ -42,12 +46,18 @@ jobs:
           mkdir -p .build/coverage
           cp "$COVERAGE_JSON" .build/coverage/noctocore-coverage.json
 
+      - name: Enforce 70 percent production coverage
+        run: python3 scripts/ci/report_coverage.py --minimum 70
+
       - name: Upload coverage artifact
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
         with:
           name: noctocore-coverage
-          path: .build/coverage/noctocore-coverage.json
+          path: |
+            .build/coverage/noctocore-coverage.json
+            .build/**/codecov/*.profdata
           if-no-files-found: error
+          include-hidden-files: true
 
   docc-archive:
     name: DocC Archive
@@ -90,3 +100,4 @@ jobs:
           name: noctocore-doccarchive
           path: .build/docc/NOCTOCore.doccarchive.tar.gz
           if-no-files-found: error
+          include-hidden-files: true
