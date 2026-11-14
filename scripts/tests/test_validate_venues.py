@@ -31,7 +31,7 @@ class VenueValidationTests(unittest.TestCase):
             self.assert_invalid(latitude=value)
 
     def test_invalid_hours(self):
-        for hours in ["22:00--04:00", "24:00-04:00", "22:60-04:00", "22:00", ""]:
+        for hours in ["22:00--04:00", "24:00-04:00", "22:60-04:00", "22:00", "", "22:٠٠-04:00", "２２:００-04:00"]:
             self.assert_invalid(workingHours=hours)
 
     def test_empty_description_is_rejected(self):

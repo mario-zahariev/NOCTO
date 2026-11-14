@@ -30,7 +30,10 @@ def fail(message: str) -> None:
     raise SystemExit(1)
 
 
-def validate_entry(entry: dict, index: int) -> None:
+HOURS_PATTERN = re.compile(r"(?:[01]\d|2[0-3]):[0-5]\d-(?:[01]\d|2[0-3]):[0-5]\d", re.ASCII)
+
+
+def validate_required_fields(entry: dict, index: int) -> None:
     missing = [key for key in REQUIRED_FIELDS if key not in entry]
     if missing:
         fail(f"entry #{index} missing fields: {', '.join(missing)}")
@@ -40,18 +43,15 @@ def validate_entry(entry: dict, index: int) -> None:
         if isinstance(value, bool) or not isinstance(value, field_type):
             fail(f"entry #{index} field '{field}' has invalid type: {type(value).__name__}")
 
-    if not entry["description"].strip():
-        fail(f"entry #{index} has empty 'description'")
-    if not re.fullmatch(r"(?:[01][0-9]|2[0-3]):[0-5][0-9]-(?:[01][0-9]|2[0-3]):[0-5][0-9]", entry["workingHours"]):
+    for field in ("name", "imageName", "description", "address", "workingHours"):
+        if not entry[field].strip():
+            fail(f"entry #{index} has empty '{field}'")
+
+
+def validate_entry(entry: dict, index: int) -> None:
+    validate_required_fields(entry, index)
+    if not HOURS_PATTERN.fullmatch(entry["workingHours"]):
         fail(f"entry #{index} 'workingHours' must be HH:mm-HH:mm")
-    if not entry["name"].strip():
-        fail(f"entry #{index} has empty 'name'")
-    if not entry["imageName"].strip():
-        fail(f"entry #{index} has empty 'imageName'")
-    if not entry["address"].strip():
-        fail(f"entry #{index} has empty 'address'")
-    if not entry["workingHours"].strip():
-        fail(f"entry #{index} has empty 'workingHours'")
 
     try:
         UUID(entry["id"])
