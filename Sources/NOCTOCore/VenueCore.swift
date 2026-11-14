@@ -106,22 +106,19 @@ public struct VenueCore: Codable, Equatable, Identifiable {
 
     public static func hourMinuteTuple(from workingHours: String, at index: Int) -> (h: Int, m: Int)? {
         let parts = workingHours.split(separator: "-", omittingEmptySubsequences: false)
-        guard parts.count == 2, parts.indices.contains(index) else { return nil }
+        guard parts.count == 2, (0...1).contains(index),
+              let opening = parsedTime(parts[0]), let closing = parsedTime(parts[1])
+        else { return nil }
+        return index == 0 ? opening : closing
+    }
 
-        let timeParts = parts[index]
-            .trimmingCharacters(in: .whitespacesAndNewlines)
-            .split(separator: ":")
-
-        guard
-            timeParts.count == 2,
-            let hour = Int(timeParts[0].trimmingCharacters(in: .whitespacesAndNewlines)),
-            let minute = Int(timeParts[1].trimmingCharacters(in: .whitespacesAndNewlines)),
-            (0...23).contains(hour),
-            (0...59).contains(minute)
-        else {
-            return nil
-        }
-
+    private static func parsedTime(_ value: Substring) -> (h: Int, m: Int)? {
+        let parts = value.trimmingCharacters(in: .whitespacesAndNewlines)
+            .split(separator: ":", omittingEmptySubsequences: false)
+        guard parts.count == 2,
+              let hour = Int(parts[0]), let minute = Int(parts[1]),
+              (0...23).contains(hour), (0...59).contains(minute)
+        else { return nil }
         return (h: hour, m: minute)
     }
 
