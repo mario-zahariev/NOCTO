@@ -96,7 +96,8 @@ jobs:
           persist-credentials: false
 
       - name: Install Semgrep
-        run: python3 -m pip install --only-binary=:all: --no-cache-dir semgrep==1.167.0
+        run: |
+          python3 -m pip install --only-binary :all: --no-cache-dir semgrep==1.167.0
 
       - name: Run Semgrep OSS scan
         env:
