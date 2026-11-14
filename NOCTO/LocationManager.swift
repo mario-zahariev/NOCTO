@@ -31,13 +31,21 @@ extension LocationManager: CLLocationManagerDelegate {
             authorizationStatus = manager.authorizationStatus
             if authorizationStatus == .authorizedWhenInUse || authorizationStatus == .authorizedAlways {
                 self.manager.requestLocation()
+            } else {
+                lastKnownLocation = nil
             }
         }
     }
 
     nonisolated func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
-        guard let location = locations.last?.coordinate else { return }
+        guard let latest = locations.last,
+              latest.horizontalAccuracy >= 0,
+              abs(latest.timestamp.timeIntervalSinceNow) <= 5 * 60,
+              CLLocationCoordinate2DIsValid(latest.coordinate)
+        else { return }
+        let location = latest.coordinate
         Task { @MainActor in
+            guard authorizationStatus == .authorizedWhenInUse || authorizationStatus == .authorizedAlways else { return }
             lastKnownLocation = location
         }
     }
