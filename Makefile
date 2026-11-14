@@ -37,7 +37,7 @@ coverage:
 
 snapshots:
 	NOCTO_RECORD_SNAPSHOTS=0 xcodebuild -project NOCTO.xcodeproj -scheme NOCTO \
-		-destination 'platform=iOS Simulator,name=iPhone 17,OS=26.6' \
+		-destination 'platform=iOS Simulator,name=iPhone 17,OS=26.5' \
 		-only-testing:NOCTOUITests test
 
 docs:

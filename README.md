@@ -299,7 +299,7 @@ cp NOCTO/GoogleService-Info.plist.example NOCTO/GoogleService-Info.plist
 
 ## Development quality gates
 
-On macOS with Xcode 26.6, the iOS 26.6 simulator, SwiftLint 0.63.3,
+On macOS with Xcode 26.6, the iOS 26.5 simulator, SwiftLint 0.63.3,
 Gitleaks 8.28.0 and Semgrep 1.167.0 installed:
 
 ```sh
@@ -315,7 +315,7 @@ The CI job summary shows the percentage and retains the JSON and profiling data.
 `make docs` generates `.build/docc/NOCTOCore.doccarchive`, which opens in Xcode.
 Hosted DocC publication still requires a configured Pages destination.
 
-Snapshot baselines use Xcode 26.6 / iOS 26.6, English system locale, Sofia time,
+Snapshot baselines use Xcode 26.6 / iOS 26.5, English system locale, Sofia time,
 large Dynamic Type and a fixed viewport. The manual **Record snapshot baselines
 for review** workflow produces candidate PNGs from the selected branch. Review
 the images and commit them through a normal PR; the workflow has no write access

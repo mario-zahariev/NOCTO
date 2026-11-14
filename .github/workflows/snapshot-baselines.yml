@@ -25,7 +25,7 @@ jobs:
           TZ: Europe/Sofia
         run: |
           xcodebuild -project NOCTO.xcodeproj -scheme NOCTO \
-            -destination 'platform=iOS Simulator,name=iPhone 17,OS=26.6' \
+            -destination 'platform=iOS Simulator,name=iPhone 17,OS=26.5' \
             -only-testing:NOCTOUITests test
       - name: Upload candidate baselines for a reviewed PR
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
