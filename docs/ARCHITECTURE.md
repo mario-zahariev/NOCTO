@@ -75,3 +75,19 @@ The guard fails if:
 - `NOCTO/GoogleService-Info.plist.example` is missing or no longer contains the expected placeholder values
 
 Purpose: keep Firebase detachment explicit and prevent accidental re-attach in routine project edits.
+
+## Remote adapter status
+
+`RemoteVenueDataSource` is implemented in `NOCTO/VenueDataSource.swift` and tested
+using an injected `VenueNetworkClient`. It validates HTTP status, non-empty data
+and the shared venue decoder, and preserves cancellation. It is inactive in the
+app: `VenueRepository` defaults to `LocalVenueDataSource`. No production or staging
+endpoint, deployed authentication service, or backend collector is declared.
+
+`ContentView` accepts an injected `VenueRepository`; tests and previews can supply
+an alternate data source through the repository initializer. No global resolver
+is required for this composition.
+
+Duplicate IDs among valid venue records fail decoding, because SwiftUI identity
+and persisted favorites require uniqueness. Invalid records are still filtered
+as before; a payload with no valid records fails explicitly.
