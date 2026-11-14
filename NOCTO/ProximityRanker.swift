@@ -23,7 +23,9 @@ enum ProximityRanker {
         from location: CLLocationCoordinate2D,
         now: Date = Date()
     ) -> [ProximityRankedVenue] {
-        venues
+        guard CLLocationCoordinate2DIsValid(location) else { return [] }
+        return venues
+            .filter(\.isValid)
             .map { venue in
                 let distance = distanceMeters(from: location, to: venue)
                 return ProximityRankedVenue(
@@ -34,7 +36,9 @@ enum ProximityRanker {
             }
             .sorted { lhs, rhs in
                 if lhs.score == rhs.score {
-                    return lhs.venue.name.localizedCaseInsensitiveCompare(rhs.venue.name) == .orderedAscending
+                    let order = lhs.venue.name.compare(rhs.venue.name, options: .caseInsensitive, locale: Locale(identifier: "bg_BG"))
+                    if order == .orderedSame { return lhs.venue.id.uuidString < rhs.venue.id.uuidString }
+                    return order == .orderedAscending
                 }
                 return lhs.score > rhs.score
             }
@@ -69,7 +73,10 @@ enum ProximityRanker {
             return false
         }
 
-        let components = Calendar.current.dateComponents([.hour, .minute], from: now)
+        // Venue hours describe Sofia, regardless of the device's travel timezone.
+        var calendar = Calendar(identifier: .gregorian)
+        calendar.timeZone = TimeZone(identifier: "Europe/Sofia") ?? TimeZone(secondsFromGMT: 0) ?? .current
+        let components = calendar.dateComponents([.hour, .minute], from: now)
         guard let hour = components.hour, let minute = components.minute else { return false }
 
         let currentMinutes = hour * 60 + minute
@@ -85,6 +92,6 @@ enum ProximityRanker {
             normalizedCurrent += 24 * 60
         }
 
-        return normalizedCurrent >= openingMinutes && normalizedCurrent <= closingMinutes
+        return normalizedCurrent >= openingMinutes && normalizedCurrent < closingMinutes
     }
 }

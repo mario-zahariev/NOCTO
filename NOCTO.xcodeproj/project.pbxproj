@@ -44,6 +44,7 @@
 		C0DE00032F0A000100AAA001 /* NOCTOCore in Frameworks */ = {isa = PBXBuildFile; productRef = C0DE00022F0A000100AAA001 /* NOCTOCore */; };
 		C821ED3724108825A03FE113 /* NOCTOLiveActivityWidget.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6080975210EC2F04DAE4B11D /* NOCTOLiveActivityWidget.swift */; };
 		EA83B75F781AB87BDD119D8B /* LiveActivitySignalViews.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF98ECE38605E376996AE93B /* LiveActivitySignalViews.swift */; };
+		C0DE00700000000000000001 /* ProximityRanker.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0DE00700000000000000002 /* ProximityRanker.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -115,6 +116,7 @@
 		E3D705C17264CB994A5D6ECD /* SnapshotTestCase.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = SnapshotTestCase.swift; sourceTree = "<group>"; };
 		F494849DDA3D18056B26211D /* NOCTOUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = NOCTOUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		FF98ECE38605E376996AE93B /* LiveActivitySignalViews.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = LiveActivitySignalViews.swift; sourceTree = "<group>"; };
+		C0DE00700000000000000002 /* ProximityRanker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProximityRanker.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -192,6 +194,7 @@
 				B9E5C64A2EF95E39005FA51F /* FavoritesView.swift */,
 				B9E5C64C2EF95E39005FA51F /* HomeView.swift */,
 				B9E5C64D2EF95E39005FA51F /* LocationManager.swift */,
+				C0DE00700000000000000002 /* ProximityRanker.swift */,
 				B9E5C64E2EF95E39005FA51F /* NightPulseView.swift */,
 				B9E5C64F2EF95E39005FA51F /* NOCTOApp.swift */,
 				B9E5C6512EF95E39005FA51F /* NoctoTheme.swift */,
@@ -388,6 +391,7 @@
 				B9E5C6622EF95E39005FA51F /* VenueRepository.swift in Sources */,
 				B9E5C6632EF95E39005FA51F /* Venue.swift in Sources */,
 				B9E5C6642EF95E39005FA51F /* LocationManager.swift in Sources */,
+				C0DE00700000000000000001 /* ProximityRanker.swift in Sources */,
 				EA83B75F781AB87BDD119D8B /* LiveActivitySignalViews.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
