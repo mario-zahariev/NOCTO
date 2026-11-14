@@ -1,6 +1,6 @@
 import Foundation
 import XCTest
-@testable import NOCTOAppLogic
+@testable import NOCTO
 import NOCTOCore
 
 final class VenueDataSourceTests: XCTestCase {

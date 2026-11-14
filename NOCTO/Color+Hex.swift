@@ -2,24 +2,39 @@ import SwiftUI
 
 extension Color {
     init(hex: String) {
-        let clean = hex.replacingOccurrences(of: "#", with: "")
-        var value: UInt64 = 0
-        let scanner = Scanner(string: clean)
-        if !(scanner.scanHexInt64(&value) && scanner.isAtEnd) {
-            value = 0xFFFFFF
+        let normalized = hex
+            .trimmingCharacters(in: .whitespacesAndNewlines)
+            .replacingOccurrences(of: "#", with: "")
+            .lowercased()
+
+        let fallback = (r: 255.0, g: 255.0, b: 255.0)
+
+        guard !normalized.isEmpty else {
+            self.init(.sRGB, red: fallback.r / 255, green: fallback.g / 255, blue: fallback.b / 255, opacity: 1)
+            return
         }
 
-        let red, green, blue: UInt64
-        switch clean.count {
+        let rawValue: String
+        switch normalized.count {
+        case 3:
+            rawValue = normalized.map { String(repeating: String($0), count: 2) }.joined()
         case 6:
-            red = (value >> 16) & 0xFF
-            green = (value >> 8) & 0xFF
-            blue = value & 0xFF
+            rawValue = normalized
         default:
-            red = 255
-            green = 255
-            blue = 255
+            self.init(.sRGB, red: fallback.r / 255, green: fallback.g / 255, blue: fallback.b / 255, opacity: 1)
+            return
         }
+
+        var parsedValue: UInt64 = 0
+        let scanner = Scanner(string: rawValue)
+        guard scanner.scanHexInt64(&parsedValue) && scanner.isAtEnd else {
+            self.init(.sRGB, red: fallback.r / 255, green: fallback.g / 255, blue: fallback.b / 255, opacity: 1)
+            return
+        }
+
+        let red = (parsedValue >> 16) & 0xFF
+        let green = (parsedValue >> 8) & 0xFF
+        let blue = parsedValue & 0xFF
 
         self.init(
             .sRGB,

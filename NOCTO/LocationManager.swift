@@ -1,6 +1,6 @@
 import Foundation
 import CoreLocation
-import Combine
+import os
 
 @MainActor
 final class LocationManager: NSObject, ObservableObject {
@@ -8,6 +8,7 @@ final class LocationManager: NSObject, ObservableObject {
     @Published private(set) var lastKnownLocation: CLLocationCoordinate2D?
 
     private let manager = CLLocationManager()
+    private let logger = Logger(subsystem: "com.mario.NOCTO", category: "LocationManager")
 
     override init() {
         super.init()
@@ -23,26 +24,32 @@ final class LocationManager: NSObject, ObservableObject {
         }
         manager.requestWhenInUseAuthorization()
     }
+
+    private func handleAuthorizationUpdate(from manager: CLLocationManager) {
+        authorizationStatus = manager.authorizationStatus
+        if authorizationStatus == .authorizedWhenInUse || authorizationStatus == .authorizedAlways {
+            self.manager.requestLocation()
+        }
+    }
 }
 
 extension LocationManager: CLLocationManagerDelegate {
     nonisolated func locationManagerDidChangeAuthorization(_ manager: CLLocationManager) {
-        Task { @MainActor in
-            authorizationStatus = manager.authorizationStatus
-            if authorizationStatus == .authorizedWhenInUse || authorizationStatus == .authorizedAlways {
-                self.manager.requestLocation()
-            }
+        Task { @MainActor [weak self] in
+            guard let self else { return }
+            self.handleAuthorizationUpdate(from: manager)
         }
     }
 
     nonisolated func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
         guard let location = locations.last?.coordinate else { return }
-        Task { @MainActor in
-            lastKnownLocation = location
+        Task { @MainActor [weak self] in
+            guard let self else { return }
+            self.lastKnownLocation = location
         }
     }
 
     nonisolated func locationManager(_ manager: CLLocationManager, didFailWithError error: Error) {
-        _ = error
+        logger.warning("Location update failed: \(error.localizedDescription, privacy: .public)")
     }
 }

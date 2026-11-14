@@ -21,12 +21,14 @@ final class NoctoLiveActivityHandler {
             await cleanupActivitiesWhenDisabled()
             return
         }
+
         hydrateActivityIfNeeded()
 
         let state = NoctoAttributes.ContentState(snapshot: snapshot)
         #if DEBUG
-        print("[NOCTO LiveActivity] score=\(state.confidenceScore) state=\(state.integrityState.rawValue) source=\(state.sourceLabel)")
+        Self.logger.debug("Live activity sync score=\(state.confidenceScore) state=\(state.integrityState.rawValue) source=\(state.sourceLabel, privacy: .public)")
         #endif
+
         guard ActivityAuthorizationInfo().areActivitiesEnabled else {
             for current in Activity<NoctoAttributes>.activities {
                 await end(current, using: state, dismissalPolicy: .immediate)
@@ -36,23 +38,7 @@ final class NoctoLiveActivityHandler {
         }
 
         if state.integrityState == .offlineLowConfidence {
-            let dismissAt = Date().addingTimeInterval(Self.lowConfidenceDismissInterval)
-            let currentActivities = Activity<NoctoAttributes>.activities
-
-            guard !currentActivities.isEmpty else {
-                activity = nil
-                return
-            }
-
-            for current in currentActivities {
-                await end(
-                    current,
-                    using: state,
-                    dismissalPolicy: .after(dismissAt)
-                )
-            }
-
-            activity = nil
+            await dismissLowConfidenceActivities(using: state)
             return
         }
 
@@ -94,6 +80,22 @@ final class NoctoLiveActivityHandler {
     private func hydrateActivityIfNeeded() {
         guard activity == nil else { return }
         activity = Activity<NoctoAttributes>.activities.first
+    }
+
+    private func dismissLowConfidenceActivities(using state: NoctoAttributes.ContentState) async {
+        let dismissAt = Date().addingTimeInterval(Self.lowConfidenceDismissInterval)
+        let currentActivities = Activity<NoctoAttributes>.activities
+
+        guard !currentActivities.isEmpty else {
+            activity = nil
+            return
+        }
+
+        for current in currentActivities {
+            await end(current, using: state, dismissalPolicy: .after(dismissAt))
+        }
+
+        activity = nil
     }
 
     private func start(with state: NoctoAttributes.ContentState) async {
