@@ -33,14 +33,15 @@ with sync_playwright() as playwright:
     assert abs(ty - 40 / matrix["d"]) < 0.01, transform
     # Zoom must preserve the world point under the cursor in a letterboxed SVG.
     page.get_by_role("button", name="Fit diagram").click()
+    box = page.locator("#diagram").bounding_box()
+    x, y = round(box["x"] + 100), round(box["y"] + 100)
     anchor = page.locator("#diagram").evaluate("(s, point) => {const p=s.createSVGPoint(); p.x=point.x; p.y=point.y; const q=p.matrixTransform(s.getScreenCTM().inverse()); return {x:q.x,y:q.y}}", {"x": x, "y": y})
-    page.mouse.move(x, y)
-    page.mouse.wheel(0, -100)
+    page.locator("#diagram").dispatch_event("wheel", {"clientX": x, "clientY": y, "deltaY": -100})
     page.wait_for_function("document.querySelector('#viewport').getAttribute('transform').includes('scale(1.08)')")
     transform = page.locator("#viewport").get_attribute("transform")
     tx, ty = map(float, re.search(r"translate\(([^ ]+) ([^)]+)\)", transform).groups())
     assert abs(tx + anchor["x"] * 0.08) < 0.01
-    assert abs(ty + anchor["y"] * 0.08) < 0.01
+    assert abs(ty + anchor["y"] * 0.08) < 0.01, (transform, anchor)
     with page.expect_download() as result:
         page.get_by_role("button", name="Export SVG").click()
     with tempfile.TemporaryDirectory() as directory:
