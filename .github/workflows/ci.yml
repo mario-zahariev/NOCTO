@@ -25,7 +25,7 @@ jobs:
         run: |
           set -euo pipefail
           mkdir -p .build/swiftlint-bin
-          curl -sSfL -o /tmp/swiftlint.zip \
+          curl --proto '=https' --proto-redir '=https' -sSfL -o /tmp/swiftlint.zip \
             "https://github.com/realm/SwiftLint/releases/download/${SWIFTLINT_VERSION}/portable_swiftlint.zip"
           echo "${SWIFTLINT_SHA256}  /tmp/swiftlint.zip" | shasum -a 256 -c -
           unzip -q /tmp/swiftlint.zip -d .build/swiftlint-bin
@@ -71,9 +71,9 @@ jobs:
           GITLEAKS_VERSION: "8.28.0"
         run: |
           GITLEAKS_ASSET="gitleaks_${GITLEAKS_VERSION}_linux_x64.tar.gz"
-          curl -sSfL -o "${GITLEAKS_ASSET}" \
+          curl --proto '=https' --proto-redir '=https' -sSfL -o "${GITLEAKS_ASSET}" \
             "https://github.com/gitleaks/gitleaks/releases/download/v${GITLEAKS_VERSION}/${GITLEAKS_ASSET}"
-          curl -sSfL -o gitleaks_checksums.txt \
+          curl --proto '=https' --proto-redir '=https' -sSfL -o gitleaks_checksums.txt \
             "https://github.com/gitleaks/gitleaks/releases/download/v${GITLEAKS_VERSION}/gitleaks_${GITLEAKS_VERSION}_checksums.txt"
           grep " ${GITLEAKS_ASSET}$" gitleaks_checksums.txt | sha256sum -c -
           tar -xzf "${GITLEAKS_ASSET}" gitleaks
