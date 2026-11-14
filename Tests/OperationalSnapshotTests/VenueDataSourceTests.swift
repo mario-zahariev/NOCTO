@@ -176,6 +176,35 @@ final class VenueDataSourceTests: XCTestCase {
         }
     }
 
+    func testRemoteSourceRethrowsURLSessionCancellation() async throws {
+        let sut = RemoteVenueDataSource(
+            url: remoteURL,
+            networkClient: StubNetworkClient(result: .failure(URLError(.cancelled)))
+        )
+        do {
+            _ = try await sut.loadVenues()
+            XCTFail("Expected CancellationError")
+        } catch is CancellationError {
+            // URLSession uses URLError.cancelled; callers need structured cancellation.
+        }
+    }
+
+    func testCancelledLocalLoadDoesNotReturnSuccessfulData() async {
+        let sut = LocalVenueDataSource(repository: StubLocalRepository(result: .success([makeVenue(name: "Local")])))
+        let task = Task {
+            withUnsafeCurrentTask { $0?.cancel() }
+            return try await sut.loadVenues()
+        }
+        do {
+            _ = try await task.value
+            XCTFail("Cancelled load returned data")
+        } catch is CancellationError {
+            // Cancellation must survive the detached local repository work.
+        } catch {
+            XCTFail("Expected CancellationError, got \(error)")
+        }
+    }
+
     func testVenueDataSourceErrorDescriptionsAreLocalizedForUserDisplay() {
         XCTAssertEqual(
             VenueDataSourceError.local(.missingResource).errorDescription,

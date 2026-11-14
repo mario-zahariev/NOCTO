@@ -57,14 +57,19 @@ struct LocalVenueDataSource: VenueDataSource {
         let repository = repository
         let task = Task.detached(priority: .userInitiated) {
             do {
-                return try repository.loadVenues()
+                try Task.checkCancellation()
+                let venues = try repository.loadVenues()
+                try Task.checkCancellation()
+                return venues
             } catch let error as LocalVenueRepositoryError {
                 throw VenueDataSourceError.local(error)
             }
         }
 
         return try await withTaskCancellationHandler {
-            try await task.value
+            let venues = try await task.value
+            try Task.checkCancellation()
+            return venues
         } onCancel: {
             task.cancel()
         }
@@ -91,7 +96,11 @@ struct RemoteVenueDataSource: VenueDataSource {
         let response: URLResponse
 
         do {
+            try Task.checkCancellation()
             (data, response) = try await networkClient.data(from: url)
+            try Task.checkCancellation()
+        } catch let error as URLError where error.code == .cancelled {
+            throw CancellationError()
         } catch let error as CancellationError {
             throw error
         } catch {
