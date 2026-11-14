@@ -31,7 +31,9 @@ unit:
 
 coverage:
 	swift test --disable-automatic-resolution --enable-code-coverage
-	python3 scripts/ci/report_coverage.py "$$(swift test --show-code-coverage-path)" --minimum 70
+	mkdir -p .build/coverage
+	cp "$$(swift test --show-code-coverage-path)" .build/coverage/noctocore-coverage.json
+	python3 scripts/ci/report_coverage.py --minimum 70
 
 snapshots:
 	NOCTO_RECORD_SNAPSHOTS=0 xcodebuild -project NOCTO.xcodeproj -scheme NOCTO \

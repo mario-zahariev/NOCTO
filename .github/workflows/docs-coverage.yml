@@ -47,7 +47,7 @@ jobs:
           cp "$COVERAGE_JSON" .build/coverage/noctocore-coverage.json
 
       - name: Enforce 70 percent production coverage
-        run: python3 scripts/ci/report_coverage.py .build/coverage/noctocore-coverage.json --minimum 70
+        run: python3 scripts/ci/report_coverage.py --minimum 70
 
       - name: Upload coverage artifact
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
@@ -57,6 +57,7 @@ jobs:
             .build/coverage/noctocore-coverage.json
             .build/**/codecov/*.profdata
           if-no-files-found: error
+          include-hidden-files: true
 
   docc-archive:
     name: DocC Archive
@@ -99,3 +100,4 @@ jobs:
           name: noctocore-doccarchive
           path: .build/docc/NOCTOCore.doccarchive.tar.gz
           if-no-files-found: error
+          include-hidden-files: true

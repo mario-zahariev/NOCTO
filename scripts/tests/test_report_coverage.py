@@ -16,13 +16,6 @@ class CoverageTests(unittest.TestCase):
         ]}]}
         self.assertEqual(len(coverage.production_files(report)), 1)
 
-    def test_paths_outside_build_are_rejected(self):
-        import argparse
-        for path in ["/etc/passwd", ".build/../../outside.json", "README.md"]:
-            with self.assertRaises(argparse.ArgumentTypeError):
-                coverage.coverage_path(path)
-        self.assertEqual(coverage.coverage_path(".build/coverage/report.json"), ROOT / ".build/coverage/report.json")
-
     def test_missing_production_data_fails_closed(self):
         with self.assertRaises(ValueError):
             coverage.production_files({"data": []})

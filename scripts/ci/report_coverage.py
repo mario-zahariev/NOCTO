@@ -18,25 +18,15 @@ def production_files(report):
     return files
 
 
-def coverage_path(value):
-    root = Path(__file__).resolve().parents[2]
-    candidate = Path(value)
-    if not candidate.is_absolute():
-        candidate = root / candidate
-    candidate = candidate.resolve()
-    if not candidate.is_relative_to(root / ".build"):
-        raise argparse.ArgumentTypeError("Coverage input must be inside this repository's .build directory")
-    if candidate.suffix != ".json":
-        raise argparse.ArgumentTypeError("Coverage input must be a JSON report")
-    return candidate
-
-
 def main():
     parser = argparse.ArgumentParser()
-    parser.add_argument("report", type=coverage_path)
     parser.add_argument("--minimum", type=float, default=70)
     args = parser.parse_args()
-    files = production_files(json.loads(args.report.read_text()))
+    root = Path(__file__).resolve().parents[2]
+    report = (root / ".build/coverage/noctocore-coverage.json").resolve()
+    if not report.is_relative_to(root / ".build"):
+        raise SystemExit("Coverage report must remain inside the repository build directory")
+    files = production_files(json.loads(report.read_text()))
     total = sum(item["count"] for item in files.values())
     covered = sum(item["covered"] for item in files.values())
     if total == 0:
