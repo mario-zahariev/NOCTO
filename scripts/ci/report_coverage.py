@@ -6,13 +6,23 @@ import os
 from pathlib import Path
 
 
-def production_files(report):
+ROOT = Path(__file__).resolve().parents[2]
+
+
+def production_files(report, source_root=ROOT):
     files = {}
     for target in report.get("data", []):
         for entry in target.get("files", []):
-            name = entry["filename"].replace("\\", "/")
-            if "/Sources/NOCTOCore/" in name or "/NOCTO/" in name:
-                files[name] = entry["summary"]["lines"]
+            path = Path(entry["filename"])
+            try:
+                relative = path.relative_to(source_root)
+            except ValueError:
+                continue
+            parts = relative.parts
+            is_core = parts[:2] == ("Sources", "NOCTOCore")
+            is_app = bool(parts) and parts[0] == "NOCTO"
+            if path.suffix == ".swift" and (is_core or is_app):
+                files[str(relative)] = entry["summary"]["lines"]
     if not files:
         raise ValueError("Coverage report contains no production Swift sources")
     return files

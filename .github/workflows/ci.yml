@@ -96,7 +96,7 @@ jobs:
           persist-credentials: false
 
       - name: Install Semgrep
-        run: python3 -m pip install --no-cache-dir semgrep==1.167.0
+        run: python3 -m pip install --only-binary=:all: --no-cache-dir semgrep==1.167.0
 
       - name: Run Semgrep OSS scan
         env:
@@ -136,11 +136,12 @@ jobs:
           TZ: Europe/Sofia
         run: |
           run_visual_snapshot() {
+            local test_case="$1"
             xcodebuild \
               -project NOCTO.xcodeproj \
               -scheme NOCTO \
               -destination 'platform=iOS Simulator,name=iPhone 17,OS=26.6' \
-              -only-testing:"$1" \
+              -only-testing:"$test_case" \
               test
           }
 
