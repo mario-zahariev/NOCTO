@@ -11,7 +11,7 @@ NOCTO is a local-first nightlife guide for Sofia: fast venue discovery, clear Ni
 <details>
 <summary><strong>Technical depth (for contributors)</strong></summary>
 
-Venue records flow from `venues.json` through `NOCTOCore`'s typed decode-and-validate pipeline before any view receives data. Invalid entries are rejected at the repository boundary, not silently ignored. Firebase is deliberately absent; it re-enters only through a defined remote adapter contract, not as passive dependency weight.
+Venue records flow from `venues.json` through `NOCTOCore`'s typed decode-and-validate pipeline before any view receives data. Invalid records are filtered at the repository boundary; malformed payloads, duplicate valid IDs and datasets with no valid records fail explicitly. Firebase is deliberately absent; it re-enters only through a defined remote adapter contract, not as passive dependency weight.
 
 </details>
 
@@ -49,7 +49,7 @@ OperationalSnapshot   pulse index · type mix · latency band · signal confiden
 LocationManager       CLLocationManager · authorizedWhenInUse · 100m accuracy
 ```
 
-Every layer fails loudly with typed errors. No degraded state reaches a view.
+Malformed payloads and all-invalid datasets fail with typed errors; mixed datasets retain only records that pass runtime validation.
 
 ---
 
@@ -67,8 +67,8 @@ Every layer fails loudly with typed errors. No degraded state reaches a view.
 
 - **Pulse index** — composite activity score for the active venue dataset.
 - **Type mix** — distribution across venue categories (`club`, `bar`, `lounge`, `event`, `other`).
-- **Latency band** — freshness band for the current signal window.
-- **Completeness** — share of venue records that passed validation and are renderable.
+- **Latency band** — duration of the local load operation; it does not measure data freshness.
+- **Completeness** — share of populated display fields in the validated venue dataset; it does not measure real-world accuracy.
 
 ---
 
@@ -296,3 +296,37 @@ cp NOCTO/GoogleService-Info.plist.example NOCTO/GoogleService-Info.plist
 <br><br>
 
 </div>
+
+## Development quality gates
+
+On macOS with Xcode 26.6, the iOS 26.6 simulator, SwiftLint 0.63.3,
+Gitleaks 8.28.0 and Semgrep 1.167.0 installed:
+
+```sh
+make validate
+```
+
+This command stops at the first failed lint, security, Firebase, dataset, unit
+or snapshot gate. `make data` runs portable dataset checks and Python regression
+tests; `make coverage` enforces at least 70% production Swift line coverage.
+Coverage includes `NOCTOCore` and package-tested app logic, and excludes test code.
+The CI job summary shows the percentage and retains the JSON and profiling data.
+
+`make docs` generates `.build/docc/NOCTOCore.doccarchive`, which opens in Xcode.
+Hosted DocC publication still requires a configured Pages destination.
+
+Snapshot baselines use Xcode 26.6 / iOS 26.6, English system locale, Sofia time,
+large Dynamic Type and a fixed viewport. The manual **Record snapshot baselines
+for review** workflow produces candidate PNGs from the selected branch. Review
+the images and commit them through a normal PR; the workflow has no write access
+and never replaces approved baselines automatically. Missing baselines fail CI.
+
+Release Please maintains a conventional-commit release PR, `CHANGELOG.md`,
+`version.txt` and version tags after the release PR is reviewed and merged.
+The initial package version follows the project's 1.0 marketing version. Xcode
+build numbers and signing remain separate. GitHub must permit Actions to create
+PRs; PRs created with `GITHUB_TOKEN` need a human event to trigger PR workflows.
+
+The weekly venue workflow validates the existing dataset and runs the complete
+CI smoke suite. A verified upstream feed is still required for automated factual
+venue updates; passing validation does not certify that opening hours are current.

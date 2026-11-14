@@ -1,6 +1,8 @@
 #!/usr/bin/env python3
 
 import json
+import math
+import re
 import sys
 from pathlib import Path
 from uuid import UUID
@@ -35,9 +37,13 @@ def validate_entry(entry: dict, index: int) -> None:
 
     for field, field_type in REQUIRED_FIELDS.items():
         value = entry[field]
-        if not isinstance(value, field_type):
+        if isinstance(value, bool) or not isinstance(value, field_type):
             fail(f"entry #{index} field '{field}' has invalid type: {type(value).__name__}")
 
+    if not entry["description"].strip():
+        fail(f"entry #{index} has empty 'description'")
+    if not re.fullmatch(r"(?:[01][0-9]|2[0-3]):[0-5][0-9]-(?:[01][0-9]|2[0-3]):[0-5][0-9]", entry["workingHours"]):
+        fail(f"entry #{index} 'workingHours' must be HH:mm-HH:mm")
     if not entry["name"].strip():
         fail(f"entry #{index} has empty 'name'")
     if not entry["imageName"].strip():
@@ -57,9 +63,9 @@ def validate_entry(entry: dict, index: int) -> None:
 
     lat = float(entry["latitude"])
     lng = float(entry["longitude"])
-    if not (-90.0 <= lat <= 90.0):
+    if not math.isfinite(lat) or not (-90.0 <= lat <= 90.0):
         fail(f"entry #{index} latitude out of range: {lat}")
-    if not (-180.0 <= lng <= 180.0):
+    if not math.isfinite(lng) or not (-180.0 <= lng <= 180.0):
         fail(f"entry #{index} longitude out of range: {lng}")
 
 
@@ -77,10 +83,15 @@ def main() -> None:
     if len(data) < 10:
         fail(f"dataset too small: expected >= 10 entries, got {len(data)}")
 
+    seen_ids = set()
     for idx, entry in enumerate(data):
         if not isinstance(entry, dict):
             fail(f"entry #{idx} must be an object")
         validate_entry(entry, idx)
+        identifier = UUID(entry["id"])
+        if identifier in seen_ids:
+            fail(f"entry #{idx} duplicates venue id: {identifier}")
+        seen_ids.add(identifier)
 
     print(f"[venues-schema] OK: validated {len(data)} entries")
 

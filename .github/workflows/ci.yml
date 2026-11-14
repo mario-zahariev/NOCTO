@@ -4,6 +4,7 @@ on:
   push:
     branches: ["main"]
   pull_request:
+  workflow_call:
 
 permissions:
   contents: read
@@ -25,14 +26,13 @@ jobs:
         run: |
           set -euo pipefail
           mkdir -p .build/swiftlint-bin
-          curl -sSfL -o /tmp/swiftlint.zip \
+          curl --proto '=https' --proto-redir '=https' -sSfL -o /tmp/swiftlint.zip \
             "https://github.com/realm/SwiftLint/releases/download/${SWIFTLINT_VERSION}/portable_swiftlint.zip"
           echo "${SWIFTLINT_SHA256}  /tmp/swiftlint.zip" | shasum -a 256 -c -
           unzip -q /tmp/swiftlint.zip -d .build/swiftlint-bin
           .build/swiftlint-bin/swiftlint version
 
-      - name: Run SwiftLint (report-only)
-        continue-on-error: true
+      - name: Run SwiftLint
         run: .build/swiftlint-bin/swiftlint lint --strict --config .swiftlint.yml
 
   architecture-guard-unit-tests:
@@ -53,8 +53,11 @@ jobs:
       - name: Validate venues schema
         run: python3 scripts/validate_venues_json.py
 
+      - name: Validate validator regressions
+        run: python3 -m unittest discover -s scripts/tests -v
+
       - name: Run Unit Tests
-        run: swift test
+        run: swift test --disable-automatic-resolution
 
   gitleaks-full-history-scan:
     name: Gitleaks full-history scan
@@ -71,9 +74,9 @@ jobs:
           GITLEAKS_VERSION: "8.28.0"
         run: |
           GITLEAKS_ASSET="gitleaks_${GITLEAKS_VERSION}_linux_x64.tar.gz"
-          curl -sSfL -o "${GITLEAKS_ASSET}" \
+          curl --proto '=https' --proto-redir '=https' -sSfL -o "${GITLEAKS_ASSET}" \
             "https://github.com/gitleaks/gitleaks/releases/download/v${GITLEAKS_VERSION}/${GITLEAKS_ASSET}"
-          curl -sSfL -o gitleaks_checksums.txt \
+          curl --proto '=https' --proto-redir '=https' -sSfL -o gitleaks_checksums.txt \
             "https://github.com/gitleaks/gitleaks/releases/download/v${GITLEAKS_VERSION}/gitleaks_${GITLEAKS_VERSION}_checksums.txt"
           grep " ${GITLEAKS_ASSET}$" gitleaks_checksums.txt | sha256sum -c -
           tar -xzf "${GITLEAKS_ASSET}" gitleaks
@@ -101,22 +104,16 @@ jobs:
         run: semgrep scan --config=p/ci --error --metrics=off .
 
   iOS-build-smoke:
-    runs-on: macos-latest
+    runs-on: macos-26
+    timeout-minutes: 30
     steps:
       - name: Checkout
         uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
         with:
           persist-credentials: false
 
-      - name: Select Xcode 26.x
-        run: |
-          XCODE_APP=$(ls -d /Applications/Xcode_26*.app 2>/dev/null | sort -V | tail -n 1)
-          if [ -z "$XCODE_APP" ]; then
-            echo "Xcode 26.x not found on runner."
-            ls -1 /Applications/Xcode*.app || true
-            exit 1
-          fi
-          sudo xcode-select -s "$XCODE_APP/Contents/Developer"
+      - name: Select Xcode 26.6
+        run: sudo xcode-select -s /Applications/Xcode_26.6.app/Contents/Developer
 
       - name: Show Xcode
         run: xcodebuild -version
@@ -128,19 +125,21 @@ jobs:
             -scheme NOCTO \
             -sdk iphonesimulator \
             -destination 'generic/platform=iOS Simulator' \
+            -disableAutomaticPackageResolution \
             build
 
       - name: Visual Integrity Gate
         env:
           NOCTO_RECORD_SNAPSHOTS: "0"
-          NOCTO_SNAPSHOT_PIXEL_TOLERANCE: "0.03"
-          TEST_RUNNER_NOCTO_SNAPSHOT_PIXEL_TOLERANCE: "0.03"
+          LANG: en_US.UTF-8
+          LC_ALL: en_US.UTF-8
+          TZ: Europe/Sofia
         run: |
           run_visual_snapshot() {
             xcodebuild \
               -project NOCTO.xcodeproj \
               -scheme NOCTO \
-              -destination 'platform=iOS Simulator,name=iPhone 17' \
+              -destination 'platform=iOS Simulator,name=iPhone 17,OS=26.6' \
               -only-testing:"$1" \
               test
           }

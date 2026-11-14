@@ -1,0 +1,35 @@
+name: Record snapshot baselines for review
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  record:
+    runs-on: macos-26
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
+        with:
+          persist-credentials: false
+      - name: Select baseline toolchain
+        run: sudo xcode-select -s /Applications/Xcode_26.6.app/Contents/Developer
+      - name: Record selected branch snapshots
+        env:
+          NOCTO_RECORD_SNAPSHOTS: '1'
+          TEST_RUNNER_NOCTO_RECORD_SNAPSHOTS: '1'
+          LANG: en_US.UTF-8
+          LC_ALL: en_US.UTF-8
+          TZ: Europe/Sofia
+        run: |
+          xcodebuild -project NOCTO.xcodeproj -scheme NOCTO \
+            -destination 'platform=iOS Simulator,name=iPhone 17,OS=26.6' \
+            -only-testing:NOCTOUITests test
+      - name: Upload candidate baselines for a reviewed PR
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+        with:
+          name: snapshot-baselines-${{ github.sha }}
+          path: NOCTOUITests/__Snapshots__/*.png
+          if-no-files-found: error

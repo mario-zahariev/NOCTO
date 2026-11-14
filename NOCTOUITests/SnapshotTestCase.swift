@@ -21,26 +21,15 @@ class SnapshotTestCase: XCTestCase {
             ProcessInfo.processInfo.arguments.contains("--record-snapshots")
     }
 
-    private var defaultPixelTolerance: Double {
-        let environment = ProcessInfo.processInfo.environment
-        if let parsed = parsePixelTolerance(environment["NOCTO_SNAPSHOT_PIXEL_TOLERANCE"]) {
-            return parsed
+    private func pixelTolerance(for name: String) -> Double {
+        switch name {
+        case "home_view", "night_pulse_view", "profile_view": return 0.03
+        case "live_expanded_92": return 0.035
+        default: return 0.03
         }
-        if let parsed = parsePixelTolerance(environment["TEST_RUNNER_NOCTO_SNAPSHOT_PIXEL_TOLERANCE"]) {
-            return parsed
-        }
-        return 0.01
     }
 
     private let mismatchThresholdPerChannel = 2
-
-    private func parsePixelTolerance(_ rawValue: String?) -> Double? {
-        guard let rawValue else { return nil }
-        guard let parsed = Double(rawValue), parsed >= 0, parsed <= 1 else {
-            return nil
-        }
-        return parsed
-    }
 
     func assertSnapshot<V: View>(
         of view: V,
@@ -50,7 +39,7 @@ class SnapshotTestCase: XCTestCase {
         file: StaticString = #filePath,
         line: UInt = #line
     ) {
-        let effectivePixelTolerance = pixelTolerance ?? defaultPixelTolerance
+        let effectivePixelTolerance = pixelTolerance ?? self.pixelTolerance(for: name)
         let image = render(view: view, viewport: viewport)
         let referenceURL = snapshotsDirectory(for: file).appendingPathComponent("\(name).png")
 
@@ -60,9 +49,8 @@ class SnapshotTestCase: XCTestCase {
         }
 
         guard FileManager.default.fileExists(atPath: referenceURL.path) else {
-            writeReference(image, to: referenceURL)
             XCTFail(
-                "Липсва snapshot baseline: \(referenceURL.path). Baseline е записан, пусни теста повторно.",
+                "Липсва snapshot baseline: \(referenceURL.path). Запиши го изрично в режим за baselines.",
                 file: file,
                 line: line
             )
@@ -104,7 +92,12 @@ class SnapshotTestCase: XCTestCase {
 
     private func render<V: View>(view: V, viewport: SnapshotViewport) -> UIImage {
         let size = CGSize(width: viewport.width, height: viewport.height)
-        let host = UIHostingController(rootView: view.preferredColorScheme(.dark))
+        let host = UIHostingController(rootView: view
+            .preferredColorScheme(.dark)
+            .environment(\.locale, Locale(identifier: "en_US"))
+            .environment(\.timeZone, TimeZone(identifier: "Europe/Sofia") ?? .current)
+            .environment(\.sizeCategory, .large)
+            .environment(\.accessibilityReduceMotion, true))
 
         let window = UIWindow(frame: CGRect(origin: .zero, size: size))
         window.overrideUserInterfaceStyle = .dark

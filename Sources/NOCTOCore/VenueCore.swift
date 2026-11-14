@@ -105,8 +105,8 @@ public struct VenueCore: Codable, Equatable, Identifiable {
     }
 
     public static func hourMinuteTuple(from workingHours: String, at index: Int) -> (h: Int, m: Int)? {
-        let parts = workingHours.split(separator: "-")
-        guard parts.indices.contains(index) else { return nil }
+        let parts = workingHours.split(separator: "-", omittingEmptySubsequences: false)
+        guard parts.count == 2, parts.indices.contains(index) else { return nil }
 
         let timeParts = parts[index]
             .trimmingCharacters(in: .whitespacesAndNewlines)

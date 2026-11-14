@@ -44,3 +44,12 @@ final class VenueSignalLabelTests: XCTestCase {
         XCTAssertNil(Venue.hourMinuteTuple(from: "22:00", at: 1))
     }
 }
+
+extension VenueSignalLabelTests {
+    func testMalformedIntervalsAreRejectedInBothPositions() {
+        for hours in ["22:00--05:00", "22:00-05:00-extra", "-22:00-05:00", "22:00-"] {
+            XCTAssertNil(Venue.hourMinuteTuple(from: hours, at: 0), hours)
+            XCTAssertNil(Venue.hourMinuteTuple(from: hours, at: 1), hours)
+        }
+    }
+}
