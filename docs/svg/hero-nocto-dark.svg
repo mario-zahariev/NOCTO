@@ -36,9 +36,9 @@
     </linearGradient>
     <linearGradient id="lensBody" x1="700" y1="105" x2="1004" y2="394" gradientUnits="userSpaceOnUse">
       <stop stop-color="#E8EAF2" stop-opacity=".12"/>
-      <stop offset=".18" stop-color="#7B3FF2" stop-opacity=".18"/>
+      <stop offset=".18" stop-color="#874CF7" stop-opacity=".24"/>
       <stop offset=".52" stop-color="#171A23" stop-opacity=".5"/>
-      <stop offset=".82" stop-color="#32D5E6" stop-opacity=".08"/>
+      <stop offset=".82" stop-color="#40DDEA" stop-opacity=".15"/>
       <stop offset="1" stop-color="#E8EAF2" stop-opacity=".04"/>
     </linearGradient>
     <linearGradient id="lensEdge" x1="706" y1="90" x2="1016" y2="410" gradientUnits="userSpaceOnUse">
@@ -58,7 +58,7 @@
     <linearGradient id="refraction" x1="700" y1="0" x2="1000" y2="0" gradientUnits="userSpaceOnUse">
       <stop stop-color="#7B3FF2" stop-opacity=".1"/>
       <stop offset=".48" stop-color="#B388FF" stop-opacity=".65"/>
-      <stop offset=".7" stop-color="#32D5E6" stop-opacity=".32"/>
+      <stop offset=".7" stop-color="#46DCEB" stop-opacity=".40"/>
       <stop offset="1" stop-color="#32D5E6" stop-opacity="0"/>
     </linearGradient>
     <filter id="softViolet" x="-60%" y="-300%" width="220%" height="700%" color-interpolation-filters="sRGB">
@@ -110,7 +110,7 @@
     <circle cx="592" cy="339" r="1.5" opacity=".2"/><circle cx="668" cy="122" r="1" opacity=".22"/>
     <circle cx="650" cy="360" r="1" opacity=".18"/><circle cx="619" cy="321" r="1" opacity=".26"/>
   </g>
-  <g stroke="#7B3FF2" stroke-width="1" opacity=".24">
+  <g stroke="#884AF8" stroke-width="1" opacity=".34">
     <path d="M570 144L699 215"/><path d="M582 342L699 277"/><path d="M618 188L699 230"/>
     <path d="M565 238L699 244"/><path d="M641 284L699 259"/><path d="M650 360L699 275"/>
   </g>
@@ -136,14 +136,18 @@
   <!-- Noise resolves into one line -->
   <path d="M598 244C639 243 663 245 699 244C744 243 764 249 804 244C844 239 871 241 907 244C951 248 986 244 1137 244" stroke="#7B3FF2" stroke-width="13" opacity=".08" filter="url(#softViolet)" fill="none"/>
   <path d="M598 244C639 243 663 245 699 244C744 243 764 249 804 244C844 239 871 241 907 244C951 248 986 244 1137 244" stroke="url(#signal)" stroke-width="1.5" fill="none" class="breathe"/>
-  <circle cx="699" cy="244" r="4" fill="#B388FF"/>
-  <circle cx="699" cy="244" r="14" fill="#7B3FF2" opacity=".18" filter="url(#dotGlow)"/>
-  <circle cx="1047" cy="244" r="3" fill="#FF6A3D" class="hot"/>
-  <circle cx="1047" cy="244" r="11" fill="#FF6A3D" opacity=".14" filter="url(#dotGlow)"/>
+  <circle cx="699" cy="244" r="4" fill="#C09AFF"/>
+  <circle cx="699" cy="244" r="14" fill="#884AF8" opacity=".24" filter="url(#dotGlow)"/>
+  <circle cx="1047" cy="244" r="3" fill="#FF7948" class="hot"/>
+  <circle cx="1047" cy="244" r="11" fill="#FF7948" opacity=".19" filter="url(#dotGlow)"/>
 
   <!-- Quiet optical scan -->
+  <g clip-path="url(#lensClip)">
+    <g class="lock">
+      <rect x="776" y="99" width="1" height="288" fill="#E8EAF2" opacity=".45"/>
+    </g>
+  </g>
   <g class="lock">
-    <rect x="776" y="99" width="1" height="288" fill="#E8EAF2" opacity=".45"/>
     <rect x="769" y="99" width="15" height="288" fill="#B388FF" opacity=".035" filter="url(#softViolet)"/>
   </g>
 

@@ -1,0 +1,157 @@
+<svg xml:lang="en" width="1200" height="480" viewBox="0 0 1200 480" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="title desc">
+  <title id="title">NOCTO — Know the night. Choose the vibe.</title>
+  <desc id="desc">An obsidian optical lens gathers scattered signals from Sofia at night into one precise ultraviolet path, expressing NOCTO's signal-over-noise philosophy.</desc>
+
+  <defs>
+    <style>
+      @keyframes reveal { from { opacity:0; transform:translateY(5px) } to { opacity:1; transform:translateY(0) } }
+      @keyframes breathe { 0%,100% { opacity:.58 } 50% { opacity:.92 } }
+      @keyframes lock { 0%,18% { transform:translateX(-128px); opacity:0 } 28% { opacity:.85 } 72% { opacity:.85 } 82%,100% { transform:translateX(248px); opacity:0 } }
+      @keyframes hot { 0%,100% { opacity:.62 } 50% { opacity:1 } }
+      .sans { font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display","Helvetica Neue",Arial,sans-serif }
+      .mono { font-family:"SFMono-Regular",Menlo,Monaco,Consolas,"Liberation Mono",monospace }
+      .r1 { animation:reveal .8s cubic-bezier(.2,.8,.2,1) both }
+      .r2 { animation:reveal .8s .12s cubic-bezier(.2,.8,.2,1) both }
+      .r3 { animation:reveal .8s .24s cubic-bezier(.2,.8,.2,1) both }
+      .breathe { animation:breathe 5.5s ease-in-out infinite }
+      .lock { animation:lock 6.8s ease-in-out infinite }
+      .hot { animation:hot 3.4s ease-in-out infinite }
+      @media (prefers-reduced-motion: reduce) { .r1,.r2,.r3,.breathe,.lock,.hot { animation:none } .lock { opacity:.45 } }
+    </style>
+
+    <linearGradient id="bg" x1="0" y1="0" x2="1200" y2="480" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#000000"/>
+      <stop offset=".58" stop-color="#050508"/>
+      <stop offset="1" stop-color="#090713"/>
+    </linearGradient>
+    <radialGradient id="violetField" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(872 234) rotate(90) scale(304 390)">
+      <stop stop-color="#7B3FF2" stop-opacity=".18"/>
+      <stop offset=".5" stop-color="#351878" stop-opacity=".08"/>
+      <stop offset="1" stop-color="#050508" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="wordmark" x1="98" y1="0" x2="514" y2="0" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#F2F2F7"/>
+      <stop offset=".7" stop-color="#E8EAF2"/>
+      <stop offset="1" stop-color="#BFC1CC"/>
+    </linearGradient>
+    <linearGradient id="lensBody" x1="700" y1="105" x2="1004" y2="394" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#E8EAF2" stop-opacity=".12"/>
+      <stop offset=".18" stop-color="#7B3FF2" stop-opacity=".18"/>
+      <stop offset=".52" stop-color="#171A23" stop-opacity=".5"/>
+      <stop offset=".82" stop-color="#32D5E6" stop-opacity=".08"/>
+      <stop offset="1" stop-color="#E8EAF2" stop-opacity=".04"/>
+    </linearGradient>
+    <linearGradient id="lensEdge" x1="706" y1="90" x2="1016" y2="410" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#E8EAF2" stop-opacity=".38"/>
+      <stop offset=".25" stop-color="#7B3FF2" stop-opacity=".7"/>
+      <stop offset=".57" stop-color="#B388FF" stop-opacity=".25"/>
+      <stop offset=".83" stop-color="#32D5E6" stop-opacity=".32"/>
+      <stop offset="1" stop-color="#E8EAF2" stop-opacity=".08"/>
+    </linearGradient>
+    <linearGradient id="signal" x1="598" y1="0" x2="1134" y2="0" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#7B3FF2" stop-opacity="0"/>
+      <stop offset=".18" stop-color="#7B3FF2" stop-opacity=".35"/>
+      <stop offset=".48" stop-color="#B388FF"/>
+      <stop offset=".68" stop-color="#D8D2FF"/>
+      <stop offset="1" stop-color="#32D5E6" stop-opacity=".2"/>
+    </linearGradient>
+    <linearGradient id="refraction" x1="700" y1="0" x2="1000" y2="0" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#7B3FF2" stop-opacity=".1"/>
+      <stop offset=".48" stop-color="#B388FF" stop-opacity=".65"/>
+      <stop offset=".7" stop-color="#32D5E6" stop-opacity=".32"/>
+      <stop offset="1" stop-color="#32D5E6" stop-opacity="0"/>
+    </linearGradient>
+    <filter id="softViolet" x="-60%" y="-300%" width="220%" height="700%" color-interpolation-filters="sRGB">
+      <feGaussianBlur stdDeviation="8"/>
+    </filter>
+    <filter id="edgeGlow" x="-30%" y="-30%" width="160%" height="160%" color-interpolation-filters="sRGB">
+      <feGaussianBlur stdDeviation="13" result="blur"/>
+      <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+    <filter id="dotGlow" x="-500%" y="-500%" width="1000%" height="1000%" color-interpolation-filters="sRGB">
+      <feGaussianBlur stdDeviation="5"/>
+    </filter>
+    <clipPath id="lensClip">
+      <path d="M737 94C783 72 920 72 967 100C1006 124 1024 331 981 375C936 421 778 418 731 380C690 347 692 116 737 94Z"/>
+    </clipPath>
+    <mask id="nCut">
+      <rect width="1200" height="480" fill="white"/>
+      <path d="M752 340V145C752 132 762 122 775 122C785 122 794 128 799 137L911 337C916 346 925 352 935 352C949 352 960 341 960 327V132" stroke="black" stroke-width="32" stroke-linecap="round" fill="none"/>
+    </mask>
+  </defs>
+
+  <rect width="1200" height="480" fill="url(#bg)"/>
+  <rect width="1200" height="480" fill="url(#violetField)"/>
+  <path d="M0 414C153 393 241 423 371 401C492 381 575 391 686 408C820 428 1003 403 1200 416V480H0Z" fill="#0A0A0A" opacity=".5"/>
+  <line x1="64" y1="54" x2="1136" y2="54" stroke="#E8EAF2" stroke-opacity=".08"/>
+  <line x1="64" y1="426" x2="1136" y2="426" stroke="#E8EAF2" stroke-opacity=".08"/>
+
+  <g class="sans">
+    <g class="r1">
+      <circle cx="100" cy="93" r="3" fill="#7B3FF2"/>
+      <text x="116" y="98" font-size="10" font-weight="500" letter-spacing="2.8" fill="#9AA3B2">NIGHT INTELLIGENCE · SOFIA</text>
+    </g>
+    <text x="92" y="251" class="r2" font-size="108" font-weight="560" letter-spacing="9" fill="url(#wordmark)">NOCTO</text>
+    <text x="100" y="291" class="r3" font-size="13" font-weight="430" letter-spacing="2.6" fill="#9AA3B2">KNOW THE NIGHT. CHOOSE THE VIBE.</text>
+  </g>
+
+  <g class="mono r3">
+    <text x="100" y="370" font-size="9" letter-spacing="1.8" fill="#9AA3B2" opacity=".72">SOFIA · TONIGHT</text>
+    <circle cx="226" cy="366.5" r="3" fill="#FF6A3D" class="hot"/>
+    <text x="239" y="370" font-size="9" letter-spacing="1.8" fill="#E8EAF2" opacity=".78">SIGNAL LOCKED</text>
+    <path d="M100 386H314" stroke="#E8EAF2" stroke-opacity=".12"/>
+    <path d="M100 386H226" stroke="#7B3FF2" stroke-opacity=".72"/>
+  </g>
+
+  <!-- Scattered city signals before the lens -->
+  <g fill="#9AA3B2">
+    <circle cx="582" cy="138" r="1" opacity=".18"/><circle cx="617" cy="190" r="1.5" opacity=".24"/>
+    <circle cx="566" cy="237" r="1" opacity=".28"/><circle cx="641" cy="283" r="1" opacity=".2"/>
+    <circle cx="592" cy="339" r="1.5" opacity=".2"/><circle cx="668" cy="122" r="1" opacity=".22"/>
+    <circle cx="650" cy="360" r="1" opacity=".18"/><circle cx="619" cy="321" r="1" opacity=".26"/>
+  </g>
+  <g stroke="#7B3FF2" stroke-width="1" opacity=".24">
+    <path d="M570 144L699 215"/><path d="M582 342L699 277"/><path d="M618 188L699 230"/>
+    <path d="M565 238L699 244"/><path d="M641 284L699 259"/><path d="M650 360L699 275"/>
+  </g>
+
+  <!-- Obsidian night lens -->
+  <path d="M737 94C783 72 920 72 967 100C1006 124 1024 331 981 375C936 421 778 418 731 380C690 347 692 116 737 94Z" fill="#050508" opacity=".8" filter="url(#edgeGlow)"/>
+  <path d="M737 94C783 72 920 72 967 100C1006 124 1024 331 981 375C936 421 778 418 731 380C690 347 692 116 737 94Z" fill="url(#lensBody)" stroke="url(#lensEdge)" stroke-width="1.2" mask="url(#nCut)"/>
+
+  <g clip-path="url(#lensClip)">
+    <ellipse cx="813" cy="153" rx="172" ry="52" fill="#E8EAF2" opacity=".035" transform="rotate(-19 813 153)"/>
+    <path d="M685 389L948 74" stroke="#E8EAF2" stroke-opacity=".055" stroke-width="72"/>
+    <path d="M715 406L992 78" stroke="url(#refraction)" stroke-width="2" opacity=".65"/>
+    <path d="M721 411L999 82" stroke="#32D5E6" stroke-width="10" opacity=".025" filter="url(#softViolet)"/>
+    <g opacity=".18">
+      <path d="M714 181H1000M704 241H1010M711 301H1002" stroke="#E8EAF2" stroke-width=".6"/>
+      <path d="M769 83V410M852 78V420M935 86V407" stroke="#E8EAF2" stroke-width=".6"/>
+    </g>
+  </g>
+
+  <!-- The N appears as precise negative space -->
+  <path d="M752 340V145C752 132 762 122 775 122C785 122 794 128 799 137L911 337C916 346 925 352 935 352C949 352 960 341 960 327V132" stroke="url(#lensEdge)" stroke-width="1.15" stroke-linecap="round" fill="none" opacity=".66"/>
+
+  <!-- Noise resolves into one line -->
+  <path d="M598 244C639 243 663 245 699 244C744 243 764 249 804 244C844 239 871 241 907 244C951 248 986 244 1137 244" stroke="#7B3FF2" stroke-width="13" opacity=".08" filter="url(#softViolet)" fill="none"/>
+  <path d="M598 244C639 243 663 245 699 244C744 243 764 249 804 244C844 239 871 241 907 244C951 248 986 244 1137 244" stroke="url(#signal)" stroke-width="1.5" fill="none" class="breathe"/>
+  <circle cx="699" cy="244" r="4" fill="#B388FF"/>
+  <circle cx="699" cy="244" r="14" fill="#7B3FF2" opacity=".18" filter="url(#dotGlow)"/>
+  <circle cx="1047" cy="244" r="3" fill="#FF6A3D" class="hot"/>
+  <circle cx="1047" cy="244" r="11" fill="#FF6A3D" opacity=".14" filter="url(#dotGlow)"/>
+
+  <!-- Quiet optical scan -->
+  <g class="lock">
+    <rect x="776" y="99" width="1" height="288" fill="#E8EAF2" opacity=".45"/>
+    <rect x="769" y="99" width="15" height="288" fill="#B388FF" opacity=".035" filter="url(#softViolet)"/>
+  </g>
+
+  <g class="mono" font-size="8" letter-spacing="1.5" fill="#9AA3B2" opacity=".48">
+    <text x="722" y="413">NOISE</text>
+    <text x="966" y="413">SIGNAL</text>
+    <text x="1136" y="443" text-anchor="end">CURATED · LOCAL · AFTER DARK</text>
+  </g>
+  <path d="M762 409H953" stroke="#E8EAF2" stroke-opacity=".1"/>
+  <path d="M862 409H953" stroke="#32D5E6" stroke-opacity=".34"/>
+</svg>
